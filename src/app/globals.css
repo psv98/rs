@@ -351,7 +351,7 @@ body {
     row-gap: 0;
   }
   /* The ring follows the window height too, so ring and hint stay on the first screen. */
-  .hero .rose { width: min(100%, clamp(22rem, calc(100svh - 18rem), 38.75rem)); }
+  .hero .rose { width: min(100%, clamp(22rem, calc(100svh - 15.5rem), 40rem)); }
 }
 .hero__copy > *,
 .hero__facts > * {
