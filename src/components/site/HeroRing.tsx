@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { RING, ringTicks, ringWedges, groupDigits } from "@/lib/viz/geometry";
 import { CATEGORY_ICONS, CATEGORY_ICON_VIEWBOX, type CategoryIconId } from "@/lib/icons/category-icons.generated";
 import { Odometer } from "./Odometer";
@@ -29,13 +29,21 @@ export function HeroRing({
   ariaLabel: string;
 }) {
   const [active, setActive] = useState<string | null>(null);
-  const pointer = useRef<string>("mouse");
+  const figure = useRef<HTMLElement>(null);
+  // A tap anywhere outside the chart hides the selected sector again.
+  useEffect(() => {
+    const off = (e: PointerEvent) => {
+      if (figure.current && !figure.current.contains(e.target as Node)) setActive(null);
+    };
+    document.addEventListener("pointerdown", off);
+    return () => document.removeEventListener("pointerdown", off);
+  }, []);
   const wedges = ringWedges(categories);
   const cur = categories.find((c) => c.id === active) ?? null;
   const S = RING.size;
   const c = S / 2;
   return (
-    <figure className="rose" style={{ "--digits": String(total).length } as CSSProperties}>
+    <figure ref={figure} className="rose" style={{ "--digits": String(total).length } as CSSProperties}>
       {/* Decorative orbits: each is its own layer and only rotates (cheap to animate). */}
       <svg viewBox={`0 0 ${S} ${S}`} className="rose__fx rose__fx--ticks" aria-hidden="true">
         <path d={ringTicks(120, RING.outer + 6, RING.outer + 12)} stroke="rgba(255,255,255,0.16)" strokeWidth="1.2" />
@@ -99,19 +107,14 @@ export function HeroRing({
                 tabIndex={0}
                 role="button"
                 aria-label={`${cat.name}: ${groupDigits(cat.value)}`}
-                onPointerDown={(e) => (pointer.current = e.pointerType)}
                 onPointerEnter={(e) => e.pointerType === "mouse" && setActive(w.id)}
                 onPointerLeave={(e) => e.pointerType === "mouse" && setActive(null)}
                 onFocus={() => setActive(w.id)}
                 onBlur={() => setActive(null)}
-                onClick={() => {
-                  // Touch: a tap shows the number in the centre. Mouse/keyboard: go to the card.
-                  if (pointer.current === "touch" || pointer.current === "pen") {
-                    setActive((a) => (a === w.id ? null : w.id));
-                    return;
-                  }
-                  const el = document.getElementById(`category-${w.id}`);
-                  el?.scrollIntoView({ behavior: "smooth", block: "center" });
+                // A tap or click only shows the number in the centre; nothing scrolls away.
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActive(w.id);
                 }}
               />
             );
