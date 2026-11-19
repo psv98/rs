@@ -3,8 +3,8 @@
   "version": 1,
   "snapshots": [
     {
-      "revision": 2,
-      "publishedAt": "2026-11-19T19:06:43.256Z",
+      "revision": 3,
+      "publishedAt": "2026-11-19T22:16:31.185Z",
       "data": {
         "schemaVersion": 1,
         "totalCrimes": 1003,
@@ -42,7 +42,7 @@
             "order": 10,
             "hidden": false,
             "name": {
-              "uk": "Вбивства",
+              "uk": "Вбивств",
               "en": "Murder"
             },
             "description": {
@@ -57,7 +57,7 @@
             "order": 20,
             "hidden": false,
             "name": {
-              "uk": "Зникнення журналістів",
+              "uk": "Зникнень журналістів",
               "en": "Journalists missing"
             },
             "description": {
@@ -72,7 +72,7 @@
             "order": 30,
             "hidden": false,
             "name": {
-              "uk": "Викрадення журналістів",
+              "uk": "Викрадень журналістів",
               "en": "Journalists kidnapped"
             },
             "description": {
