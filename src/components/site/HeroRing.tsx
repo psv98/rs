@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { RING, ringTicks, ringWedges, groupDigits } from "@/lib/viz/geometry";
-import { CATEGORY_ICONS, CATEGORY_ICON_VIEWBOX, type CategoryIconId } from "@/lib/icons/category-icons.generated";
 import { Odometer } from "./Odometer";
 
 export interface RingCategory {
@@ -42,25 +41,30 @@ export function HeroRing({
   const cur = categories.find((c) => c.id === active) ?? null;
   const S = RING.size;
   const c = S / 2;
+  // No icons around the ring, so the orbit sits close to the ticks and the view box is
+  // cropped to it: the ring fills the figure instead of leaving an empty margin.
+  const ORBIT = 296;
+  const V = 2 * (ORBIT + 6);
+  const box = `${c - V / 2} ${c - V / 2} ${V} ${V}`;
   return (
     <figure ref={figure} className="rose" style={{ "--digits": String(total).length } as CSSProperties}>
       {/* Decorative orbits: each is its own layer and only rotates (cheap to animate). */}
-      <svg viewBox={`0 0 ${S} ${S}`} className="rose__fx rose__fx--ticks" aria-hidden="true">
+      <svg viewBox={box} className="rose__fx rose__fx--ticks" aria-hidden="true">
         <path d={ringTicks(120, RING.outer + 6, RING.outer + 12)} stroke="rgba(255,255,255,0.16)" strokeWidth="1.2" />
         <path d={ringTicks(12, RING.outer + 4, RING.outer + 16)} stroke="rgba(255,138,150,0.55)" strokeWidth="1.6" />
       </svg>
-      <svg viewBox={`0 0 ${S} ${S}`} className="rose__fx rose__fx--comet" aria-hidden="true">
+      <svg viewBox={box} className="rose__fx rose__fx--comet" aria-hidden="true">
         <defs>
-          <linearGradient id="cometTail" gradientUnits="userSpaceOnUse" x1={c} y1={c - 334} x2={c + 334} y2={c}>
+          <linearGradient id="cometTail" gradientUnits="userSpaceOnUse" x1={c} y1={c - ORBIT} x2={c + ORBIT} y2={c}>
             <stop offset="0" stopColor="#ffb3ba" stopOpacity="0.95" />
             <stop offset="1" stopColor="#ed4c5c" stopOpacity="0" />
           </linearGradient>
         </defs>
-        <circle cx={c} cy={c} r="334" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-        <path d={`M${c} ${c - 334} A334 334 0 0 1 ${c + 334} ${c}`} fill="none" stroke="url(#cometTail)" strokeWidth="2.5" strokeLinecap="round" />
-        <circle cx={c} cy={c - 334} r="4.5" fill="#ffd7db" />
+        <circle cx={c} cy={c} r={ORBIT} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+        <path d={`M${c} ${c - ORBIT} A${ORBIT} ${ORBIT} 0 0 1 ${c + ORBIT} ${c}`} fill="none" stroke="url(#cometTail)" strokeWidth="2.5" strokeLinecap="round" />
+        <circle cx={c} cy={c - ORBIT} r="4.5" fill="#ffd7db" />
       </svg>
-      <svg viewBox={`0 0 ${S} ${S}`} className="rose__fx rose__fx--inner" aria-hidden="true">
+      <svg viewBox={box} className="rose__fx rose__fx--inner" aria-hidden="true">
         <circle cx={c} cy={c} r={RING.inner - 16} fill="none" stroke="rgba(237,76,92,0.45)" strokeWidth="1.2" strokeDasharray="3 7" />
         <path
           d={`M${c - (RING.inner - 16)} ${c} A${RING.inner - 16} ${RING.inner - 16} 0 0 1 ${c} ${c - (RING.inner - 16)}`}
@@ -71,7 +75,7 @@ export function HeroRing({
           opacity="0.85"
         />
       </svg>
-      <svg viewBox={`0 0 ${S} ${S}`} className="ring__svg" role="img" aria-label={ariaLabel}>
+      <svg viewBox={box} className="ring__svg" role="img" aria-label={ariaLabel}>
         <defs>
           <radialGradient id="ringHeat" cx={c} cy={c} r={RING.outer} gradientUnits="userSpaceOnUse">
             <stop offset={RING.inner / RING.outer} stopColor="#7a1424" />
@@ -120,24 +124,6 @@ export function HeroRing({
             );
           })}
         </g>
-        {wedges.map((w) => {
-          const cat = categories[w.index]!;
-          const body = CATEGORY_ICONS[cat.iconId as CategoryIconId];
-          return (
-            <svg
-              key={`i-${w.id}`}
-              x={w.icon.x - 15}
-              y={w.icon.y - 15}
-              width="30"
-              height="30"
-              viewBox={CATEGORY_ICON_VIEWBOX}
-              className="ring__icon"
-              data-active={active === w.id || undefined}
-              aria-hidden="true"
-              dangerouslySetInnerHTML={{ __html: body ?? "" }}
-            />
-          );
-        })}
         <circle cx={c} cy={c} r={RING.inner - 26} fill="url(#ringCore)" />
         <g className="ring__sweep" aria-hidden="true">
           <path d={`M${c} ${c}L${c} ${c - RING.outer}`} stroke="url(#ringSweep)" strokeWidth="2" />

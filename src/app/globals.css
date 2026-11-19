@@ -344,13 +344,14 @@ body {
 @media (min-width: 1000px) {
   .hero__grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
-    grid-template-areas: "copy visual" "facts visual";
-    grid-template-rows: auto 1fr;
+    /* Text and button sit as one block on the ring's vertical centre. */
+    grid-template-areas: ". visual" "copy visual" "facts visual" ". visual";
+    grid-template-rows: 1fr auto auto 1fr;
     column-gap: clamp(2rem, 4vw, 4.5rem);
     row-gap: 0;
   }
-  .hero__copy { align-self: end; }
-  .hero__facts { align-self: start; }
+  /* The ring follows the window height too, so ring and hint stay on the first screen. */
+  .hero .rose { width: min(100%, clamp(22rem, calc(100svh - 18rem), 38.75rem)); }
 }
 .hero__copy > *,
 .hero__facts > * {
@@ -397,7 +398,8 @@ body {
   margin-top: 0;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.25rem, 4.6vw, 4.5rem);
+  /* Capped so the title stays on three lines on wide screens. */
+  font-size: clamp(2.25rem, 4.6vw, 4rem);
   line-height: 1.02;
   letter-spacing: -0.02em;
   text-wrap: balance;
@@ -476,12 +478,6 @@ body {
   filter: brightness(1.25) drop-shadow(0 0 14px rgba(237, 76, 92, 0.75));
 }
 .ring__wedge[data-dim] { opacity: 0.35; }
-.ring__icon {
-  color: var(--color-ash-2);
-  transition: color 0.3s;
-  animation: fade 1s var(--ease-out) 0.9s both;
-}
-.ring__icon[data-active] { color: #ffd7db; }
 @keyframes fade { from { opacity: 0; } }
 .ring__sweep {
   transform-origin: 320px 320px;
@@ -496,7 +492,7 @@ body {
 }
 .ring__center {
   position: absolute;
-  inset: 31%;
+  inset: 30%;
   display: grid;
   place-items: center;
   pointer-events: none;
@@ -518,7 +514,7 @@ body {
   font-family: var(--font-display);
   font-weight: 700;
   /* scales down with the number of digits: 989, 1 240, 12 400 all fit */
-  font-size: min(15cqi, calc(46cqi / var(--digits, 3)));
+  font-size: min(16cqi, calc(49cqi / var(--digits, 3)));
   line-height: 0.95;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
@@ -531,14 +527,14 @@ body {
   animation: fade 0.25s ease-out;
 }
 .ring__label {
-  max-width: 22cqi;
-  font-size: max(0.75rem, 2.5cqi);
+  max-width: 23cqi;
+  font-size: max(0.75rem, 2.65cqi);
   font-weight: 600;
   line-height: 1.2;
   color: var(--color-paper);
 }
 .ring__caption {
-  font-size: max(0.75rem, 2.1cqi);
+  font-size: max(0.75rem, 2.2cqi);
   color: var(--color-ash-2);
 }
 
@@ -1192,7 +1188,7 @@ body {
 .present__ring { display: grid; place-items: center; min-height: 0; }
 .present .rose { width: 680px; }
 /* The total reads larger here than on the site: it is the subject of the slide. */
-.present .ring__value { font-size: min(17cqi, calc(52cqi / var(--digits, 3))); }
+.present .ring__value { font-size: min(18cqi, calc(55cqi / var(--digits, 3))); }
 .present__right { display: grid; min-height: 0; }
 .present-grid {
   display: grid;
