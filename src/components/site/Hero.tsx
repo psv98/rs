@@ -43,7 +43,7 @@ export function Hero({ locale, snap }: { locale: Locale; snap: PublicSnapshot })
             total={data.totalCrimes}
             categories={cats.map((c) => ({ id: c.id, iconId: c.iconId, value: c.value, name: c.name[locale] }))}
             label={d.hero.ringLabel(data.totalCrimes)}
-            caption={d.hero.asOf(formatShortDate(data.asOfDate))}
+            caption={d.hero.ringAsOf(formatShortDate(data.asOfDate))}
             ariaLabel={d.hero.ringAria(data.totalCrimes)}
           />
           <p className="hero__hint" aria-hidden="true">

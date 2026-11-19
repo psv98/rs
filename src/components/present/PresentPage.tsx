@@ -53,7 +53,7 @@ export async function PresentPage({ locale }: { locale: Locale }) {
                   total={current.data.totalCrimes}
                   categories={cats.map((c) => ({ id: c.id, iconId: c.iconId, value: c.value, name: c.name[locale] }))}
                   label={d.hero.ringLabel(current.data.totalCrimes)}
-                  caption={d.hero.asOf(formatShortDate(current.data.asOfDate))}
+                  caption={d.hero.ringAsOf(formatShortDate(current.data.asOfDate))}
                   ariaLabel={d.hero.ringAria(current.data.totalCrimes)}
                 />
               </div>

@@ -1,7 +1,7 @@
 /* Admin: compact, practical, same tokens as the public site. */
 .adm {
   min-height: 100dvh;
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 .adm-top {
   position: sticky;
@@ -25,8 +25,8 @@
   margin-left: 1rem;
 }
 .adm-top nav a {
-  padding: 0.4rem 0.7rem;
-  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
   color: var(--color-ash);
   font-weight: 500;
 }
@@ -38,7 +38,7 @@
 .adm-top .who {
   margin-left: auto;
   color: var(--color-ash-2);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
 }
 .adm-main {
   max-width: 1280px;
@@ -52,7 +52,7 @@
 }
 .adm h2 {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   margin: 2rem 0 0.75rem;
 }
 .adm .muted {
@@ -71,27 +71,27 @@
 }
 .adm-field {
   display: grid;
-  gap: 0.4rem;
+  gap: 0.5rem;
   /* Keep label, control and hint at the top: fields in one row line up even when
      only some of them have a hint. */
   align-content: start;
 }
 .adm-field > span {
-  font-size: 0.82rem;
+  font-size: 0.875rem;
   color: var(--color-ash);
   font-weight: 600;
 }
 .adm-field small {
   color: var(--color-ash-2);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
 }
 .adm-input,
 .adm-textarea,
 .adm-select {
   width: 100%;
   min-height: 2.75rem;
-  padding: 0.5rem 0.8rem;
-  border-radius: 9px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
   border: 1px solid var(--color-rule);
   background: var(--color-night);
   color: var(--color-paper);
@@ -107,10 +107,10 @@
 .adm-select {
   appearance: none;
   -webkit-appearance: none;
-  padding-right: 2.2rem;
+  padding-right: 2.25rem;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%23adadad' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 0.7rem center;
+  background-position: right 0.75rem center;
   background-size: 1rem;
   text-overflow: ellipsis;
 }
@@ -132,7 +132,7 @@
   font-variant-numeric: tabular-nums;
   font-weight: 700;
 }
-.adm-input.num--lead { font-size: 1.15rem; }
+.adm-input.num--lead { font-size: 1.25rem; }
 /* Category rows: icon picker | value | names | order and visibility */
 .adm-cat-row {
   display: grid;
@@ -140,17 +140,17 @@
   gap: 1rem;
   align-items: start;
 }
-.adm-iconpick { display: flex; align-items: center; gap: 0.6rem; }
-.adm-iconpick .adm-cat-icon { flex: none; width: 2.2rem; height: 2.2rem; }
-.adm-iconpick .adm-select { font-size: 0.85rem; min-width: 0; }
-.adm-cat-side { display: grid; gap: 0.6rem; justify-items: center; padding-top: 1.55rem; }
-.adm-order { display: flex; gap: 0.35rem; }
+.adm-iconpick { display: flex; align-items: center; gap: 0.5rem; }
+.adm-iconpick .adm-cat-icon { flex: none; width: 2.25rem; height: 2.25rem; }
+.adm-iconpick .adm-select { font-size: 0.875rem; min-width: 0; }
+.adm-cat-side { display: grid; gap: 0.5rem; justify-items: center; padding-top: 1.5rem; }
+.adm-order { display: flex; gap: 0.25rem; }
 .adm-iconbtn {
   display: grid;
   place-items: center;
   width: 2.75rem;
   height: 2.75rem;
-  border-radius: 9px;
+  border-radius: 8px;
   border: 1px solid var(--color-rule);
   background: var(--color-night);
   color: var(--color-paper);
@@ -159,17 +159,17 @@
 .adm-iconbtn svg { width: 1rem; height: 1rem; }
 .adm-iconbtn:hover:not(:disabled) { border-color: var(--color-ash-2); }
 .adm-iconbtn:disabled { opacity: 0.35; cursor: default; }
-.adm-hide { display: flex; gap: 0.4rem; align-items: center; font-size: 0.82rem; color: var(--color-ash); }
+.adm-hide { display: flex; gap: 0.5rem; align-items: center; font-size: 0.875rem; color: var(--color-ash); }
 @media (max-width: 900px) {
   .adm-cat-row { grid-template-columns: 1fr 1fr; }
 }
 .adm-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.15rem 0.6rem;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 700;
   border: 1px solid var(--color-rule);
   white-space: nowrap;
@@ -185,13 +185,13 @@
 }
 .adm-table th,
 .adm-table td {
-  padding: 0.55rem 0.6rem;
+  padding: 0.5rem;
   border-bottom: 1px solid var(--color-rule-soft);
   text-align: left;
   vertical-align: top;
 }
 .adm-table th {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: var(--color-ash-2);
   font-weight: 600;
 }
@@ -207,7 +207,7 @@
   margin: 1.5rem 0 1.25rem;
 }
 .adm-tabs button {
-  padding: 0.6rem 1rem;
+  padding: 0.5rem 1rem;
   border-bottom: 2px solid transparent;
   color: var(--color-ash);
   font-weight: 600;
@@ -219,9 +219,9 @@
 }
 .adm-tabs .count {
   display: inline-block;
-  min-width: 1.4rem;
-  margin-left: 0.4rem;
-  padding: 0 0.35rem;
+  min-width: 1.5rem;
+  margin-left: 0.5rem;
+  padding: 0 0.25rem;
   border-radius: 999px;
   background: var(--color-signal);
   color: #16080b;
@@ -231,7 +231,7 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: var(--color-ash-2);
 }
 .adm-steps span[data-on="true"] {
@@ -255,9 +255,9 @@
   gap: 0.5rem;
 }
 .adm .btn {
-  min-height: 2.4rem;
-  padding: 0.45rem 0.95rem;
-  font-size: 0.9rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
 }
 .btn--danger {
   border-color: rgba(237, 76, 92, 0.6);
@@ -271,15 +271,15 @@
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 0.75rem;
-  padding: 0.65rem 0.8rem;
+  padding: 0.75rem;
   border-radius: 8px;
   border: 1px solid var(--color-rule-soft);
   margin-bottom: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 .adm-issue b {
-  font-size: 0.72rem;
-  padding: 0.1rem 0.45rem;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 4px;
   align-self: start;
 }
@@ -295,17 +295,17 @@
   font-family: var(--font-display);
 }
 .adm-sum strong {
-  font-size: 2.6rem;
+  font-size: 2.5rem;
   line-height: 1;
 }
 .adm-sum span {
   font-family: var(--font-sans);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--color-ash-2);
 }
 .adm-check {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.5rem;
   align-items: flex-start;
   padding: 0.75rem;
   border-radius: 8px;
@@ -313,9 +313,9 @@
   background: var(--color-night);
 }
 .adm-check input {
-  width: 1.15rem;
-  height: 1.15rem;
-  margin-top: 0.15rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.25rem;
   accent-color: var(--color-signal);
 }
 .adm-toast {
@@ -324,8 +324,8 @@
   bottom: 1.25rem;
   z-index: 80;
   max-width: 28rem;
-  padding: 0.85rem 1rem;
-  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
   border: 1px solid var(--color-rule);
   background: var(--color-graphite-2);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
@@ -335,7 +335,7 @@
 }
 .adm-dialog {
   border: 1px solid var(--color-rule);
-  border-radius: 14px;
+  border-radius: 16px;
   background: var(--color-graphite);
   color: var(--color-paper);
   padding: 1.5rem;
@@ -355,7 +355,7 @@
   width: 100%;
   height: 720px;
   border: 1px solid var(--color-rule);
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--color-night);
 }
 .adm-pngs {
@@ -376,8 +376,8 @@
 }
 .adm-pngs span {
   display: block;
-  padding: 0.35rem 0.5rem;
-  font-size: 0.78rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
   color: var(--color-ash);
 }
 .adm-cat-icon {
@@ -398,5 +398,5 @@
 }
 .adm-error {
   color: var(--color-signal);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }

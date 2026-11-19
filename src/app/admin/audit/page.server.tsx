@@ -33,7 +33,7 @@ export default async function AuditPage() {
                 <td>{r.username}</td>
                 <td>{ACTION_LABEL[r.action] ?? r.action}</td>
                 <td>{r.snapshot_id ? <a className="link" href={`/admin/snapshots/${r.snapshot_id}`}>#{r.snapshot_id}</a> : "—"}</td>
-                <td className="muted" style={{ maxWidth: "26rem", wordBreak: "break-word", fontSize: "0.82rem" }}>
+                <td className="muted" style={{ maxWidth: "26rem", wordBreak: "break-word", fontSize: "0.875rem" }}>
                   {r.details !== "{}" ? r.details : ""}
                 </td>
                 <td className="muted">{r.ip ?? "—"}</td>

@@ -95,7 +95,7 @@ function Gate({ onReady }: { onReady: (token: string, login: string) => void }) 
   return (
     <div className="adm-login">
       <div className="adm-card" style={{ width: "min(36rem, 100%)", display: "grid", gap: "1rem" }}>
-        <h1 style={{ margin: 0, fontFamily: "var(--font-display)", fontSize: "1.6rem" }}>Редактор даних</h1>
+        <h1 style={{ margin: 0, fontFamily: "var(--font-display)", fontSize: "1.5rem" }}>Редактор даних</h1>
         {mode === "password" ? (
           <>
             <p className="muted">Вхід на цьому пристрої{vaultLogin() ? ` як ${vaultLogin()}` : ""}.</p>
@@ -122,7 +122,7 @@ function Gate({ onReady }: { onReady: (token: string, login: string) => void }) 
               Перший вхід на цьому пристрої. Потрібен GitHub-токен з правом запису лише в репозиторій {REPO.owner}/{REPO.repo}. Токен зберігається тільки на цьому пристрої,
               зашифрований вашим паролем.
             </p>
-            <ol style={{ display: "grid", gap: "0.45rem", paddingLeft: "1.2rem", listStyle: "decimal", color: "var(--color-ash)", fontSize: "0.92rem" }}>
+            <ol style={{ display: "grid", gap: "0.5rem", paddingLeft: "1.25rem", listStyle: "decimal", color: "var(--color-ash)", fontSize: "0.875rem" }}>
               <li>
                 Відкрийте{" "}
                 <a className="link" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">

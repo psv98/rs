@@ -37,7 +37,7 @@ export default async function AdminHome() {
       <h2>На сайті зараз</h2>
       {current ? (
         <div className="adm-card" style={{ display: "flex", gap: "2rem", alignItems: "center", flexWrap: "wrap" }}>
-          <div style={{ fontFamily: "var(--font-display)", fontSize: "3.2rem", color: "var(--color-signal)", lineHeight: 1 }}>{current.data.totalCrimes}</div>
+          <div style={{ fontFamily: "var(--font-display)", fontSize: "3.25rem", color: "var(--color-signal)", lineHeight: 1 }}>{current.data.totalCrimes}</div>
           <div>
             <div>
               Станом на <b>{formatLongDate(current.periodKey, "uk")}</b> · редакція {current.revision}

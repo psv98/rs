@@ -152,7 +152,7 @@ export function SnapshotEditor({
               <span data-on={step === 0} data-done={step > 0}>Чернетка</span>→<span data-on={step === 1} data-done={step > 1}>Перевірка</span>→
               <span data-on={step === 2}>Публікація</span>
             </span>
-            <span className="muted" style={{ fontSize: "0.82rem" }}>
+            <span className="muted" style={{ fontSize: "0.875rem" }}>
               Оновлено {formatDateTime(rec.updatedAt, "uk")} ({rec.updatedBy})
             </span>
             {!rec.checksumValid && <span className="adm-error">Контрольна сума не збігається!</span>}
@@ -284,7 +284,7 @@ export function SnapshotEditor({
             </button>
           </div>
           {toast.issues && (
-            <ul style={{ marginTop: "0.5rem", fontSize: "0.85rem", color: "var(--color-ash)" }}>
+            <ul style={{ marginTop: "0.5rem", fontSize: "0.875rem", color: "var(--color-ash)" }}>
               {toast.issues
                 .filter((i) => i.severity === "error")
                 .slice(0, 6)
@@ -455,7 +455,7 @@ export function CategoriesTab({ data, update, editable }: { data: SnapshotData; 
               <Field label="Значення">
                 <input className="adm-input num num--lead" aria-label="Значення" type="number" min={0} disabled={!editable} value={Number.isFinite(c.value) ? c.value : ""} onChange={(e) => update((d) => void (d.categories[idx]!.value = e.target.value === "" ? Number.NaN : Number(e.target.value)))} />
               </Field>
-              <div style={{ display: "grid", gap: "0.6rem", gridTemplateColumns: "1fr 1fr" }}>
+              <div style={{ display: "grid", gap: "0.5rem", gridTemplateColumns: "1fr 1fr" }}>
                 <Field label="Назва (UA)">
                   <input className="adm-input" disabled={!editable} maxLength={160} value={c.name.uk} aria-invalid={!c.name.uk && !c.hidden ? "true" : undefined} onChange={(e) => update((d) => void (d.categories[idx]!.name.uk = e.target.value))} />
                 </Field>
@@ -520,7 +520,7 @@ export function HistoryTab({ data, update, editable }: { data: SnapshotData; upd
   const pts = data.history.points;
   const yrs = data.history.years;
   const sorted = pts.every((p, i) => i === 0 || pts[i - 1]!.date < p.date);
-  const cell = { padding: "0.35rem 0.4rem", verticalAlign: "top" } as const;
+  const cell = { padding: "0.25rem 0.5rem", verticalAlign: "top" } as const;
   return (
     <div style={{ display: "grid", gap: "1.25rem" }}>
       <div className="adm-card">
@@ -530,7 +530,7 @@ export function HistoryTab({ data, update, editable }: { data: SnapshotData; upd
           потребує посилання на публікацію ІМІ. Примітка показується на графіку (заповнюйте обидві мови або жодної).
         </p>
         <div style={{ overflowX: "auto", marginTop: "0.75rem" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.85rem" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.875rem" }}>
             <thead>
               <tr className="muted" style={{ textAlign: "left" }}>
                 <th style={cell}>Дата</th>
@@ -561,7 +561,7 @@ export function HistoryTab({ data, update, editable }: { data: SnapshotData; upd
                     <input className="adm-input" type="url" style={{ minWidth: "14rem" }} disabled={!editable} value={p.source} aria-invalid={!p.source ? "true" : undefined} onChange={(e) => update((d) => void (d.history.points[i]!.source = e.target.value.trim()))} />
                   </td>
                   <td style={cell}>
-                    <div style={{ display: "grid", gap: "0.3rem", minWidth: "14rem" }}>
+                    <div style={{ display: "grid", gap: "0.25rem", minWidth: "14rem" }}>
                       <input className="adm-input" maxLength={300} disabled={!editable} value={p.note.uk} placeholder="UA" onChange={(e) => update((d) => void (d.history.points[i]!.note.uk = e.target.value))} />
                       <input className="adm-input" maxLength={300} disabled={!editable} value={p.note.en} placeholder="EN" onChange={(e) => update((d) => void (d.history.points[i]!.note.en = e.target.value))} />
                     </div>
@@ -577,7 +577,7 @@ export function HistoryTab({ data, update, editable }: { data: SnapshotData; upd
           </table>
         </div>
         {editable && (
-          <div style={{ display: "flex", gap: "0.6rem", marginTop: "0.75rem", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.75rem", flexWrap: "wrap" }}>
             <button className="btn" onClick={() => update((d) => void d.history.points.push({ date: "", total: null, killedTotal: null, killedOnDuty: null, note: { uk: "", en: "" }, source: "" }))}>
               Додати точку
             </button>
@@ -594,7 +594,7 @@ export function HistoryTab({ data, update, editable }: { data: SnapshotData; upd
         <p className="muted">Короткий підсумок для картки року: скільки медійників загинуло за рік і одне речення про головне. Зміну показника за рік сайт рахує сам.</p>
         <div style={{ display: "grid", gap: "0.75rem", marginTop: "0.75rem" }}>
           {yrs.map((y, i) => (
-            <div key={i} style={{ display: "grid", gridTemplateColumns: "6rem 7rem 1fr 1fr auto", gap: "0.6rem", alignItems: "end" }}>
+            <div key={i} style={{ display: "grid", gridTemplateColumns: "6rem 7rem 1fr 1fr auto", gap: "0.5rem", alignItems: "end" }}>
               <Field label="Рік">
                 <input className="adm-input num" type="number" min={2022} max={2100} disabled={!editable} value={y.year} onChange={(e) => update((d) => void (d.history.years[i]!.year = Number(e.target.value)))} />
               </Field>
@@ -602,7 +602,7 @@ export function HistoryTab({ data, update, editable }: { data: SnapshotData; upd
                 <input className="adm-input num" type="number" min={0} disabled={!editable} value={y.killedInYear ?? ""} onChange={(e) => update((d) => void (d.history.years[i]!.killedInYear = numOrNull(e.target.value)))} />
               </Field>
               <Field label="Підсумок UA / EN">
-                <div style={{ display: "grid", gap: "0.3rem" }}>
+                <div style={{ display: "grid", gap: "0.25rem" }}>
                   <input className="adm-input" maxLength={300} disabled={!editable} value={y.note.uk} onChange={(e) => update((d) => void (d.history.years[i]!.note.uk = e.target.value))} />
                   <input className="adm-input" maxLength={300} disabled={!editable} value={y.note.en} onChange={(e) => update((d) => void (d.history.years[i]!.note.en = e.target.value))} />
                 </div>
