@@ -1,0 +1,40 @@
+# dependencies
+node_modules/
+
+# next.js / build
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# environment & secrets — never commit
+.env
+.env.*
+!.env.example
+
+# databases (contain admin credentials and sessions) — never commit
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+data/*.db*
+var/
+
+# backups are local operational data
+backups/
+
+# test & QA artefacts
+coverage/
+tests/.tmp/
+qa/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+npm-debug.log*

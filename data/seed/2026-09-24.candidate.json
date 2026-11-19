@@ -1,0 +1,251 @@
+{
+  "schemaVersion": 1,
+  "totalCrimes": 977,
+  "monitoringStart": "2022-02-24",
+  "asOfDate": "2026-09-24",
+  "period": {
+    "start": "2026-08-24",
+    "end": "2026-09-24",
+    "newCases": null
+  },
+  "casualties": {
+    "killedTotal": null,
+    "killedOnDuty": 15
+  },
+  "texts": {
+    "periodLabel": {
+      "uk": "4 роки і 7 місяців повномасштабної війни",
+      "en": "4 years, 7 months of the full-scale war"
+    },
+    "editorNote": {
+      "uk": "",
+      "en": ""
+    }
+  },
+  "sources": {
+    "articleUk": "",
+    "articleEn": "",
+    "registry": "https://imi.org.ua/russias-crimes"
+  },
+  "categories": [
+    {
+      "id": "killings",
+      "iconId": "killings",
+      "value": 15,
+      "order": 10,
+      "hidden": false,
+      "name": {
+        "uk": "Вбивства",
+        "en": "Murder"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "missing",
+      "iconId": "missing",
+      "value": 14,
+      "order": 20,
+      "hidden": false,
+      "name": {
+        "uk": "Зникнення журналістів",
+        "en": "Journalists missing"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "kidnapping",
+      "iconId": "kidnapping",
+      "value": 29,
+      "order": 30,
+      "hidden": false,
+      "name": {
+        "uk": "Викрадення журналістів",
+        "en": "Journalists kidnapped"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "injuries",
+      "iconId": "injuries",
+      "value": 46,
+      "order": 40,
+      "hidden": false,
+      "name": {
+        "uk": "Поранення журналістів",
+        "en": "Journalists injured"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "assassination-attempts",
+      "iconId": "assassination-attempts",
+      "value": 6,
+      "order": 50,
+      "hidden": false,
+      "name": {
+        "uk": "Замахи на вбивство",
+        "en": "Assassination attempts"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "tv-tower-strikes",
+      "iconId": "tv-tower-strikes",
+      "value": 24,
+      "order": 60,
+      "hidden": false,
+      "name": {
+        "uk": "Обстріли телевеж",
+        "en": "Air strikes at TV towers"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "strikes-on-journalists",
+      "iconId": "strikes-on-journalists",
+      "value": 52,
+      "order": 70,
+      "hidden": false,
+      "name": {
+        "uk": "Обстріли журналістів",
+        "en": "Armed strikes at journalists"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "newsroom-damage",
+      "iconId": "newsroom-damage",
+      "value": 109,
+      "order": 80,
+      "hidden": false,
+      "name": {
+        "uk": "Руйнування і пошкодження редакцій",
+        "en": "Media offices destroyed or damaged"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "broadcast-takeover",
+      "iconId": "broadcast-takeover",
+      "value": 35,
+      "order": 90,
+      "hidden": false,
+      "name": {
+        "uk": "Вимкнення українського мовлення та трансляція російської пропаганди",
+        "en": "Ukrainian channels disabled, replaced with Russian propaganda"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "threats",
+      "iconId": "threats",
+      "value": 143,
+      "order": 100,
+      "hidden": false,
+      "name": {
+        "uk": "Погрози журналістам",
+        "en": "Death threats to journalists"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "cybercrimes",
+      "iconId": "cybercrimes",
+      "value": 118,
+      "order": 110,
+      "hidden": false,
+      "name": {
+        "uk": "Кіберзлочини",
+        "en": "Cyber crimes"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "media-closures",
+      "iconId": "media-closures",
+      "value": 338,
+      "order": 120,
+      "hidden": false,
+      "name": {
+        "uk": "Медіа припинили роботу через війну Росії проти України",
+        "en": "News outlets shut down due to Russia’s war"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "internet-blocking",
+      "iconId": "internet-blocking",
+      "value": 11,
+      "order": 130,
+      "hidden": false,
+      "name": {
+        "uk": "Блокування інтернет-доступу до медіа",
+        "en": "News websites blocked"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "legal-pressure",
+      "iconId": "legal-pressure",
+      "value": 38,
+      "order": 140,
+      "hidden": false,
+      "name": {
+        "uk": "Випадки юридичного тиску",
+        "en": "Cases of judicial pressure"
+      },
+      "description": {
+        "uk": "",
+        "en": ""
+      }
+    }
+  ],
+  "verification": {
+    "sourceChecked": false,
+    "sumMismatchConfirmed": false,
+    "sumMismatchExplanation": {
+      "uk": "",
+      "en": ""
+    },
+    "internalNote": "ІСТОРИЧНИЙ ЗНІМОК ДЛЯ ЗВІРКИ, НЕ ПУБЛІКУВАТИ БЕЗ ПЕРЕВІРКИ. Значення взято з макетів інфографіки «4 роки і 7 місяців» (977, станом на 24.09.2026). Не заповнено: посилання на публікації ІМІ, кількість нових випадків за 24.08–24.09. Кількість загиблих медійників: у макеті 134, Укрінформ із посиланням на ІМІ наводить 137 — звірте з публікацією ІМІ. Сума категорій = 978 при головному показнику 977."
+  }
+}
