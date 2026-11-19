@@ -3,11 +3,11 @@
   "version": 1,
   "snapshots": [
     {
-      "revision": 1,
-      "publishedAt": null,
+      "revision": 2,
+      "publishedAt": "2026-11-19T19:06:43.256Z",
       "data": {
         "schemaVersion": 1,
-        "totalCrimes": 989,
+        "totalCrimes": 1003,
         "monitoringStart": "2022-02-24",
         "asOfDate": "2026-10-24",
         "period": {
@@ -246,15 +246,6 @@
             }
           }
         ],
-        "verification": {
-          "sourceChecked": true,
-          "sumMismatchConfirmed": true,
-          "sumMismatchExplanation": {
-            "uk": "Значення категорій наведено так, як їх опубліковано в інфографіці ІМІ, а головний показник — за текстом публікації ІМІ від 26 жовтня 2026 року. Різницю між ними збережено без змін.",
-            "en": "Category figures are shown as published in the IMI infographic, and the headline figure as stated in the IMI publication of 26 October 2026. The difference between them is kept as published."
-          },
-          "internalNote": ""
-        },
         "history": {
           "points": [
             {
@@ -855,6 +846,15 @@
               "source": "https://imi.org.ua/en/monitorings/russia-commits-896-crimes-against-ukrainian-journalists-media-in-4-years-of-full-scale-war"
             }
           ]
+        },
+        "verification": {
+          "sourceChecked": true,
+          "sumMismatchConfirmed": true,
+          "sumMismatchExplanation": {
+            "uk": "Значення категорій наведено так, як їх опубліковано в інфографіці ІМІ, а головний показник — за текстом публікації ІМІ від 26 жовтня 2026 року. Різницю між ними збережено без змін.",
+            "en": "Category figures are shown as published in the IMI infographic, and the headline figure as stated in the IMI publication of 26 October 2026. The difference between them is kept as published."
+          },
+          "internalNote": ""
         }
       }
     }
