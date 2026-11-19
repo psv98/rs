@@ -272,6 +272,18 @@ body {
   background: linear-gradient(135deg, #f05a6a, #dc3b52 50%, #bd2a42);
   box-shadow: 0 14px 34px -10px rgba(237, 76, 92, 0.9);
 }
+/* Secondary action: red outline, white label; fills red on hover. */
+.btn--outline {
+  background: transparent;
+  border-color: var(--color-signal);
+  color: var(--color-paper);
+}
+.btn--outline:hover {
+  background: var(--color-signal);
+  border-color: var(--color-signal);
+  color: #fff;
+  box-shadow: 0 10px 30px -14px rgba(237, 76, 92, 0.8);
+}
 .btn svg { width: 1rem; height: 1rem; flex: none; position: relative; z-index: 1; }
 .btn span { position: relative; z-index: 1; }
 /* Labels are trimmed to cap height and baseline, so flex centring puts the letters

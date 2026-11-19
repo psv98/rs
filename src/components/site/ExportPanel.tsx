@@ -33,14 +33,15 @@ type SavePicker = (o: { suggestedName: string; types: Array<{ description: strin
  * desktop). Other browsers use their usual download behaviour; Safari and Firefox ask
  * where to save if "Ask where to save each file" is on in their settings.
  */
-function SaveButton({ href, name, label }: { href?: string; name?: string; label: string }) {
+function SaveButton({ href, name, label, ariaLabel }: { href?: string; name?: string; label: string; ariaLabel: string }) {
   if (!href) return null;
   const file = (name ?? href).split("/").pop()!.split("?")[0]!;
   return (
     <a
-      className="btn btn--primary"
+      className="btn btn--outline"
       href={href}
       download={file}
+      aria-label={ariaLabel}
       onClick={async (e) => {
         const picker = (window as unknown as { showSaveFilePicker?: SavePicker }).showSaveFilePicker;
         if (!picker) return; // regular download
@@ -94,7 +95,8 @@ export function ExportPanel({ locale, links }: { locale: Locale; links: ExportLi
           <SaveButton
             href={socialCount > 1 && links.socialZip ? links.socialZip : links.social[0]?.download}
             name={socialCount > 1 && links.socialZip ? links.social[0]?.filename?.replace(/(_\d+-of-\d+)?\.png$/, ".zip") : links.social[0]?.filename}
-            label={d.social}
+            label={d.save}
+            ariaLabel={d.social}
           />
         </div>
       </div>
@@ -106,7 +108,7 @@ export function ExportPanel({ locale, links }: { locale: Locale; links: ExportLi
           ))}
         </div>
         <div className="export-actions">
-          <SaveButton href={links.wide[0]?.download} name={links.wide[0]?.filename ?? links.wide[0]?.download} label={d.wide} />
+          <SaveButton href={links.wide[0]?.download} name={links.wide[0]?.filename ?? links.wide[0]?.download} label={d.save} ariaLabel={d.wide} />
         </div>
       </div>
     </div>
