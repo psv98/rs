@@ -1,6 +1,7 @@
 import type { Locale, PublicSnapshot } from "@/lib/data/schema";
 import { formatLongDate, formatShortDate } from "@/lib/data/dates";
-import { t, localePath } from "@/lib/i18n/dictionaries";
+import { t } from "@/lib/i18n/dictionaries";
+import { pageHref, routePath } from "@/lib/site";
 import { CountUp } from "./CountUp";
 import { ShareTools } from "./ShareTools";
 
@@ -35,9 +36,9 @@ export function Hero({ locale, snap, siteUrl }: { locale: Locale; snap: PublicSn
             <span>{d.hero.asOf(asOf)}</span>
           </p>
           <ShareTools
-            statsText={d.share.statsText(data.totalCrimes, asOf, since, `${siteUrl}${localePath(locale)}`)}
+            statsText={d.share.statsText(data.totalCrimes, asOf, since, `${siteUrl}${routePath(locale)}`)}
             labels={{ copyStats: d.share.copyStats, copied: d.share.copied, share: d.share.share, present: d.share.present }}
-            presentHref={localePath(locale, "/present")}
+            presentHref={pageHref(locale, "/present")}
             title={d.projectName}
           />
         </div>

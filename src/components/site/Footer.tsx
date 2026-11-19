@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/data/schema";
-import { t, localePath } from "@/lib/i18n/dictionaries";
+import { t } from "@/lib/i18n/dictionaries";
+import { pageHref, withBase } from "@/lib/site";
 
 export function Footer({ locale }: { locale: Locale }) {
   const d = t(locale);
@@ -8,7 +9,7 @@ export function Footer({ locale }: { locale: Locale }) {
       <div className="shell site-footer__row">
         <div style={{ display: "grid", gap: "1rem" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`/brand/imi-logo-${locale}.svg`} alt={d.org} width={124} height={44} />
+          <img src={withBase(`/brand/imi-logo-${locale}.svg`)} alt={d.org} width={124} height={44} />
           <p>{d.footer.monitoring}</p>
           <p>{d.footer.rights}</p>
         </div>
@@ -17,8 +18,8 @@ export function Footer({ locale }: { locale: Locale }) {
             {d.footer.site}
           </a>
           <a href="#methodology">{d.nav.methodology}</a>
-          <a href={localePath(locale, "/present")}>{d.share.present}</a>
-          <a href={locale === "uk" ? "/en" : "/"} hrefLang={locale === "uk" ? "en" : "uk"}>
+          <a href={pageHref(locale, "/present")}>{d.share.present}</a>
+          <a href={pageHref(locale === "uk" ? "en" : "uk")} hrefLang={locale === "uk" ? "en" : "uk"}>
             {locale === "uk" ? "English" : "Українська"}
           </a>
           <span style={{ color: "var(--color-ash-2)" }}>© {new Date().getFullYear()} {d.org}</span>

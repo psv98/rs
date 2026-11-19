@@ -1,0 +1,261 @@
+{
+  "format": "imi-russias-crimes-published",
+  "version": 1,
+  "snapshots": [
+    {
+      "revision": 1,
+      "publishedAt": null,
+      "data": {
+        "schemaVersion": 1,
+        "totalCrimes": 989,
+        "monitoringStart": "2022-02-24",
+        "asOfDate": "2026-10-24",
+        "period": {
+          "start": "2026-09-24",
+          "end": "2026-10-24",
+          "newCases": 12
+        },
+        "casualties": {
+          "killedTotal": 143,
+          "killedOnDuty": 15
+        },
+        "texts": {
+          "periodLabel": {
+            "uk": "4 роки і 8 місяців повномасштабної війни",
+            "en": "4 years, 8 months of the full-scale war"
+          },
+          "editorNote": {
+            "uk": "",
+            "en": ""
+          }
+        },
+        "sources": {
+          "articleUk": "https://imi.org.ua/monitorings/za-chotyry-roky-j-visim-misyatsiv-povnomasshtabnoyi-vijny-rf-skoyila-989-zlochyniv-proty-zhurnalistiv-i-media",
+          "articleEn": "https://imi.org.ua/en/monitorings/989-crimes-against-ukrainian-journalists-media-committed-by-russia-since-24-feb-2024",
+          "registry": "https://imi.org.ua/russias-crimes"
+        },
+        "categories": [
+          {
+            "id": "killings",
+            "iconId": "killings",
+            "value": 15,
+            "order": 10,
+            "hidden": false,
+            "name": {
+              "uk": "Вбивства",
+              "en": "Murder"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          },
+          {
+            "id": "missing",
+            "iconId": "missing",
+            "value": 14,
+            "order": 20,
+            "hidden": false,
+            "name": {
+              "uk": "Зникнення журналістів",
+              "en": "Journalists missing"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          },
+          {
+            "id": "kidnapping",
+            "iconId": "kidnapping",
+            "value": 29,
+            "order": 30,
+            "hidden": false,
+            "name": {
+              "uk": "Викрадення журналістів",
+              "en": "Journalists kidnapped"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          },
+          {
+            "id": "injuries",
+            "iconId": "injuries",
+            "value": 46,
+            "order": 40,
+            "hidden": false,
+            "name": {
+              "uk": "Поранення журналістів",
+              "en": "Journalists injured"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          },
+          {
+            "id": "assassination-attempts",
+            "iconId": "assassination-attempts",
+            "value": 6,
+            "order": 50,
+            "hidden": false,
+            "name": {
+              "uk": "Замахи на вбивство",
+              "en": "Assassination attempts"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          },
+          {
+            "id": "tv-tower-strikes",
+            "iconId": "tv-tower-strikes",
+            "value": 24,
+            "order": 60,
+            "hidden": false,
+            "name": {
+              "uk": "Обстріли телевеж",
+              "en": "Air strikes at TV towers"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          },
+          {
+            "id": "strikes-on-journalists",
+            "iconId": "strikes-on-journalists",
+            "value": 53,
+            "order": 70,
+            "hidden": false,
+            "name": {
+              "uk": "Обстріли журналістів",
+              "en": "Armed strikes at journalists"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          },
+          {
+            "id": "newsroom-damage",
+            "iconId": "newsroom-damage",
+            "value": 112,
+            "order": 80,
+            "hidden": false,
+            "name": {
+              "uk": "Руйнування і пошкодження редакцій",
+              "en": "Media offices destroyed or damaged"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          },
+          {
+            "id": "broadcast-takeover",
+            "iconId": "broadcast-takeover",
+            "value": 42,
+            "order": 90,
+            "hidden": false,
+            "name": {
+              "uk": "Вимкнення українського мовлення та трансляція російської пропаганди",
+              "en": "Ukrainian channels disabled, replaced with Russian propaganda"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          },
+          {
+            "id": "threats",
+            "iconId": "threats",
+            "value": 143,
+            "order": 100,
+            "hidden": false,
+            "name": {
+              "uk": "Погрози журналістам",
+              "en": "Death threats to journalists"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          },
+          {
+            "id": "cybercrimes",
+            "iconId": "cybercrimes",
+            "value": 119,
+            "order": 110,
+            "hidden": false,
+            "name": {
+              "uk": "Кіберзлочини",
+              "en": "Cyber crimes"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          },
+          {
+            "id": "media-closures",
+            "iconId": "media-closures",
+            "value": 338,
+            "order": 120,
+            "hidden": false,
+            "name": {
+              "uk": "Медіа припинили роботу через війну Росії проти України",
+              "en": "News outlets shut down due to Russia’s war"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          },
+          {
+            "id": "internet-blocking",
+            "iconId": "internet-blocking",
+            "value": 11,
+            "order": 130,
+            "hidden": false,
+            "name": {
+              "uk": "Блокування інтернет-доступу до медіа",
+              "en": "News websites blocked"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          },
+          {
+            "id": "legal-pressure",
+            "iconId": "legal-pressure",
+            "value": 38,
+            "order": 140,
+            "hidden": false,
+            "name": {
+              "uk": "Випадки юридичного тиску",
+              "en": "Cases of judicial pressure"
+            },
+            "description": {
+              "uk": "",
+              "en": ""
+            }
+          }
+        ],
+        "verification": {
+          "sourceChecked": false,
+          "sumMismatchConfirmed": false,
+          "sumMismatchExplanation": {
+            "uk": "Значення категорій наведено так, як їх опубліковано в інфографіці ІМІ, а головний показник — за текстом публікації ІМІ від 26 жовтня 2026 року. Різницю між ними збережено без змін.",
+            "en": "Category figures are shown as published in the IMI infographic, and the headline figure as stated in the IMI publication of 26 October 2026. The difference between them is kept as published."
+          },
+          "internalNote": "Стартовий набір. Головний показник 989, 12 нових випадків (24.09–24.10.2026), 143 загиблі медійники, з них 15 під час роботи — за публікаціями ІМІ від 26.10.2026 (UA та EN). Значення 14 категорій — за офіційною інфографікою ІМІ «4 роки і 8 місяців повномасштабної війни» (SVG у UA та EN версіях, категорія мовлення = 42). Сума категорій = 990, головний показник = 989: розбіжність не виправлялася, її має пояснити редактор."
+        }
+      }
+    }
+  ]
+}

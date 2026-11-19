@@ -28,4 +28,5 @@ export const ACTION_LABEL: Record<string, string> = {
   "admin.create": "Створено адміністратора (CLI)",
   "admin.password-reset": "Змінено пароль (CLI)",
   seed: "Завантажено стартові дані",
+  "pages.export": "Завантажено файл для GitHub Pages",
 };

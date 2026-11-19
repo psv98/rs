@@ -4,6 +4,8 @@
 
 Публічна двомовна сторінка (UA `/`, EN `/en`), закрита адмін-панель для одного редактора, генератор PNG-інфографіки (1080 × 1350, 1920 × 1080, Open Graph) та журнал версій статистики.
 
+**Сайт:** https://psv98.github.io/rs/ — статична версія публічної частини, яка автоматично збирається з `data/published/snapshots.json` при кожному push у `main` (див. [«GitHub Pages»](#github-pages)).
+
 Усе, що бачить відвідувач, береться з одного опублікованого знімка даних: сторінка, англійська версія, картки категорій, PNG-експорт і превʼю в соцмережах. Чернетки на сайт не потрапляють.
 
 ---
@@ -68,6 +70,8 @@ npm run dev                   # http://localhost:3000
 | `npm run db:restore -- файл.json` | повне відновлення з копії (спершу записується страхувальна копія) |
 | `npm test` | автоматичні тести |
 | `npm run typecheck` | перевірка типів |
+| `npm run build:static` | статична збірка публічної частини в `./out` (для GitHub Pages) |
+| `npm run pages:export` | записати опубліковані знімки з локальної БД у `data/published/snapshots.json` |
 | `npm run icons:build` | перегенерувати модуль іконок із `public/icons/categories/*.svg` |
 | `npm run qa:screenshots` | скриншоти сторінок у headless Chrome для візуальної перевірки |
 
@@ -167,11 +171,26 @@ npm run typecheck && npm test && npm run build
 
 Окремо перевірено роботу на PostgreSQL 16 з роллю застосунку без прав `DROP`/`DELETE` на журнал аудиту (див. `docs/DEPLOYMENT.md`).
 
-## GitHub і продакшн
+## GitHub Pages
+
+Публічна частина працює і як статичний сайт. Workflow `.github/workflows/pages.yml` на кожен push у `main`:
+
+1. запускає тести;
+2. перевіряє `data/published/snapshots.json` за правилами публікації (знімки без підтвердження редактора на сайт не потрапляють, причина видна в журналі Actions);
+3. заздалегідь рендерить усі PNG і ZIP;
+4. збирає HTML (`npm run build:static`) і викладає його в гілку `gh-pages`.
+
+Одноразове налаштування: **Settings → Pages → Build and deployment → Source: Deploy from a branch → Branch: `gh-pages` / `(root)` → Save.**
+
+Адмін-панель і серверні API у статичну версію не входять: їм потрібен сервер. На Pages дані оновлюються через файл `data/published/snapshots.json` — прямо в GitHub або вивантаженням з локальної адмінки (`npm run pages:export`). Подробиці — у [data/published/README.md](data/published/README.md).
+
+Власний домен: задайте змінні репозиторію `PAGES_BASE_PATH` (порожнє значення) і `PAGES_SITE_URL` (наприклад `https://crimes.imi.org.ua`) і додайте домен у налаштуваннях Pages.
+
+## Сервер і продакшн
 
 - Секрети та бази даних не потрапляють у Git (`.gitignore`): `.env`, `*.db`, `var/`, `backups/`.
 - CI (`.github/workflows/ci.yml`): typecheck, тести, `npm audit`, збірка. Dependabot стежить за залежностями.
-- GitHub Pages для цього застосунку **не підходить**: адмінка і PNG-експорт потребують сервера. Потрібен Node.js-хостинг (VPS, Docker або PaaS) і PostgreSQL. Покрокова інструкція — у [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+- Повна версія з адмінкою онлайн потребує Node.js-хостингу (VPS, Docker або PaaS) і PostgreSQL. Покрокова інструкція — у [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Що потрібно додати
 

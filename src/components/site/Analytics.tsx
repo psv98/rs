@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { visibleCategories, type Locale, type PublicSnapshot } from "@/lib/data/schema";
 import { formatLongDate, formatShortDate, yearOf } from "@/lib/data/dates";
 import { t } from "@/lib/i18n/dictionaries";
@@ -43,6 +43,23 @@ export function Analytics({ locale, history, initial }: { locale: Locale; histor
   const [catId, setCatId] = useState<string | null>(initial.cat);
   const cat = cats.find((c) => c.id === catId) ?? cats[0] ?? null;
 
+  // Filters live in the URL so links can be shared; they are read in the browser
+  // (the page itself may be static HTML).
+  const hydrated = useRef(false);
+  useEffect(() => {
+    const sp = new URLSearchParams(window.location.search);
+    const y = Number.parseInt(sp.get("year") ?? "", 10);
+    const iso = (v: string | null) => (v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null);
+    if (Number.isInteger(y) && y >= 2022 && y <= 2100) setYear(y);
+    if (iso(sp.get("s"))) setSKey(iso(sp.get("s")));
+    if (sp.get("cmp") === "none") setCmpKey(null);
+    else if (iso(sp.get("cmp"))) setCmpKey(iso(sp.get("cmp")));
+    const c = sp.get("cat");
+    if (c && /^[a-z0-9-]{2,48}$/.test(c)) setCatId(c);
+    hydrated.current = true;
+    if (Number.isInteger(y)) window.dispatchEvent(new CustomEvent("imi:year-sync", { detail: y }));
+  }, []);
+
   // React to the year rail (history block).
   useEffect(() => {
     const onYear = (e: Event) => {
@@ -56,6 +73,7 @@ export function Analytics({ locale, history, initial }: { locale: Locale; histor
   }, []);
 
   useEffect(() => {
+    if (!hydrated.current) return;
     writeUrl({
       year: year === null ? null : String(year),
       s: sKey,

@@ -17,6 +17,17 @@ export function BackupTools({ csrf }: { csrf: string }) {
         </p>
       </div>
       <div className="adm-card">
+        <h2 style={{ marginTop: 0 }}>Файл для GitHub Pages</h2>
+        <p className="muted">
+          Опубліковані знімки у форматі <code>data/published/snapshots.json</code>. Замініть цей файл у репозиторії — сайт на GitHub Pages перебудується автоматично.
+        </p>
+        <p style={{ marginTop: "0.75rem" }}>
+          <a className="btn" href="/api/admin/published-file" download>
+            Завантажити snapshots.json
+          </a>
+        </p>
+      </div>
+      <div className="adm-card">
         <h2 style={{ marginTop: 0 }}>Імпорт як чернетки</h2>
         <p className="muted">
           Кожен знімок із файлу буде додано як <b>чернетку</b> — після імпорту нічого не публікується. Повне відновлення сайту зі статусами виконується з сервера: <code>npm run db:restore -- файл.json</code>.

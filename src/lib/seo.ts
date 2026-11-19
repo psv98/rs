@@ -12,9 +12,12 @@ export async function pageMetadata(locale: Locale, path: "" | "/present" = ""): 
   const title = current ? d.title(current.data.totalCrimes) : d.fallbackTitle;
   const description = current ? d.description(current.data.totalCrimes, formatLongDate(current.data.asOfDate, locale)) : d.fallbackDescription;
   const base = config.siteUrl;
-  const ukUrl = `${base}${path || "/"}`;
-  const enUrl = `${base}/en${path}`;
-  const og = `${base}/api/og?lang=${locale}&v=${current?.checksum.slice(0, 10) ?? "0"}`;
+  const isStatic = process.env.STATIC_EXPORT === "1";
+  const slash = isStatic ? "/" : "";
+  const ukUrl = `${base}${path ? `${path}${slash}` : "/"}`;
+  const enUrl = `${base}/en${path}${slash}`;
+  const v = current?.checksum.slice(0, 10) ?? "0";
+  const og = isStatic ? `${base}/exports/${locale}/og.png?v=${v}` : `${base}/api/og?lang=${locale}&v=${v}`;
   return {
     metadataBase: new URL(base),
     title,

@@ -1,14 +1,16 @@
 import type { Locale } from "@/lib/data/schema";
 import { visibleCategories } from "@/lib/data/schema";
-import { getPublicState } from "@/lib/data/public";
+import { dynamicInServerMode, getPublicState } from "@/lib/data/public";
 import { formatLongDate } from "@/lib/data/dates";
-import { t, localePath } from "@/lib/i18n/dictionaries";
+import { t } from "@/lib/i18n/dictionaries";
+import { pageHref, withBase } from "@/lib/site";
 import { CategoryIcon } from "../ui/CategoryIcon";
 import { Glyph } from "../ui/Glyph";
 import { FullscreenButton } from "./FullscreenButton";
 
 /** Large-screen mode: the headline figure and all categories, nothing else. */
 export async function PresentPage({ locale }: { locale: Locale }) {
+  await dynamicInServerMode();
   const { current } = await getPublicState();
   const d = t(locale);
   const fmt = (n: number) => new Intl.NumberFormat(locale === "uk" ? "uk-UA" : "en-GB").format(n).replace(/ /g, " ");
@@ -16,10 +18,10 @@ export async function PresentPage({ locale }: { locale: Locale }) {
     <main className="present" id="main">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={`/brand/imi-logo-${locale}.svg`} alt={d.org} height={52} style={{ height: 52, width: "auto" }} />
+        <img src={withBase(`/brand/imi-logo-${locale}.svg`)} alt={d.org} height={52} style={{ height: 52, width: "auto" }} />
         <div style={{ display: "flex", gap: "0.75rem" }}>
           <FullscreenButton label={d.present.fullscreen} />
-          <a className="btn" href={localePath(locale)}>
+          <a className="btn" href={pageHref(locale)}>
             <Glyph name="close" />
             {d.present.exit}
           </a>

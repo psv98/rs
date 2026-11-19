@@ -20,7 +20,9 @@
     "admin:create": "tsx --conditions=react-server scripts/admin-create.ts",
     "icons:build": "node scripts/icons/build-icons.mjs",
     "qa:screenshots": "tsx scripts/qa-screenshots.ts",
-    "setup": "npm run db:migrate && npm run db:seed"
+    "setup": "npm run db:migrate && npm run db:seed",
+    "build:static": "node scripts/build-static.mjs",
+    "pages:export": "tsx --conditions=react-server scripts/pages-export.ts"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",

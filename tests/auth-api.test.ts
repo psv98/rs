@@ -4,12 +4,12 @@ import type { DB } from "@/lib/db";
 import { hashPassword, verifyPassword, passwordProblems } from "@/lib/auth/password";
 import { createSession, getSessionByToken } from "@/lib/auth/session";
 import { insertSnapshot } from "@/lib/data/repository";
-import * as login from "@/app/api/admin/login/route";
-import * as snapshots from "@/app/api/admin/snapshots/route";
-import * as snapshot from "@/app/api/admin/snapshots/[id]/route";
-import * as action from "@/app/api/admin/snapshots/[id]/action/route";
-import * as adminExport from "@/app/api/admin/export/route";
-import * as backup from "@/app/api/admin/backup/route";
+import * as login from "@/app/api/admin/login/route.server";
+import * as snapshots from "@/app/api/admin/snapshots/route.server";
+import * as snapshot from "@/app/api/admin/snapshots/[id]/route.server";
+import * as action from "@/app/api/admin/snapshots/[id]/action/route.server";
+import * as adminExport from "@/app/api/admin/export/route.server";
+import * as backup from "@/app/api/admin/backup/route.server";
 import { freshDb, seedOct, actor } from "./helpers";
 
 const ORIGIN = "http://localhost:3000";

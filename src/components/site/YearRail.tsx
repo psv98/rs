@@ -10,7 +10,11 @@ export function YearRail({ locale, counts, years, currentYear, initialYear }: { 
   useEffect(() => {
     const on = (e: Event) => setActive((e as CustomEvent<number | null>).detail);
     window.addEventListener("imi:year", on);
-    return () => window.removeEventListener("imi:year", on);
+    window.addEventListener("imi:year-sync", on);
+    return () => {
+      window.removeEventListener("imi:year", on);
+      window.removeEventListener("imi:year-sync", on);
+    };
   }, []);
   return (
     <ol className="rail" style={{ "--years": years.length } as CSSProperties}>

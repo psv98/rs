@@ -5,16 +5,16 @@ import { t } from "@/lib/i18n/dictionaries";
 import { Glyph } from "../ui/Glyph";
 
 export interface ExportLinks {
-  social: Array<{ src: string; download: string }>;
-  wide: Array<{ src: string; download: string }>;
+  social: Array<{ src: string; download: string; filename?: string }>;
+  wide: Array<{ src: string; download: string; filename?: string }>;
   socialZip: string | null;
   allZip: string | null;
 }
 
-function Thumb({ src, href, caption, ratio }: { src: string; href: string; caption: string; ratio: string }) {
+function Thumb({ src, href, caption, ratio, filename }: { src: string; href: string; caption: string; ratio: string; filename?: string }) {
   const [loaded, setLoaded] = useState(false);
   return (
-    <a className="thumb" href={href} data-loaded={loaded} aria-label={caption} style={{ aspectRatio: ratio }}>
+    <a className="thumb" href={href} download={filename} data-loaded={loaded} aria-label={caption} style={{ aspectRatio: ratio }}>
       <figure>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={src} alt="" width={ratio === "1080 / 1350" ? 1080 : 1920} height={ratio === "1080 / 1350" ? 1350 : 1080} loading="lazy" decoding="async" onLoad={() => setLoaded(true)} ref={(el) => { if (el?.complete && el.naturalWidth) setLoaded(true); }} />
@@ -34,7 +34,7 @@ export function ExportPanel({ locale, links }: { locale: Locale; links: ExportLi
         <h3>{d.socialCaption[0]} <span style={{ color: "var(--color-ash-2)", fontWeight: 500 }}>{d.socialCaption[1]}</span></h3>
         <div className="thumbs" style={{ ["--n" as string]: Math.min(socialCount, 3) }}>
           {links.social.map((l, i) => (
-            <Thumb key={i} ratio="1080 / 1350" src={l.src} href={l.download} caption={socialCount > 1 ? d.slide(i + 1, socialCount) : "1080 × 1350"} />
+            <Thumb key={i} ratio="1080 / 1350" src={l.src} href={l.download} filename={l.filename} caption={socialCount > 1 ? d.slide(i + 1, socialCount) : "1080 × 1350"} />
           ))}
         </div>
         <div className="export-actions">
@@ -48,11 +48,11 @@ export function ExportPanel({ locale, links }: { locale: Locale; links: ExportLi
         <h3>{d.wideCaption[0]} <span style={{ color: "var(--color-ash-2)", fontWeight: 500 }}>{d.wideCaption[1]}</span></h3>
         <div className="thumbs" style={{ ["--n" as string]: 1 }}>
           {links.wide.map((l, i) => (
-            <Thumb key={i} ratio="1920 / 1080" src={l.src} href={l.download} caption={wideCount > 1 ? d.slide(i + 1, wideCount) : "1920 × 1080"} />
+            <Thumb key={i} ratio="1920 / 1080" src={l.src} href={l.download} filename={l.filename} caption={wideCount > 1 ? d.slide(i + 1, wideCount) : "1920 × 1080"} />
           ))}
         </div>
         <div className="export-actions">
-          <a className="btn" href={links.wide[0]?.download} download>
+          <a className="btn" href={links.wide[0]?.download} download={links.wide[0]?.filename ?? true}>
             <Glyph name="download" />
             {d.wide}
           </a>

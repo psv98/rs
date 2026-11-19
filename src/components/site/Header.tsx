@@ -1,18 +1,21 @@
 import type { Locale } from "@/lib/data/schema";
-import { t, localePath } from "@/lib/i18n/dictionaries";
+import { t } from "@/lib/i18n/dictionaries";
+import { pageHref, withBase } from "@/lib/site";
 import { LanguageSwitch } from "./LanguageSwitch";
 
-export function Header({ locale, ukPath = "/", enPath = "/en" }: { locale: Locale; ukPath?: string; enPath?: string }) {
+export function Header({ locale, ukPath, enPath }: { locale: Locale; ukPath?: string; enPath?: string }) {
   const d = t(locale);
+  ukPath ??= pageHref("uk");
+  enPath ??= pageHref("en");
   return (
     <header className="site-header">
       <a className="skip-link" href="#main">
         {d.skipToContent}
       </a>
       <div className="shell site-header__row">
-        <a className="site-header__logo" href={localePath(locale)} aria-label={d.org}>
+        <a className="site-header__logo" href={pageHref(locale)} aria-label={d.org}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`/brand/imi-logo-${locale}.svg`} alt={d.org} width={108} height={39} />
+          <img src={withBase(`/brand/imi-logo-${locale}.svg`)} alt={d.org} width={108} height={39} />
         </a>
         <div className="site-header__project">
           <b>{d.projectKicker}</b>

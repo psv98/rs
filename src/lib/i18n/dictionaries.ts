@@ -352,4 +352,5 @@ const en: Dictionary = {
 
 export const dictionaries: Record<Locale, Dictionary> = { uk, en };
 export const t = (locale: Locale) => dictionaries[locale];
-export const localePath = (locale: Locale, path = "/") => (locale === "uk" ? path : `/en${path === "/" ? "" : path}`);
+/** @deprecated use pageHref from lib/site */
+export { pageHref as localePath } from "../site";

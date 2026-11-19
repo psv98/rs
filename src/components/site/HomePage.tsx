@@ -9,15 +9,16 @@ import { CategoryLedger } from "./CategoryLedger";
 import { Analytics, type AnalyticsInitial } from "./Analytics";
 import { History } from "./History";
 import { Methodology } from "./Methodology";
-import { ExportPanel } from "./ExportPanel";
+import { ExportPanel, type ExportLinks } from "./ExportPanel";
 import { Footer } from "./Footer";
 
 export type ExportMode = { kind: "public" } | { kind: "admin"; id: number };
+import { IS_STATIC, withBase } from "@/lib/site";
 
 export function HomePage({
   locale,
   state,
-  initial,
+  initial = { year: null, s: null, cmp: null, cat: null },
   siteUrl,
   exportMode = { kind: "public" },
   banner,
@@ -26,7 +27,7 @@ export function HomePage({
 }: {
   locale: Locale;
   state: PublicState;
-  initial: AnalyticsInitial;
+  initial?: AnalyticsInitial;
   siteUrl: string;
   exportMode?: ExportMode;
   banner?: string;
@@ -54,6 +55,20 @@ export function HomePage({
     );
   }
   const v = snap.checksum.slice(0, 10);
+  if (IS_STATIC && exportMode.kind === "public") {
+    // GitHub Pages: files pre-rendered by scripts/render-static-exports.ts
+    const file = (f: "social" | "wide", p: { index: number; count: number }) => {
+      const src = withBase(`/exports/${locale}/${f}-${p.index}.png?v=${v}`);
+      return { src, download: src, filename: `imi-russias-crimes_${snap.data.asOfDate}_${locale}_${f === "social" ? "1080x1350" : "1920x1080"}${p.count > 1 ? `_${p.index}-of-${p.count}` : ""}.png` };
+    };
+    const staticLinks = {
+      social: planSlides(snap.data, "social").map((p) => file("social", p)),
+      wide: planSlides(snap.data, "wide").map((p) => file("wide", p)),
+      socialZip: withBase(`/exports/${locale}/slides-1080x1350.zip?v=${v}`),
+      allZip: withBase(`/exports/${locale}/all-slides.zip?v=${v}`),
+    };
+    return renderPage(staticLinks);
+  }
   const url = (f: "social" | "wide", s: number, dl: boolean) =>
     exportMode.kind === "public"
       ? `/api/export/${f}?lang=${locale}&slide=${s}&v=${v}${dl ? "&download=1" : ""}`
@@ -65,6 +80,10 @@ export function HomePage({
     socialZip: exportMode.kind === "public" ? `/api/export/zip?lang=${locale}&set=social&v=${v}` : null,
     allZip: exportMode.kind === "public" ? `/api/export/zip?lang=${locale}&set=all&v=${v}` : null,
   };
+  return renderPage(links);
+
+  function renderPage(links: ExportLinks) {
+  if (!snap) return null;
   return (
     <>
       {banner && <div className="preview-banner">{banner}</div>}
@@ -101,4 +120,5 @@ export function HomePage({
       <Footer locale={locale} />
     </>
   );
+  }
 }

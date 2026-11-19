@@ -38,3 +38,7 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 npm-debug.log*
+
+# static build artefacts (generated in CI)
+out/
+public/exports/
