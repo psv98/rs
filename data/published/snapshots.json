@@ -247,8 +247,8 @@
           }
         ],
         "verification": {
-          "sourceChecked": false,
-          "sumMismatchConfirmed": false,
+          "sourceChecked": true,
+          "sumMismatchConfirmed": true,
           "sumMismatchExplanation": {
             "uk": "Значення категорій наведено так, як їх опубліковано в інфографіці ІМІ, а головний показник — за текстом публікації ІМІ від 26 жовтня 2026 року. Різницю між ними збережено без змін.",
             "en": "Category figures are shown as published in the IMI infographic, and the headline figure as stated in the IMI publication of 26 October 2026. The difference between them is kept as published."
