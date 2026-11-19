@@ -1172,15 +1172,15 @@ body {
 }
 .present__body {
   display: grid;
-  grid-template-columns: 740px 1fr;
+  grid-template-columns: 680px 1fr;
   grid-template-rows: minmax(0, 1fr) auto;
-  column-gap: 32px;
+  column-gap: 64px;
   row-gap: 16px;
   min-height: 0;
   align-items: stretch;
 }
 .present__ring { display: grid; place-items: center; min-height: 0; }
-.present .rose { width: 740px; }
+.present .rose { width: 680px; }
 /* The total reads larger here than on the site: it is the subject of the slide. */
 .present .ring__value { font-size: min(17cqi, calc(52cqi / var(--digits, 3))); }
 .present__right { display: grid; min-height: 0; }
