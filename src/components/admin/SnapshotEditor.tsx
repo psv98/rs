@@ -434,7 +434,7 @@ export function CategoriesTab({ data, update, editable }: { data: SnapshotData; 
   return (
     <div>
       <p className="muted" style={{ marginBottom: "1rem" }}>
-        Сума видимих категорій: <b style={{ color: "var(--color-paper)" }}>{sum}</b> · головний показник: <b style={{ color: "var(--color-paper)" }}>{data.totalCrimes}</b>
+        Сума видимих категорій: <b style={{ color: "var(--color-paper)" }}>{sum}</b>, головний показник: <b style={{ color: "var(--color-paper)" }}>{data.totalCrimes}</b>
       </p>
       <div style={{ display: "grid", gap: "0.75rem" }}>
         {sorted.map(({ c, idx }, pos) => (

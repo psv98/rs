@@ -1,72 +1,89 @@
+import type { CSSProperties } from "react";
 import type { Locale } from "@/lib/data/schema";
 import { visibleCategories } from "@/lib/data/schema";
 import { dynamicInServerMode, getPublicState } from "@/lib/data/public";
-
 import { t } from "@/lib/i18n/dictionaries";
 import { pageHref, withBase } from "@/lib/site";
+import { formatShortDate } from "@/lib/data/dates";
 import { CategoryIcon } from "../ui/CategoryIcon";
 import { Glyph } from "../ui/Glyph";
 import { FullscreenButton } from "./FullscreenButton";
 import { HeroRing } from "../site/HeroRing";
-import { formatShortDate } from "@/lib/data/dates";
+import { PresentStage } from "./PresentStage";
 
-/** Large-screen mode: the headline figure and all categories, nothing else. */
+/**
+ * Presentation mode: the headline figure and all categories on one 1920×1080 canvas,
+ * scaled to the screen. Three categories per row; an incomplete last row is stretched
+ * to the full width.
+ */
 export async function PresentPage({ locale }: { locale: Locale }) {
   await dynamicInServerMode();
   const { current } = await getPublicState();
   const d = t(locale);
-  const fmt = (n: number) => new Intl.NumberFormat(locale === "uk" ? "uk-UA" : "en-GB").format(n).replace(/ /g, " ");
+  const fmt = (n: number) => new Intl.NumberFormat(locale === "uk" ? "uk-UA" : "en-GB").format(n).replace(/\s/g, " ");
+  const cats = current ? visibleCategories(current.data) : [];
+  const rest = cats.length % 3; // items in an incomplete last row
+  const [t1, t2, t3] = d.hero.titleParts;
   return (
     <main className="present" id="main">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={withBase(`/brand/imi-logo-${locale}.svg`)} alt={d.org} height={52} style={{ height: 52, width: "auto" }} />
-        <div style={{ display: "flex", gap: "0.75rem" }}>
-          <FullscreenButton label={d.present.fullscreen} />
-          <a className="btn" href={pageHref(locale)}>
-            <Glyph name="close" />
-            {d.present.exit}
-          </a>
-        </div>
-      </div>
-      {current ? (
-        <div className="present__main">
-          <div style={{ display: "grid", gap: "1.5rem", justifyItems: "start" }}>
-            <p className="hero__war">
-              <span className="hero__war-line" aria-hidden="true" />
-              {current.data.texts.periodLabel[locale]}
-            </p>
-            <h1 className="hero__title" style={{ marginTop: 0 }}>{d.hero.title}</h1>
-            <HeroRing
-              total={current.data.totalCrimes}
-              categories={visibleCategories(current.data).map((c) => ({ id: c.id, iconId: c.iconId, value: c.value, name: c.name[locale] }))}
-              label={d.hero.ringLabel(current.data.totalCrimes)}
-              caption={d.hero.asOf(formatShortDate(current.data.asOfDate))}
-              ariaLabel={d.hero.ringAria(current.data.totalCrimes)}
-            />
+      <PresentStage>
+        <header className="present__top">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={withBase(`/brand/imi-logo-${locale}.svg`)} alt={d.org} className="present__logo" />
+          {current && <p className="war-plaque present__plaque">{current.data.texts.periodLabel[locale]}</p>}
+          <div className="present__actions">
+            <FullscreenButton label={d.present.fullscreen} />
+            <a className="btn btn--lg" href={pageHref(locale)}>
+              <Glyph name="close" />
+              <span>{d.present.exit}</span>
+            </a>
           </div>
-          <div className="present-grid" role="list" aria-label={d.categories.title}>
-            {visibleCategories(current.data).map((c) => (
-              <div key={c.id} role="listitem">
-                <CategoryIcon id={c.iconId} />
-                <b>
-                  {fmt(c.value)}
-                  {c.id === "killings" && current.data.casualties.killedTotal !== null && (
-                    <small style={{ fontSize: "0.4em", marginLeft: "0.3em", verticalAlign: "super" }}>({fmt(current.data.casualties.killedTotal)})*</small>
-                  )}
-                </b>
-                <span>{c.name[locale]}</span>
+        </header>
+        {current ? (
+          <>
+            <h1 className="present__title">
+              {t1}
+              <span className="hero__title-accent">{t2}</span>
+              {t3}
+            </h1>
+            <div className="present__body">
+              <div className="present__ring">
+                <HeroRing
+                  total={current.data.totalCrimes}
+                  categories={cats.map((c) => ({ id: c.id, iconId: c.iconId, value: c.value, name: c.name[locale] }))}
+                  label={d.hero.ringLabel(current.data.totalCrimes)}
+                  caption={d.hero.asOf(formatShortDate(current.data.asOfDate))}
+                  ariaLabel={d.hero.ringAria(current.data.totalCrimes)}
+                />
               </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <h1 className="section__title">{d.empty.title}</h1>
-      )}
-      <p style={{ color: "var(--color-ash-2)", fontSize: "0.95rem" }}>
-        {current?.data.casualties.killedTotal != null && `* ${d.categories.killedFootnote(current.data.casualties.killedTotal, current.data.casualties.killedOnDuty)} `}
-        {d.exportText.source}. imi.org.ua
-      </p>
+              <div className="present__right">
+                <div className="present-grid" role="list" aria-label={d.categories.title} style={{ "--rows": Math.ceil(cats.length / 3) } as CSSProperties}>
+                  {cats.map((c, i) => {
+                    const inLastRow = rest > 0 && i >= cats.length - rest;
+                    const span = inLastRow ? 6 / rest : 2;
+                    return (
+                      <div key={c.id} role="listitem" style={{ gridColumn: `span ${span}` }}>
+                        <CategoryIcon id={c.iconId} />
+                        <b>
+                          {fmt(c.value)}
+                          {c.id === "killings" && current.data.casualties.killedTotal !== null && <small>({fmt(current.data.casualties.killedTotal)})*</small>}
+                        </b>
+                        <span>{c.name[locale]}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="present__note">
+                  {current.data.casualties.killedTotal !== null && `* ${d.categories.killedFootnote(current.data.casualties.killedTotal, current.data.casualties.killedOnDuty)} `}
+                  {d.exportText.source}. imi.org.ua
+                </p>
+              </div>
+            </div>
+          </>
+        ) : (
+          <h1 className="present__title">{d.empty.title}</h1>
+        )}
+      </PresentStage>
     </main>
   );
 }

@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import { visibleCategories, type Locale, type PublicSnapshot } from "@/lib/data/schema";
 import { formatLongDate, formatShortDate } from "@/lib/data/dates";
 import { t } from "@/lib/i18n/dictionaries";
@@ -12,19 +11,8 @@ export function Hero({ locale, snap }: { locale: Locale; snap: PublicSnapshot })
   const data = snap.data;
   const since = formatLongDate(data.monitoringStart, locale);
   const asOf = formatLongDate(data.asOfDate, locale);
-  const p = data.period;
-  const k = data.casualties;
   const cats = visibleCategories(data);
   const [t1, t2, t3] = d.hero.titleParts;
-  const stats: Array<{ value: string; label: string; tone?: "ember" }> = [];
-  if (p.newCases !== null)
-    stats.push({
-      value: `+${groupDigits(p.newCases)}`,
-      label: p.start && p.end ? d.hero.statNew(formatShortDate(p.start), formatShortDate(p.end)) : d.hero.rowNew,
-      tone: "ember",
-    });
-  if (k.killedTotal !== null) stats.push({ value: groupDigits(k.killedTotal), label: d.hero.statKilled });
-  if (k.killedOnDuty !== null) stats.push({ value: groupDigits(k.killedOnDuty), label: d.hero.statOnDuty });
   return (
     <section className="hero" id="stats" aria-labelledby="hero-title">
       <div className="aurora" aria-hidden="true" />
@@ -35,28 +23,15 @@ export function Hero({ locale, snap }: { locale: Locale; snap: PublicSnapshot })
             <span className="hero__title-accent">{t2}</span>
             {t3}
           </h1>
-          <p className="hero__war">
-            <span className="hero__war-line" aria-hidden="true" />
-            {data.texts.periodLabel[locale]}
-          </p>
+          <p className="hero__war war-plaque">{data.texts.periodLabel[locale]}</p>
           <p className="hero__dek">
             <span className="sr-only">{`${groupDigits(data.totalCrimes)} ${d.heroLabel(data.totalCrimes)}. `}</span>
             {d.hero.dek(since, asOf)}
           </p>
         </div>
         <div className="hero__facts">
-          {stats.length > 0 && (
-            <dl className="hero__stats">
-              {stats.map((s, i) => (
-                <div key={s.label} className="hero__stat" style={{ "--i": i } as CSSProperties}>
-                  <dt>{s.label}</dt>
-                  <dd data-tone={s.tone}>{s.value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
           <div className="hero__actions">
-            <a className="btn btn--primary" href={pageHref(locale, "/present")}>
+            <a className="btn btn--primary btn--lg" href={pageHref(locale, "/present")}>
               <Glyph name="screen" />
               <span>{d.share.present}</span>
             </a>

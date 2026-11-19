@@ -43,7 +43,9 @@ export function CategoryLedger({ locale, snap }: { locale: Locale; snap: PublicS
                   <span className="cat__icon" aria-hidden="true" />
                 </div>
                 <p className="cat__value">
-                  {groupDigits(c.value)}
+                  <span className="cat__num" data-count={c.value}>
+                    {groupDigits(c.value)}
+                  </span>
                   {c.id === "killings" && k.killedTotal !== null && (
                     <a className="cat__sup" href={`#${anchor}-note`} aria-label={d.categories.killedFootnote(k.killedTotal, k.killedOnDuty)}>
                       ({groupDigits(k.killedTotal)})*

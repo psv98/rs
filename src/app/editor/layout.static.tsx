@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { RootDocument } from "@/components/site/RootDocument";
 import "../admin/admin.css";
+import "./editor.css";
 
 export const metadata: Metadata = {
   title: "Редактор даних — ІМІ",

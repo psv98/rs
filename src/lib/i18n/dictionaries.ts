@@ -210,7 +210,7 @@ const uk = {
   },
   footer: {
     monitoring: "Моніторинг злочинів Росії проти журналістів і медіа в Україні з 24 лютого 2022 року веде Інститут масової інформації.",
-    rights: "Дані та матеріали платформи належать Інституту масової інформації. Під час цитування, поширення або іншого використання даних посилання на ІМІ як на джерело обов'язкове.",
+    rights: "Під час цитування, поширення або іншого використання даних посилання на ІМІ як на джерело обов'язкове.",
     site: "imi.org.ua",
   },
   present: {
@@ -432,7 +432,7 @@ const en: Dictionary = {
   },
   footer: {
     monitoring: "The Institute of Mass Information has monitored Russia's crimes against journalists and media in Ukraine since 24 February 2022.",
-    rights: "The data and materials on this platform belong to the Institute of Mass Information. Any quotation, distribution or other use of the data must credit IMI as the source.",
+    rights: "Any quotation, distribution or other use of the data must credit IMI as the source.",
     site: "imi.org.ua",
   },
   present: {

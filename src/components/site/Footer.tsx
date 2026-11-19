@@ -11,7 +11,6 @@ export function Footer({ locale }: { locale: Locale }) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={withBase(`/brand/imi-logo-${locale}.svg`)} alt={d.org} width={150} height={53} />
         </a>
-        <p className="site-footer__lead">{d.footer.monitoring}</p>
         <p className="site-footer__rights">{d.footer.rights}</p>
       </div>
     </footer>

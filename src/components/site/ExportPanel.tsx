@@ -40,7 +40,7 @@ export function ExportPanel({ locale, links }: { locale: Locale; links: ExportLi
         <div className="export-actions">
           <a className="btn btn--primary" href={socialCount > 1 && links.socialZip ? links.socialZip : links.social[0]?.download} download>
             <Glyph name="download" />
-            {d.social}
+            <span>{d.social}</span>
           </a>
         </div>
       </div>
@@ -54,12 +54,12 @@ export function ExportPanel({ locale, links }: { locale: Locale; links: ExportLi
         <div className="export-actions">
           <a className="btn" href={links.wide[0]?.download} download={links.wide[0]?.filename ?? true}>
             <Glyph name="download" />
-            {d.wide}
+            <span>{d.wide}</span>
           </a>
           {links.allZip && (
             <a className="btn" href={links.allZip} download>
               <Glyph name="download" />
-              {d.all}
+              <span>{d.all}</span>
             </a>
           )}
         </div>

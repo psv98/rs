@@ -20,10 +20,10 @@ export function Header({ locale, ukPath, enPath }: { locale: Locale; ukPath?: st
         </a>
         <nav className="site-nav" aria-label={locale === "uk" ? "Розділи сторінки" : "Page sections"}>
           <div className="site-nav__links">
-            <a className="navlink" href="#types-title">{d.nav.stats}</a>
-            <a className="navlink" href="#dynamics">{d.nav.dynamics}</a>
-            <a className="navlink" href="#export">{d.nav.export}</a>
-            <a className="navlink" href="#methodology">{d.nav.methodology}</a>
+            <a className="navlink" href="#types-title"><span>{d.nav.stats}</span></a>
+            <a className="navlink" href="#dynamics"><span>{d.nav.dynamics}</span></a>
+            <a className="navlink" href="#export"><span>{d.nav.export}</span></a>
+            <a className="navlink" href="#methodology"><span>{d.nav.methodology}</span></a>
           </div>
           <LanguageSwitch locale={locale} label={d.langSwitch} ukPath={ukPath} enPath={enPath} />
         </nav>

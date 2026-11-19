@@ -3,7 +3,9 @@ import { useEffect, useMemo, useState } from "react";
 import { snapshotDataSchema, type SnapshotData } from "@/lib/data/schema";
 import { validateSnapshot } from "@/lib/data/validation";
 import { formatLongDate, suggestPeriodLabel, todayIso } from "@/lib/data/dates";
-import { CategoriesTab, CheckTab, Field, HistoryTab, MainTab, TextsTab } from "../admin/SnapshotEditor";
+import { CategoriesTab, Field, HistoryTab, MainTab, TextsTab } from "../admin/SnapshotEditor";
+import { diffSnapshots, type Change } from "@/lib/data/diff";
+import type { Issue } from "@/lib/data/validation";
 import { pageHref } from "@/lib/site";
 import {
   REPO,
@@ -22,15 +24,9 @@ import {
 
 type Entry = { revision: number; publishedAt: string | null; data: SnapshotData };
 type FileJson = { format: string; version: number; snapshots: Entry[] };
-type Tab = "main" | "categories" | "history" | "texts" | "check";
 
 const clone = <T,>(v: T): T => JSON.parse(JSON.stringify(v));
 const byDate = (a: Entry, b: Entry) => (a.data.asOfDate < b.data.asOfDate ? -1 : 1);
-const addMonth = (iso: string) => {
-  const [y, m, d] = iso.split("-").map(Number) as [number, number, number];
-  const dt = new Date(Date.UTC(y, m, d));
-  return dt.toISOString().slice(0, 10);
-};
 
 /**
  * Editor for the GitHub Pages site. The data lives in data/published/snapshots.json in the
@@ -166,36 +162,63 @@ function Gate({ onReady }: { onReady: (token: string, login: string) => void }) 
 
 /* --------------------------------------------------------------------- workspace */
 
+const STEPS: Array<{ id: Step; title: string; help: string }> = [
+  {
+    id: "main",
+    title: "Головні цифри",
+    help: "Загальна кількість злочинів, дата, на яку актуальні дані, нові випадки за останній період і кількість загиблих медійників. Числа беріть з публікації ІМІ.",
+  },
+  {
+    id: "categories",
+    title: "Види порушень",
+    help: "14 видів порушень з кругової діаграми та карток. Змініть число біля потрібного виду. Назви та іконки зазвичай не змінюються.",
+  },
+  {
+    id: "history",
+    title: "Динаміка по роках",
+    help: "Точки графіка «Як змінювалися цифри» і картки років. До кожної точки потрібне посилання на публікацію на imi.org.ua. Поточні дані додаються на графік автоматично.",
+  },
+  {
+    id: "texts",
+    title: "Тексти UA/EN",
+    help: "Підпис періоду («4 роки і 8 місяців повномасштабної війни»), примітка редакції та посилання на публікації ІМІ українською й англійською.",
+  },
+];
+type Step = "main" | "categories" | "history" | "texts";
+const stepOf = (field?: string): Step =>
+  !field ? "main" : field.startsWith("categories") ? "categories" : field.startsWith("history") ? "history" : field.startsWith("texts") || field.startsWith("sources") ? "texts" : "main";
+
 function Workspace({ token, login, onLogout }: { token: string; login: string; onLogout: () => void }) {
   const [file, setFile] = useState<FileJson | null>(null);
   const [sha, setSha] = useState("");
-  const [index, setIndex] = useState(-1); // index in the sorted list; -1 = new month draft
+  const [mode, setMode] = useState<"edit" | "new">("edit");
+  const [base, setBase] = useState<SnapshotData | null>(null); // what the edit started from
   const [data, setData] = useState<SnapshotData | null>(null);
-  const [isNew, setIsNew] = useState(false);
-  const [dirty, setDirty] = useState(false);
-  const [tab, setTab] = useState<Tab>("main");
+  const [step, setStep] = useState<Step>("main");
+  const [review, setReview] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
-  const [run, setRun] = useState<{ commit: string; state: RunState } | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [done, setDone] = useState<{ commit: string; state: RunState; asOf: string } | null>(null);
+  const [publishError, setPublishError] = useState<string | null>(null);
 
   const entries = useMemo(() => (file ? [...file.snapshots].sort(byDate) : []), [file]);
+  const live = entries.at(-1)?.data ?? null;
 
   const load = async () => {
     setBusy(true);
-    setMsg(null);
+    setLoadError(null);
     try {
       const r = await readDataFile(token);
       const f = r.json as FileJson;
-      f.snapshots = f.snapshots.map((s) => ({ ...s, data: snapshotDataSchema.parse(s.data) }));
+      f.snapshots = f.snapshots.map((x) => ({ ...x, data: snapshotDataSchema.parse(x.data) }));
       setFile(f);
       setSha(r.sha);
-      const sorted = [...f.snapshots].sort(byDate);
-      setIndex(sorted.length - 1);
-      setData(clone(sorted[sorted.length - 1]!.data));
-      setIsNew(false);
-      setDirty(false);
+      const latest = [...f.snapshots].sort(byDate).at(-1)!.data;
+      setMode("edit");
+      setBase(clone(latest));
+      setData(clone(latest));
     } catch (e) {
-      setMsg({ kind: "error", text: (e as Error).message });
+      setLoadError((e as Error).message);
     } finally {
       setBusy(false);
     }
@@ -205,6 +228,9 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const changes = useMemo(() => (data && base ? diffSnapshots(base, data).filter((c) => !c.path.startsWith("verification")) : []), [data, base]);
+  const dirty = mode === "new" || changes.length > 0;
+
   useEffect(() => {
     const warn = (e: BeforeUnloadEvent) => {
       if (dirty) e.preventDefault();
@@ -213,20 +239,18 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
     return () => window.removeEventListener("beforeunload", warn);
   }, [dirty]);
 
-  // Follow the deploy run after publishing.
   useEffect(() => {
-    if (!run || (run.state && run.state.status === "completed")) return;
+    if (!done || (done.state && done.state.status === "completed")) return;
     const t = setInterval(async () => {
       try {
-        const s = await deployState(token, run.commit);
-        setRun((r) => (r ? { ...r, state: s } : r));
+        const st = await deployState(token, done.commit);
+        setDone((r) => (r ? { ...r, state: st } : r));
       } catch {
-        /* Actions permission may be missing: just stop polling */
         clearInterval(t);
       }
     }, 8000);
     return () => clearInterval(t);
-  }, [run, token]);
+  }, [done, token]);
 
   const previous = useMemo(() => {
     if (!data) return null;
@@ -234,11 +258,12 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
     return before.length ? before[before.length - 1]!.data : null;
   }, [entries, data]);
   const v = useMemo(() => (data ? validateSnapshot(data, { previous, today: todayIso() }) : null), [data, previous]);
-  const errors = v ? v.issues.filter((i) => i.severity === "error") : [];
+  const dataErrors = v ? v.issues.filter((i) => i.severity === "error" && i.kind !== "gate") : [];
+  const warnings = v ? v.issues.filter((i) => i.severity === "warning") : [];
 
-  // Any change to the figures or texts withdraws the editor's confirmations: they must be
-  // given again for exactly what is about to be published.
-  const update = (fn: (d: SnapshotData) => void) => {
+  // Any change to figures or texts withdraws the confirmations: they are given again in
+  // the review step for exactly what is about to be published.
+  const update = (fn: (d: SnapshotData) => void) =>
     setData((prev) => {
       if (!prev) return prev;
       const next = clone(prev);
@@ -250,179 +275,369 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
       }
       return next;
     });
-    setDirty(true);
-  };
 
-  const pick = (i: number) => {
-    if (dirty && !window.confirm("Є незбережені зміни. Відкинути їх?")) return;
-    setIndex(i);
-    setData(clone(entries[i]!.data));
-    setIsNew(false);
-    setDirty(false);
-    setTab("main");
+  const startEdit = () => {
+    if (!live || (dirty && !window.confirm("Незбережені зміни буде втрачено. Продовжити?"))) return;
+    setMode("edit");
+    setBase(clone(live));
+    setData(clone(live));
+    setStep("main");
   };
-
-  const newMonth = () => {
-    if (dirty && !window.confirm("Є незбережені зміни. Відкинути їх?")) return;
-    const last = entries[entries.length - 1]!.data;
-    const d = clone(last);
-    const asOf = addMonth(last.asOfDate);
+  const startNew = (asOf = todayIso()) => {
+    if (!live) return;
+    if (mode !== "new" && dirty && !window.confirm("Незбережені зміни буде втрачено. Продовжити?")) return;
+    const d = clone(live);
     d.asOfDate = asOf;
-    d.period = { start: last.asOfDate, end: asOf, newCases: null };
+    d.period = { start: live.asOfDate, end: asOf, newCases: null };
     d.texts.periodLabel = suggestPeriodLabel(d.monitoringStart, asOf);
     d.verification = { ...d.verification, sourceChecked: false, sumMismatchConfirmed: false, internalNote: "" };
-    // The previous month becomes a point on the dynamics chart.
-    if (!d.history.points.some((p) => p.date === last.asOfDate)) {
+    // The figures that are on the site now become a point on the dynamics chart.
+    if (!d.history.points.some((p) => p.date === live.asOfDate)) {
       d.history.points.push({
-        date: last.asOfDate,
-        total: last.totalCrimes,
-        killedTotal: last.casualties.killedTotal,
-        killedOnDuty: last.casualties.killedOnDuty,
+        date: live.asOfDate,
+        total: live.totalCrimes,
+        killedTotal: live.casualties.killedTotal,
+        killedOnDuty: live.casualties.killedOnDuty,
         note: { uk: "", en: "" },
-        source: last.sources.articleUk,
+        source: live.sources.articleUk,
       });
+      d.history.points.sort((a, b) => (a.date < b.date ? -1 : 1));
     }
+    setMode("new");
+    setBase(clone(live));
     setData(d);
-    setIndex(-1);
-    setIsNew(true);
-    setDirty(true);
-    setTab("main");
+    setStep("main");
   };
 
   const publish = async () => {
-    if (!file || !data || errors.length) return;
-    if (!window.confirm(`Опублікувати дані станом на ${formatLongDate(data.asOfDate, "uk")}? Сайт і всі PNG оновляться приблизно за 2 хвилини.`)) return;
+    if (!file || !data) return;
     setBusy(true);
-    setMsg(null);
+    setPublishError(null);
     try {
       const now = new Date().toISOString();
       const next: FileJson = clone(file);
       // The repository is public: internal notes are not written to it.
       const out: SnapshotData = { ...clone(data), verification: { ...data.verification, internalNote: "" } };
-      if (isNew) {
-        next.snapshots.push({ revision: 1, publishedAt: now, data: out });
-      } else {
-        const orig = entries[index]!;
-        const at = next.snapshots.findIndex((s) => s.data.asOfDate === orig.data.asOfDate);
-        next.snapshots[at] = { revision: orig.revision + 1, publishedAt: now, data: out };
-      }
+      const at = next.snapshots.findIndex((x) => x.data.asOfDate === (mode === "edit" ? base!.asOfDate : out.asOfDate));
+      if (at >= 0) next.snapshots[at] = { revision: next.snapshots[at]!.revision + 1, publishedAt: now, data: out };
+      else next.snapshots.push({ revision: 1, publishedAt: now, data: out });
       next.snapshots.sort(byDate);
-      const r = await writeDataFile(token, next, sha, `Дані станом на ${data.asOfDate}: ${isNew ? "новий місяць" : "оновлення"} (редактор, ${login})`);
+      const what = mode === "new" ? "нові дані" : "виправлення";
+      const r = await writeDataFile(token, next, sha, `Дані станом на ${out.asOfDate}: ${what} (редактор, ${login})`);
       setSha(r.sha);
       setFile(next);
-      const sorted = [...next.snapshots].sort(byDate);
-      setIndex(sorted.findIndex((s) => s.data.asOfDate === data.asOfDate));
-      setIsNew(false);
-      setDirty(false);
-      setRun({ commit: r.commit, state: null });
-      setMsg({ kind: "ok", text: "Збережено в репозиторії. Сайт і інфографіка оновлюються." });
+      setMode("edit");
+      setBase(clone(out));
+      setData(clone(out));
+      setReview(false);
+      setDone({ commit: r.commit, state: null, asOf: out.asOfDate });
     } catch (e) {
       const err = e as GitHubError;
-      setMsg({
-        kind: "error",
-        text: err.status === 409 ? "Файл даних змінився з іншого місця. Натисніть «Оновити з GitHub» і повторіть зміни." : err.message,
-      });
+      setPublishError(
+        err.status === 409 ? "Хтось інший щойно змінив дані. Закрийте це вікно, натисніть «Завантажити заново» і внесіть зміни ще раз." : err.message,
+      );
     } finally {
       setBusy(false);
     }
   };
 
   const site = pageHref("uk");
+  const help = STEPS.find((x) => x.id === step)!;
   return (
-    <div className="adm">
-      <header className="adm-top">
-        <div className="adm-bar">
-          <b>Редактор даних</b>
-          <span className="muted">{login}</span>
-          <a className="btn" href={site} target="_blank" rel="noopener">
-            Відкрити сайт
-          </a>
-          <a className="btn" href={`https://github.com/${REPO.owner}/${REPO.repo}/commits/${REPO.branch}/${REPO.file}`} target="_blank" rel="noopener">
-            Журнал змін
-          </a>
-          <button className="btn" onClick={onLogout}>
-            Вийти
-          </button>
+    <div className="adm ed">
+      <header className="ed-top">
+        <div className="ed-top__inner">
+          <b className="ed-top__title">Редактор даних</b>
+          {live && (
+            <span className="ed-live">
+              На сайті зараз: <b>{live.totalCrimes}</b> станом на {formatLongDate(live.asOfDate, "uk")}
+            </span>
+          )}
+          <nav className="ed-top__links">
+            <a href={site} target="_blank" rel="noopener">
+              Сайт
+            </a>
+            <a href={`https://github.com/${REPO.owner}/${REPO.repo}/commits/${REPO.branch}/${REPO.file}`} target="_blank" rel="noopener">
+              Журнал змін
+            </a>
+            <button onClick={onLogout}>Вийти ({login})</button>
+          </nav>
         </div>
       </header>
-      <main className="adm-main">
-        {!file || !data ? (
-          <p className="adm-card">{busy ? "Завантажую дані з GitHub…" : msg?.text}</p>
+
+      <main className="ed-main">
+        {!file || !data || !live ? (
+          <div className="adm-card">
+            {busy ? "Завантажую дані з GitHub…" : loadError}
+            {loadError && (
+              <button className="btn" style={{ marginLeft: "1rem" }} onClick={load}>
+                <span>Спробувати ще раз</span>
+              </button>
+            )}
+          </div>
         ) : (
           <>
-            <div className="adm-card" style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", alignItems: "end" }}>
-              <Field label="Знімок">
-                <select className="adm-select" value={isNew ? "new" : String(index)} onChange={(e) => e.target.value !== "new" && pick(Number(e.target.value))}>
-                  {entries.map((e, i) => (
-                    <option key={e.data.asOfDate} value={i}>
-                      {`${formatLongDate(e.data.asOfDate, "uk")}: ${e.data.totalCrimes}${i === entries.length - 1 ? " (на сайті зараз)" : ""}`}
-                    </option>
-                  ))}
-                  {isNew && <option value="new">{`Новий: ${formatLongDate(data.asOfDate, "uk")}`}</option>}
-                </select>
-              </Field>
-              <button className="btn" onClick={newMonth} disabled={busy}>
-                Новий місяць
-              </button>
-              <button className="btn" onClick={() => (!dirty || window.confirm("Відкинути незбережені зміни?")) && load()} disabled={busy}>
-                Оновити з GitHub
-              </button>
-              <div style={{ marginLeft: "auto", display: "flex", gap: "0.75rem", alignItems: "center" }}>
-                {dirty && <span className="muted">Є незбережені зміни</span>}
-                <button className="btn btn--primary" onClick={publish} disabled={busy || !dirty || errors.length > 0} title={errors.length ? "Спершу виправте помилки на вкладці «Перевірка»" : undefined}>
-                  {busy ? "Публікую…" : "Опублікувати"}
-                </button>
+            {done && (
+              <div className="ed-done" role="status">
+                <b>Опубліковано: дані станом на {formatLongDate(done.asOf, "uk")}.</b>
+                <span>
+                  {!done.state || done.state.status !== "completed"
+                    ? "Сайт і інфографіка оновлюються, це займає близько 2 хвилин."
+                    : done.state.conclusion === "success"
+                      ? "Сайт оновлено. Якщо бачите старі цифри, оновіть сторінку."
+                      : "Під час оновлення сайту сталася помилка."}{" "}
+                  {done.state?.url && (
+                    <a className="link" href={done.state.url} target="_blank" rel="noopener">
+                      Подробиці
+                    </a>
+                  )}
+                </span>
               </div>
-            </div>
+            )}
 
-            {msg && (
-              <div className="adm-card" role={msg.kind === "error" ? "alert" : "status"} style={{ borderColor: msg.kind === "error" ? "var(--color-signal)" : undefined, marginTop: "1rem" }}>
-                <b>{msg.text}</b>
-                {run && (
-                  <p className="muted" style={{ marginTop: "0.4rem" }}>
-                    {!run.state
-                      ? "Чекаю, поки GitHub запустить публікацію…"
-                      : run.state.status !== "completed"
-                        ? "Публікація триває…"
-                        : run.state.conclusion === "success"
-                          ? "Готово: сайт оновлено (може знадобитися ще хвилина на кеш)."
-                          : "Публікація завершилась з помилкою."}{" "}
-                    {run.state?.url && (
-                      <a className="link" href={run.state.url} target="_blank" rel="noopener">
-                        Деталі
-                      </a>
-                    )}
-                  </p>
+            <section className="ed-mode" aria-label="Що ви хочете зробити">
+              <button className="ed-choice" aria-pressed={mode === "edit"} onClick={startEdit}>
+                <b>Виправити поточні дані</b>
+                <span>
+                  Уточнити цифри станом на {formatLongDate(live.asOfDate, "uk")}. Підходить для виправлень у будь-який день.
+                </span>
+              </button>
+              <div className="ed-choice" aria-pressed={mode === "new"} role="group">
+                <button className="ed-choice__btn" onClick={() => startNew(data.asOfDate > live.asOfDate ? data.asOfDate : todayIso())}>
+                  <b>Додати нові дані</b>
+                  <span>Нові цифри на обрану дату. Поточні стануть точкою на графіку динаміки.</span>
+                </button>
+                {mode === "new" && (
+                  <label className="ed-date">
+                    Дані станом на
+                    <input
+                      className="adm-input"
+                      type="date"
+                      value={data.asOfDate}
+                      min={live.asOfDate}
+                      max={todayIso()}
+                      onChange={(e) => e.target.value && startNew(e.target.value)}
+                    />
+                  </label>
                 )}
               </div>
-            )}
+            </section>
 
-            <div className="adm-tabs" role="tablist" style={{ marginTop: "1rem" }}>
-              {(
-                [
-                  ["main", "Основне"],
-                  ["categories", `Категорії (${data.categories.length})`],
-                  ["history", `Динаміка (${data.history.points.length})`],
-                  ["texts", "Тексти UA/EN"],
-                  ["check", "Перевірка"],
-                ] as Array<[Tab, string]>
-              ).map(([k, l]) => (
-                <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}>
-                  {l}
-                  {k === "check" && errors.length > 0 && <span className="count">{errors.length}</span>}
-                </button>
-              ))}
+            <nav className="ed-steps" aria-label="Розділи">
+              {STEPS.map((x, i) => {
+                const n = v?.issues.filter((iss) => iss.severity === "error" && iss.kind !== "gate" && stepOf(iss.field) === x.id).length ?? 0;
+                return (
+                  <button key={x.id} aria-current={step === x.id ? "step" : undefined} onClick={() => setStep(x.id)}>
+                    <i>{i + 1}</i>
+                    <span>{x.title}</span>
+                    {n > 0 && <em title="Помилки в розділі">{n}</em>}
+                  </button>
+                );
+              })}
+            </nav>
+            <p className="ed-help">{help.help}</p>
+
+            <div className="ed-panel">
+              {step === "main" && <MainTab data={data} update={update} editable changeNote="" setChangeNote={() => undefined} issues={v?.issues ?? []} hideChangeNote />}
+              {step === "categories" && <CategoriesTab data={data} update={update} editable />}
+              {step === "history" && <HistoryTab data={data} update={update} editable />}
+              {step === "texts" && <TextsTab data={data} update={update} editable />}
             </div>
-            {tab === "main" && <MainTab data={data} update={update} editable changeNote="" setChangeNote={() => undefined} issues={v?.issues ?? []} hideChangeNote />}
-            {tab === "categories" && <CategoriesTab data={data} update={update} editable />}
-            {tab === "history" && <HistoryTab data={data} update={update} editable />}
-            {tab === "texts" && <TextsTab data={data} update={update} editable />}
-            {tab === "check" && v && (
-              <CheckTab data={data} update={update} editable issues={v.issues} sum={v.categorySum} total={data.totalCrimes} status="draft" dirty={dirty} busy={busy} onSaveVerification={() => undefined} hideSave hideInternal />
-            )}
           </>
         )}
       </main>
+
+      {data && live && (
+        <footer className="ed-bar">
+          <div className="ed-bar__inner">
+            <span className="ed-bar__state">
+              {mode === "new" ? `Нові дані станом на ${formatLongDate(data.asOfDate, "uk")}` : changes.length ? `Змінено полів: ${changes.length}` : "Змін поки немає"}
+              {warnings.length > 0 && <em className="ed-chip ed-chip--warn">Попереджень: {warnings.length}</em>}
+              {dataErrors.length > 0 && <em className="ed-chip ed-chip--err">Помилок: {dataErrors.length}</em>}
+            </span>
+            {dirty && (
+              <button className="btn" onClick={startEdit}>
+                <span>Скасувати зміни</span>
+              </button>
+            )}
+            <button className="btn btn--primary btn--lg" disabled={!dirty || busy} onClick={() => (setPublishError(null), setReview(true))}>
+              <span>{dirty ? "Перевірити й опублікувати" : "Немає що публікувати"}</span>
+            </button>
+          </div>
+        </footer>
+      )}
+
+      {review && data && v && (
+        <ReviewDialog
+          data={data}
+          update={update}
+          changes={changes}
+          isNew={mode === "new"}
+          dataErrors={dataErrors}
+          warnings={warnings}
+          sum={v.categorySum}
+          busy={busy}
+          error={publishError}
+          onGo={(f) => (setReview(false), setStep(stepOf(f)))}
+          onClose={() => setReview(false)}
+          onPublish={publish}
+        />
+      )}
+    </div>
+  );
+}
+
+/* --------------------------------------------------------------------- review */
+
+function ReviewDialog({
+  data,
+  update,
+  changes,
+  isNew,
+  dataErrors,
+  warnings,
+  sum,
+  busy,
+  error,
+  onGo,
+  onClose,
+  onPublish,
+}: {
+  data: SnapshotData;
+  update: (fn: (d: SnapshotData) => void) => void;
+  changes: Change[];
+  isNew: boolean;
+  dataErrors: Issue[];
+  warnings: Issue[];
+  sum: number;
+  busy: boolean;
+  error: string | null;
+  onGo: (field?: string) => void;
+  onClose: () => void;
+  onPublish: () => void;
+}) {
+  const vf = data.verification;
+  const mismatch = sum !== data.totalCrimes;
+  const explained = !!vf.sumMismatchExplanation.uk && !!vf.sumMismatchExplanation.en;
+  const ready = dataErrors.length === 0 && vf.sourceChecked && (!mismatch || (vf.sumMismatchConfirmed && explained));
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", k);
+    return () => window.removeEventListener("keydown", k);
+  }, [onClose]);
+  return (
+    <div className="ed-modal" role="dialog" aria-modal="true" aria-labelledby="ed-review-title" onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="ed-modal__box">
+        <h2 id="ed-review-title">Перевірка перед публікацією</h2>
+
+        <section>
+          <h3>{isNew ? `Нові дані станом на ${formatLongDate(data.asOfDate, "uk")}` : "Що зміниться на сайті"}</h3>
+          {changes.length === 0 ? (
+            <p className="muted">Цифри ті самі, що й зараз на сайті.</p>
+          ) : (
+            <ul className="ed-changes">
+              {changes.slice(0, 40).map((c) => (
+                <li key={c.path}>
+                  <span>{c.label}</span>
+                  <s>{c.before}</s>
+                  <b>{c.after}</b>
+                </li>
+              ))}
+              {changes.length > 40 && <li className="muted">і ще {changes.length - 40}</li>}
+            </ul>
+          )}
+        </section>
+
+        {dataErrors.length > 0 && (
+          <section className="ed-issues ed-issues--err">
+            <h3>Потрібно виправити перед публікацією</h3>
+            <ul>
+              {dataErrors.map((i, n) => (
+                <li key={n}>
+                  {i.message}{" "}
+                  <button className="link" onClick={() => onGo(i.field)}>
+                    Виправити
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {warnings.length > 0 && (
+          <section className="ed-issues ed-issues--warn">
+            <h3>Зверніть увагу</h3>
+            <p className="muted">Це попередження. Якщо так і має бути, публікуйте.</p>
+            <ul>
+              {warnings.map((i, n) => (
+                <li key={n}>{i.message}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <section className="ed-confirm">
+          <h3>Підтвердження</h3>
+          <label className="ed-check">
+            <input type="checkbox" checked={vf.sourceChecked} onChange={(e) => update((d) => void (d.verification.sourceChecked = e.target.checked))} />
+            <span>Я звірив(-ла) цифри з публікацією ІМІ.</span>
+          </label>
+          {mismatch && (
+            <>
+              <label className="ed-check">
+                <input type="checkbox" checked={vf.sumMismatchConfirmed} onChange={(e) => update((d) => void (d.verification.sumMismatchConfirmed = e.target.checked))} />
+                <span>
+                  Сума видів порушень ({sum}) відрізняється від головного показника ({data.totalCrimes}). Я перевірив(-ла): так у публікації ІМІ.
+                </span>
+              </label>
+              {vf.sumMismatchConfirmed && (
+                <div className="ed-explain">
+                  <Field label="Пояснення для сайту (UA)" hint="Показується в розділі «Про дані»">
+                    <textarea
+                      className="adm-textarea"
+                      maxLength={600}
+                      value={vf.sumMismatchExplanation.uk}
+                      onChange={(e) => update((d) => void (d.verification.sumMismatchExplanation.uk = e.target.value))}
+                    />
+                  </Field>
+                  <Field label="Пояснення для сайту (EN)">
+                    <textarea
+                      className="adm-textarea"
+                      maxLength={600}
+                      value={vf.sumMismatchExplanation.en}
+                      onChange={(e) => update((d) => void (d.verification.sumMismatchExplanation.en = e.target.value))}
+                    />
+                  </Field>
+                </div>
+              )}
+            </>
+          )}
+        </section>
+
+        {error && (
+          <p className="adm-error" role="alert">
+            {error}
+          </p>
+        )}
+
+        <div className="ed-modal__actions">
+          <button className="btn" onClick={onClose}>
+            <span>Повернутися до редагування</span>
+          </button>
+          <button className="btn btn--primary btn--lg" disabled={!ready || busy} onClick={onPublish}>
+            <span>{busy ? "Публікую…" : "Опублікувати на сайті"}</span>
+          </button>
+        </div>
+        {!ready && !busy && (
+          <p className="muted ed-why">
+            {dataErrors.length > 0
+              ? "Спершу виправте помилки вище."
+              : !vf.sourceChecked
+                ? "Поставте позначку, що цифри звірено з публікацією ІМІ."
+                : "Підтвердьте розбіжність суми і додайте пояснення обома мовами."}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

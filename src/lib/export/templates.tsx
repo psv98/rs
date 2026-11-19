@@ -138,8 +138,6 @@ function TotalBlock({ data, locale, width, height, max, center = false }: { data
   const pad = Math.round(Math.min(height * 0.1, 52));
   const fs = fitNumber(text, width - pad * 2, max);
   const side = Math.round(Math.max(18, max * 0.11));
-  const p = data.period;
-  const fresh = p.newCases !== null && p.start && p.end ? { v: `+${num(p.newCases)}`, l: d.hero.statNew(formatShortDate(p.start), formatShortDate(p.end)) } : null;
   const align = center ? "center" : "flex-start";
   return (
     <div
@@ -163,12 +161,6 @@ function TotalBlock({ data, locale, width, height, max, center = false }: { data
       <div style={{ display: "flex", justifyContent: align, fontSize: side, color: C.text2, lineHeight: 1.35, marginTop: side * 0.7, maxWidth: width - pad * 2 }}>
         {nb(d.exportText.crimesBetween(formatLongDate(data.monitoringStart, locale), formatLongDate(data.asOfDate, locale)).replace(/^\S+\s/, ""))}
       </div>
-      {fresh && (
-        <div style={{ display: "flex", alignItems: "center", gap: side * 0.7, marginTop: side * 1.1, paddingTop: side * 0.9, borderTop: `1.5px solid ${C.lineStrong}` }}>
-          <div style={{ display: "flex", fontFamily: "Kyiv", fontSize: side * 1.6, lineHeight: 1, color: C.ember }}>{fresh.v}</div>
-          <div style={{ display: "flex", fontSize: side * 0.85, color: C.text2 }}>{fresh.l}</div>
-        </div>
-      )}
     </div>
   );
 }
