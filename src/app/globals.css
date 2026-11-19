@@ -136,6 +136,9 @@ body {
   gap: 1.5rem;
   /* Height is set by the logo, so the taller nav pill does not stretch the header. */
   min-height: calc(var(--logo-h) + 2 * var(--header-pad));
+  /* The 1px bottom rule and the shadow under it read as part of the header, so the
+     row sits 1px lower than the geometric centre to look centred by eye. */
+  padding-top: 2px;
 }
 .site-header__logo {
   display: inline-flex;
