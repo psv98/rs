@@ -112,21 +112,25 @@ export function HeroRing({
         </g>
         <image href={withBase("/brand/favicon.svg")} x={c - 13} y={c + 92} width="26" height="26" opacity="0.9" />
       </svg>
-      <figcaption className="ring__center" aria-live="polite">
-        {cur ? (
-          <>
-            <span className="ring__value ring__value--cat">{groupDigits(cur.value)}</span>
-            <span className="ring__label">{cur.name}</span>
-          </>
-        ) : (
-          <>
-            <Odometer value={total} className="ring__value" />
-            <span className="sr-only">{groupDigits(total)}</span>
-            <span className="ring__label">{label}</span>
-            <span className="ring__caption">{caption}</span>
-          </>
-        )}
-      </figcaption>
+      {/* Both layers stay mounted: the counter rolls once on load and is never re-mounted on hover. */}
+      <div className="ring__center">
+        <div className="ring__layer" data-hidden={cur ? true : undefined}>
+          <Odometer value={total} className="ring__value" />
+          <span className="sr-only">{groupDigits(total)}</span>
+          <span className="ring__label">{label}</span>
+          <span className="ring__caption">{caption}</span>
+        </div>
+        <div className="ring__layer ring__layer--cat" data-hidden={cur ? undefined : true} aria-live="polite">
+          {cur && (
+            <>
+              <span key={cur.id} className="ring__value ring__value--cat">
+                {groupDigits(cur.value)}
+              </span>
+              <span className="ring__label">{cur.name}</span>
+            </>
+          )}
+        </div>
+      </div>
     </figure>
   );
 }

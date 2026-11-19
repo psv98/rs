@@ -1,11 +1,9 @@
 import { categorySum, type Locale, type PublicSnapshot } from "@/lib/data/schema";
-import { formatDateTime, formatLongDate } from "@/lib/data/dates";
 import { t } from "@/lib/i18n/dictionaries";
-import { groupDigits } from "@/lib/viz/geometry";
 import { Glyph, type GlyphName } from "../ui/Glyph";
 
 /** «Про дані»: who counts, what is counted, how to read it, primary sources. */
-export function AboutData({ locale, snap, history }: { locale: Locale; snap: PublicSnapshot; history: PublicSnapshot[] }) {
+export function AboutData({ locale, snap }: { locale: Locale; snap: PublicSnapshot }) {
   const d = t(locale);
   const m = d.about;
   const data = snap.data;
@@ -27,8 +25,6 @@ export function AboutData({ locale, snap, history }: { locale: Locale; snap: Pub
   ];
   const sources: Array<[string, string]> = (
     [
-      [m.articleUk, data.sources.articleUk],
-      [m.articleEn, data.sources.articleEn],
       [m.registry, data.sources.registry],
       [m.imiSite, locale === "uk" ? "https://imi.org.ua/" : "https://imi.org.ua/en/"],
     ] as Array<[string, string]>
@@ -77,25 +73,6 @@ export function AboutData({ locale, snap, history }: { locale: Locale; snap: Pub
               </li>
             ))}
           </ul>
-          <div className="sources__meta">
-            <p>
-              {m.lastUpdate}: <b>{formatLongDate(data.asOfDate, locale)}</b>
-            </p>
-            {history.length > 0 && (
-              <details>
-                <summary>{m.changelog(history.length)}</summary>
-                <ul>
-                  {history.map((h) => (
-                    <li key={h.id}>
-                      {formatLongDate(h.periodKey, locale)} — {groupDigits(h.data.totalCrimes)}
-                      {h.revision > 1 ? ` (${m.revised})` : ""}
-                      {h.publishedAt ? `, ${m.published} ${formatDateTime(h.publishedAt, locale)}` : ""}
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            )}
-          </div>
         </div>
       </div>
     </section>

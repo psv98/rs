@@ -2,25 +2,18 @@ import type { CSSProperties } from "react";
 import { visibleCategories, categorySum, type Locale, type PublicSnapshot } from "@/lib/data/schema";
 import { t } from "@/lib/i18n/dictionaries";
 import { withBase } from "@/lib/site";
-import { dotUnit, groupDigits } from "@/lib/viz/geometry";
+import { groupDigits } from "@/lib/viz/geometry";
 import { LedgerReveal } from "./LedgerReveal";
 import { CopyLink } from "./CopyLink";
 
 export const categoryAnchor = (id: string) => `category-${id}`;
 
-/** Each card shows its count as dots: one dot = one case (or N cases once numbers grow). */
-const COLS = 25;
-const ROWS = 14;
 
 export function CategoryLedger({ locale, snap }: { locale: Locale; snap: PublicSnapshot }) {
   const d = t(locale);
   const data = snap.data;
   const cats = visibleCategories(data);
   const sum = categorySum(data);
-  const unit = dotUnit(
-    cats.map((c) => c.value),
-    COLS * ROWS,
-  );
   const n = cats.length;
   const span = (cols: number) => (n % cols === 0 ? cols : cols - (n % cols));
   const noteStyle = { "--span2": span(2), "--span3": span(3), "--span4": span(4) } as CSSProperties;
@@ -33,20 +26,11 @@ export function CategoryLedger({ locale, snap }: { locale: Locale; snap: PublicS
           <h2 id="types-title" className="section__title">
             {d.categories.title}
           </h2>
-          <div className="section__aside">
-            <p className="section__lead">{d.categories.lead}</p>
-            <p className="dot-legend">
-              <span className="dot-legend__dot" aria-hidden="true" />
-              {d.categories.dotLegend(unit)}
-            </p>
-          </div>
+          <p className="section__lead">{d.categories.lead}</p>
         </header>
         <LedgerReveal className="cats" label={d.categories.title}>
           {cats.map((c, i) => {
             const anchor = categoryAnchor(c.id);
-            const dots = Math.ceil(c.value / unit);
-            const full = Math.floor(dots / COLS);
-            const rem = dots % COLS;
             return (
               <article
                 key={c.id}
@@ -82,12 +66,6 @@ export function CategoryLedger({ locale, snap }: { locale: Locale; snap: PublicS
                     <p>{c.description[locale]}</p>
                   </details>
                 )}
-                <div className="dots-wrap" aria-hidden="true">
-                  <div className="dots" style={{ "--cols": COLS, "--rows": ROWS, "--full": full, "--rem": rem } as CSSProperties}>
-                    <span className="dots__rem" />
-                    <span className="dots__full" />
-                  </div>
-                </div>
               </article>
             );
           })}

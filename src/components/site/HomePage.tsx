@@ -6,7 +6,6 @@ import { Header } from "./Header";
 import { Hero } from "./Hero";
 import { Ticker } from "./Ticker";
 import { CategoryLedger } from "./CategoryLedger";
-import { Analytics, type AnalyticsInitial } from "./Analytics";
 import { Dynamics } from "./Dynamics";
 import { AboutData } from "./AboutData";
 import { ExportPanel, type ExportLinks } from "./ExportPanel";
@@ -18,7 +17,6 @@ import { IS_STATIC, withBase } from "@/lib/site";
 export function HomePage({
   locale,
   state,
-  initial = { year: null, s: null, cmp: null, cat: null },
   siteUrl,
   exportMode = { kind: "public" },
   banner,
@@ -27,7 +25,6 @@ export function HomePage({
 }: {
   locale: Locale;
   state: PublicState;
-  initial?: AnalyticsInitial;
   siteUrl: string;
   exportMode?: ExportMode;
   banner?: string;
@@ -93,17 +90,6 @@ export function HomePage({
         <Ticker locale={locale} snap={snap} />
         <CategoryLedger locale={locale} snap={snap} />
         <Dynamics locale={locale} snap={snap} />
-        <section className="section" id="analytics" aria-labelledby="analytics-title">
-          <div className="shell">
-            <div className="section__head">
-              <h2 id="analytics-title" className="section__title">
-                {d.analytics.title}
-              </h2>
-              <p className="section__lead">{d.analytics.lead}</p>
-            </div>
-            <Analytics locale={locale} history={state.history} initial={initial} />
-          </div>
-        </section>
         <section className="section" id="export" aria-labelledby="export-title">
           <div className="shell">
             <div className="section__head">
@@ -115,7 +101,7 @@ export function HomePage({
             <ExportPanel locale={locale} links={links} />
           </div>
         </section>
-        <AboutData locale={locale} snap={snap} history={state.history} />
+        <AboutData locale={locale} snap={snap} />
       </main>
       <Footer locale={locale} />
     </>

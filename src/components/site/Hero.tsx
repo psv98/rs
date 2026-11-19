@@ -6,6 +6,7 @@ import { pageHref, routePath } from "@/lib/site";
 import { groupDigits } from "@/lib/viz/geometry";
 import { HeroRing } from "./HeroRing";
 import { ShareTools } from "./ShareTools";
+import { WarTimeline } from "./WarTimeline";
 
 export function Hero({ locale, snap, siteUrl }: { locale: Locale; snap: PublicSnapshot; siteUrl: string }) {
   const d = t(locale);
@@ -29,10 +30,7 @@ export function Hero({ locale, snap, siteUrl }: { locale: Locale; snap: PublicSn
       <div className="aurora" aria-hidden="true" />
       <div className="hero__grid shell">
         <div className="hero__copy">
-          <p className="hero__period" style={{ "--d": "0ms" } as CSSProperties}>
-            <span className="hero__live" aria-hidden="true" />
-            {data.texts.periodLabel[locale]}
-          </p>
+          <WarTimeline label={data.texts.periodLabel[locale]} start={data.monitoringStart} end={data.asOfDate} />
           <h1 id="hero-title" className="hero__title">
             {d.hero.title}
           </h1>
@@ -40,6 +38,8 @@ export function Hero({ locale, snap, siteUrl }: { locale: Locale; snap: PublicSn
             <span className="sr-only">{`${groupDigits(data.totalCrimes)} ${d.heroLabel(data.totalCrimes)}. `}</span>
             {d.hero.dek(since, asOf)}
           </p>
+        </div>
+        <div className="hero__facts">
           {stats.length > 0 && (
             <dl className="hero__stats">
               {stats.map((s, i) => (
@@ -58,6 +58,10 @@ export function Hero({ locale, snap, siteUrl }: { locale: Locale; snap: PublicSn
           />
         </div>
         <div className="hero__visual">
+          <div className="hero__ringhead">
+            <h2 className="hero__ringtitle">{d.hero.ringTitle}</h2>
+            <p className="hero__legend">{d.hero.legend}</p>
+          </div>
           <HeroRing
             total={data.totalCrimes}
             categories={cats.map((c) => ({ id: c.id, iconId: c.iconId, value: c.value, name: c.name[locale] }))}
@@ -65,7 +69,6 @@ export function Hero({ locale, snap, siteUrl }: { locale: Locale; snap: PublicSn
             caption={d.hero.asOf(formatShortDate(data.asOfDate))}
             ariaLabel={d.hero.ringAria(data.totalCrimes)}
           />
-          <p className="hero__legend">{d.hero.legend}</p>
         </div>
       </div>
     </section>

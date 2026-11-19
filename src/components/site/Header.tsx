@@ -2,6 +2,7 @@ import type { Locale } from "@/lib/data/schema";
 import { t } from "@/lib/i18n/dictionaries";
 import { pageHref, withBase } from "@/lib/site";
 import { LanguageSwitch } from "./LanguageSwitch";
+import { SectionSpy } from "./SectionSpy";
 
 export function Header({ locale, ukPath, enPath }: { locale: Locale; ukPath?: string; enPath?: string }) {
   const d = t(locale);
@@ -15,19 +16,18 @@ export function Header({ locale, ukPath, enPath }: { locale: Locale; ukPath?: st
       <div className="shell site-header__row">
         <a className="site-header__logo" href={pageHref(locale)} aria-label={d.org}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={withBase(`/brand/imi-logo-${locale}.svg`)} alt={d.org} width={108} height={39} />
+          <img src={withBase(`/brand/imi-logo-${locale}.svg`)} alt={d.org} width={133} height={48} />
         </a>
-        <div className="site-header__project">
-          <b>{d.projectKicker}</b>
-          <span>{d.projectKickerSub}</span>
-        </div>
         <nav className="site-nav" aria-label={locale === "uk" ? "Розділи сторінки" : "Page sections"}>
-          <a className="navlink" href="#types-title">{d.nav.stats}</a>
-          <a className="navlink" href="#dynamics">{d.nav.dynamics}</a>
-          <a className="navlink" href="#export">{d.nav.export}</a>
-          <a className="navlink" href="#methodology">{d.nav.methodology}</a>
+          <div className="site-nav__links">
+            <a className="navlink" href="#types-title">{d.nav.stats}</a>
+            <a className="navlink" href="#dynamics">{d.nav.dynamics}</a>
+            <a className="navlink" href="#export">{d.nav.export}</a>
+            <a className="navlink" href="#methodology">{d.nav.methodology}</a>
+          </div>
           <LanguageSwitch locale={locale} label={d.langSwitch} ukPath={ukPath} enPath={enPath} />
         </nav>
+        <SectionSpy />
       </div>
     </header>
   );

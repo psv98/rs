@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { niceMax, groupDigits } from "@/lib/viz/geometry";
-import { withBase } from "@/lib/site";
 
 export interface ChartPoint {
   date: string;
@@ -28,7 +27,7 @@ export function DynamicsChart({
   points: ChartPoint[];
   start: string;
   ariaLabel: string;
-  labels: { killed: string; source: string; start: string; brand: string };
+  labels: { killed: string; source: string; start: string };
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
@@ -142,12 +141,6 @@ export function DynamicsChart({
           <line x1={x(h.date)} x2={x(h.date)} y1={M.t} y2={H - M.b} className="dyn__guide" />
         )}
         <rect x={M.l} y={M.t} width={W - M.l - M.r} height={H - M.t - M.b} fill="transparent" onPointerMove={onMove} onPointerLeave={() => setHover(null)} />
-        <g opacity="0.85">
-          <image href={withBase("/brand/favicon.svg")} x={M.l + 8} y={M.t + 4} width="22" height="22" />
-          <text x={M.l + 38} y={M.t + 20} className="dyn__brand">
-            {labels.brand}
-          </text>
-        </g>
       </svg>
       {h && (
         <div className="dyn__tip" style={{ left: `${(x(h.date) / W) * 100}%`, top: `${(y(h.total) / H) * 100}%` }} role="status">

@@ -254,26 +254,26 @@
         "date": "2022-03-24",
         "total": 148,
         "killedTotal": null,
-        "killedOnDuty": null,
+        "killedOnDuty": 5,
         "note": {
           "uk": "",
           "en": ""
         },
-        "source": "https://www.slovoidilo.ua/2022/03/25/novyna/suspilstvo/misyacz-vijny-stalo-vidomo-skilky-zlochyniv-skoyila-rf-proty-zhurnalistiv-ta-media-ukrayini"
+        "source": "https://imi.org.ua/monitorings/rosiya-skoyila-148-zlochyniv-proty-zhurnalistiv-ta-media-v-ukrayini-za-misyats-napadu-i44595"
       },
       {
         "date": "2022-04-24",
         "total": 243,
         "killedTotal": null,
-        "killedOnDuty": null,
+        "killedOnDuty": 7,
         "note": {
           "uk": "",
           "en": ""
         },
-        "source": "https://ifex.org/?p=333173"
+        "source": "https://imi.org.ua/monitorings/243-zlochyny-proty-zhurnalistiv-ta-media-skoyila-rosiya-v-ukrayini-za-dva-misyatsi-vijny-i45175"
       },
       {
-        "date": "2022-05-25",
+        "date": "2022-05-24",
         "total": 280,
         "killedTotal": 29,
         "killedOnDuty": 7,
@@ -281,29 +281,40 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://armyinform.com.ua/2022/05/25/280-zlochyniv-proty-zhurnalistiv-ta-media-skoyila-rosiya-v-ukrayini-za-try-misyaczi-vijny/"
+        "source": "https://imi.org.ua/monitorings/280-zlochyniv-proty-zhurnalistiv-ta-media-skoyila-rosiya-v-ukrayini-za-try-misyatsi-vijny-i45739"
       },
       {
-        "date": "2022-10-24",
-        "total": 457,
-        "killedTotal": null,
+        "date": "2022-06-24",
+        "total": 413,
+        "killedTotal": 33,
         "killedOnDuty": 8,
         "note": {
           "uk": "",
           "en": ""
         },
-        "source": "https://armyinform.com.ua/2022/10/24/457-zlochyniv-proty-zhurnalistiv-skoyila-rf-za-8-misyacziv-shyrokomasshtabnoyi-vijny-v-ukrayini/"
+        "source": "https://imi.org.ua/monitorings/413-zlochyniv-proty-zhurnalistiv-ta-media-skoyila-rosiya-v-ukrayini-za-chotyry-misyatsi-vijny-i46365"
+      },
+      {
+        "date": "2022-10-24",
+        "total": 457,
+        "killedTotal": 42,
+        "killedOnDuty": 8,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/za-visim-misyatsiv-vijny-rosiya-skoyila-457-zlochyniv-proty-zhurnalistiv-ta-media-v-ukrayini-imi-i48551"
       },
       {
         "date": "2022-11-24",
         "total": 462,
-        "killedTotal": null,
+        "killedTotal": 42,
         "killedOnDuty": null,
         "note": {
           "uk": "",
           "en": ""
         },
-        "source": "https://imi.org.ua/en/monitorings/freedom-of-speech-barometer/page/8"
+        "source": "https://imi.org.ua/monitorings/za-dev-yat-misyatsiv-vijny-rosiya-vchynyla-462-zlochyny-proty-zhurnalistiv-ta-media-v-ukrayini-i49264"
       },
       {
         "date": "2022-12-24",
@@ -314,7 +325,7 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://imi.org.ua/en/monitorings/freedom-of-speech-barometer/page/8"
+        "source": "https://imi.org.ua/en/monitorings/467-crimes-against-journalists-and-media-in-ukraine-committed-by-russia-in-ten-months-of-the-war-i49772"
       },
       {
         "date": "2023-01-24",
@@ -325,7 +336,7 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://imi.org.ua/en/monitorings/freedom-of-speech-barometer/page/8"
+        "source": "https://imi.org.ua/monitorings/za-11-misyatsiv-vijny-rosiya-vchynyla-477-zlochyniv-proty-zhurnalistiv-ta-media-v-ukrayini-i50332"
       },
       {
         "date": "2023-02-24",
@@ -336,7 +347,51 @@
           "uk": "Перший рік повномасштабної війни",
           "en": "First year of the full-scale war"
         },
-        "source": "https://imi.org.ua/en/news/a-year-of-the-big-war-497-crimes-against-journalists-and-media-committed-by-russia-in-ukraine-i51010"
+        "source": "https://imi.org.ua/monitorings/rik-velykoyi-vijny-rf-skoyila-497-zlochyniv-proty-zhurnalistiv-ta-media-v-ukrayini-i50995"
+      },
+      {
+        "date": "2023-03-24",
+        "total": 505,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/za-rik-ta-misyats-z-pochatku-vtorgnennya-rf-skoyila-504-zlochyny-proty-zhurnalistiv-ta-media-v-i51590"
+      },
+      {
+        "date": "2023-04-24",
+        "total": 509,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/za-rik-ta-dva-misyatsi-z-pochatku-vtorgnennya-rf-skoyila-509-zlochyniv-proty-zhurnalistiv-ta-media-i52295"
+      },
+      {
+        "date": "2023-05-24",
+        "total": 514,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/za-rik-ta-try-misyatsi-velykoyi-vijny-rf-skoyila-514-zlochyniv-proty-zhurnalistiv-ta-media-v-i53046"
+      },
+      {
+        "date": "2023-06-24",
+        "total": 519,
+        "killedTotal": 63,
+        "killedOnDuty": 10,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/articles/519-zlochyniv-skoyila-rf-proty-zhurnalistiv-ta-media-v-ukrayini-za-rik-ta-chotyry-misyatsi-velykoyi-i53627"
       },
       {
         "date": "2023-07-24",
@@ -347,7 +402,18 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://fakty.com.ua/ua/ukraine/20230724-tysk-vykradennya-ta-vbyvstva-rf-skoyila-524-zlochyny-proty-zhurnalistiv-v-ukrayini/"
+        "source": "https://imi.org.ua/monitorings/524-zlochyny-skoyila-rf-proty-zhurnalistiv-ta-media-v-ukrayini-za-rik-ta-p-yat-misyatsiv-velykoyi-i54215"
+      },
+      {
+        "date": "2023-08-24",
+        "total": 529,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/pivtora-roky-velykoyi-vijny-529-zlochyniv-skoyila-rf-proty-zhurnalistiv-ta-media-v-ukrayini-i54862"
       },
       {
         "date": "2023-09-24",
@@ -358,7 +424,18 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://old.imi.org.ua/en/news/536-crimes-against-journalists-and-media-committed-by-russia-in-ukraine-in-the-year-and-seven-i55614"
+        "source": "https://imi.org.ua/news/za-rik-ta-sim-misyatsiv-velykoyi-vijny-rosiya-vchynyly-536-zlochyniv-proty-media-ta-zhurnalistiv-i55609"
+      },
+      {
+        "date": "2023-10-24",
+        "total": 540,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/540-zlochyniv-proty-media-ta-zhurnalistiv-skoyila-rosiya-za-rik-ta-visim-misyatsiv-velykoyi-vijny-i56304"
       },
       {
         "date": "2023-12-24",
@@ -369,7 +446,7 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://imi.org.ua/en/news/548-crimes-against-the-media-and-journalists-committed-by-russia-in-the-year-and-ten-months-of-the-i57949"
+        "source": "https://imi.org.ua/monitorings/546-zlochyniv-proty-media-ta-zhurnalistiv-vchynyla-rf-za-rik-i-desyat-misyatsiv-velykoyi-vijny-i57888"
       },
       {
         "date": "2024-01-24",
@@ -391,7 +468,7 @@
           "uk": "Два роки повномасштабної війни",
           "en": "Two years of the full-scale war"
         },
-        "source": "https://imi.org.ua/en/news/two-years-since-the-start-of-the-invasion-russia-commits-567-crimes-against-journalists-and-the-i59439"
+        "source": "https://imi.org.ua/monitorings/dva-roky-z-pochatku-vtorgnennya-rosiya-vchynyla-567-zlochyniv-proty-zhurnalistiv-ta-media-v-ukrayini-i59422"
       },
       {
         "date": "2024-03-24",
@@ -402,7 +479,40 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://unn.ua/en/news/more-than-80-media-workers-have-been-killed-in-the-10-years-of-russias-war-against-ukraine"
+        "source": "https://imi.org.ua/monitorings/575-zlochyniv-vchynyla-rf-proty-media-ta-zhurnalistiv-za-dva-roky-i-misyats-povnomasshtabnoyi-vijny-i60153"
+      },
+      {
+        "date": "2024-04-24",
+        "total": 589,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/589-zlochyniv-vchynyla-rf-proty-media-ta-zhurnalistiv-za-dva-roky-i-dva-misyatsi-povnomasshtabnoyi-i60890"
+      },
+      {
+        "date": "2024-05-24",
+        "total": 599,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/599-zlochyniv-skoyila-rf-proty-media-ta-zhurnalistiv-za-dva-roky-i-try-misyatsi-povnomasshtabnoyi-i61556"
+      },
+      {
+        "date": "2024-06-24",
+        "total": 602,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/602-zlochyny-skoyila-rf-proty-media-ta-zhurnalistiv-za-dva-roky-j-chotyry-misyatsi-i62133"
       },
       {
         "date": "2024-07-24",
@@ -413,7 +523,18 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://old.imi.org.ua/en/news/607-crimes-against-the-media-and-journalists-in-ukraine-committed-by-russia-in-the-two-years-and-i62665"
+        "source": "https://imi.org.ua/monitorings/607-zlochyniv-vchynyla-rf-proty-media-ta-zhurnalistiv-za-dva-roky-i-p-yat-misyatsiv-i62647"
+      },
+      {
+        "date": "2024-08-24",
+        "total": 620,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "ІМІ оновив показник із 617 до 620 після додавання трьох випадків юридичного тиску.",
+          "en": "IMI revised the figure from 617 to 620 after adding three cases of legal pressure."
+        },
+        "source": "https://imi.org.ua/monitorings/617-zlochyniv-vchynyla-rf-proty-media-ta-zhurnalistiv-za-dva-z-polovynoyu-roky-povnomasshtabnoyi-i63178"
       },
       {
         "date": "2024-09-24",
@@ -424,7 +545,7 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://imi.org.ua/en/news/637-crimes-against-the-media-and-journalists-committed-by-russia-in-the-2-years-and-7-months-of-the-i63829"
+        "source": "https://imi.org.ua/monitorings/637-zlochyniv-skoyila-rf-proty-media-ta-zhurnalistiv-za-dva-roky-ta-sim-misyatsiv-povnomasshtabnoyi-i63821"
       },
       {
         "date": "2024-10-24",
@@ -435,7 +556,7 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://imi.org.ua/en/news/664-crimes-against-the-media-and-journalists-committed-by-russia-in-the-2-years-and-8-months-of-the-i64453"
+        "source": "https://imi.org.ua/en/monitorings/664-crimes-against-the-media-and-journalists-committed-by-russia-in-the-2-years-and-8-months-of-the-i64452"
       },
       {
         "date": "2024-11-24",
@@ -446,7 +567,7 @@
           "uk": "ІМІ додав до загального показника дані про медіа, що припинили роботу через агресію Росії (329)",
           "en": "IMI added data on media outlets closed due to Russia's aggression (329) to the total"
         },
-        "source": "https://imi.org.ua/en/news/762-crimes-against-the-media-and-journalists-committed-by-russia-in-the-2-years-and-9-months-of-the-i65063"
+        "source": "https://imi.org.ua/monitorings/762-zlochyny-skoyila-rf-proty-media-ta-zhurnalistiv-za-dva-roky-ta-dev-yat-misyatsiv-i65057"
       },
       {
         "date": "2024-12-24",
@@ -457,7 +578,7 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://imi.org.ua/en/news/801-crime-against-the-media-and-journalists-committed-by-russia-in-the-2-years-and-10-months-of-the-i65656"
+        "source": "https://imi.org.ua/monitorings/801-zlochyn-proty-media-ta-zhurnalistiv-vchynyla-rosiya-za-dva-roky-j-desyat-misyatsiv-i65649"
       },
       {
         "date": "2025-01-24",
@@ -468,7 +589,7 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://imi.org.ua/en/news/807-crimes-against-the-media-and-journalists-committed-by-russia-in-the-2-years-and-11-months-of-i66248"
+        "source": "https://imi.org.ua/monitorings/807-zlochyniv-proty-media-ta-zhurnalistiv-skoyila-rf-za-dva-roky-i-odynadtsyat-misyatsiv-i66240"
       },
       {
         "date": "2025-02-24",
@@ -479,7 +600,18 @@
           "uk": "Три роки повномасштабної війни",
           "en": "Three years of the full-scale war"
         },
-        "source": "https://imi.org.ua/en/news/three-years-of-the-full-scale-war-russia-commits-823-crimes-against-journalists-and-the-media-in-i66795"
+        "source": "https://imi.org.ua/monitorings/za-try-roky-povnomasshtabnoyi-vijny-rosiya-skoyila-823-zlochyniv-proty-zhurnalistiv-ta-media-v-i66772"
+      },
+      {
+        "date": "2025-03-24",
+        "total": 829,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/829-zlochyniv-proty-zhurnalistiv-ta-media-v-ukrayini-skoyila-rf-za-try-roky-i-misyats-i67301"
       },
       {
         "date": "2025-04-24",
@@ -490,7 +622,18 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://old.imi.org.ua/en/news/833-crimes-against-media-and-journalists-committed-by-russia-in-3-years-2-months-of-full-scale-i67862"
+        "source": "https://imi.org.ua/news/833-zlochyny-proty-zhurnalistiv-ta-media-v-ukrayini-skoyila-rf-za-try-roky-i-dva-misyatsi-i67848"
+      },
+      {
+        "date": "2025-05-24",
+        "total": 836,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/836-zlochyniv-vchynyla-rf-proty-zhurnalistiv-ta-media-v-ukrayini-try-roky-i-try-misyatsi-i68403"
       },
       {
         "date": "2025-06-24",
@@ -501,7 +644,7 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://fakty.com.ua/ua/ukraine/suspilstvo/20250624-rosiya-skoyila-ponad-800-zlochyniv-proty-zhurnalistiv-i-media-z-pochatku-povnomasshtabnogo-vtorgnennya-imi/"
+        "source": "https://imi.org.ua/monitorings/838-zlochyniv-vchynyla-rf-proty-zhurnalistiv-ta-media-v-ukrayini-try-roky-i-chotyry-misyatsi-i68979"
       },
       {
         "date": "2025-07-24",
@@ -512,7 +655,40 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://www.kyivpost.com/uk/post/56917"
+        "source": "https://imi.org.ua/monitorings/840-zlochyniv-skoyila-rf-proty-zhurnalistiv-ta-media-v-ukrayini-za-try-roky-j-pyat-misyatsiv-povnomasshtabnoyi-vijny"
+      },
+      {
+        "date": "2025-09-24",
+        "total": 848,
+        "killedTotal": 111,
+        "killedOnDuty": 12,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/847-zlochyniv-skoyila-rf-proty-zhurnalistiv-i-media-v-ukrayini-za-try-roky-ta-sim-misyatsiv-povnomasshtabnoyi-vijny"
+      },
+      {
+        "date": "2025-10-24",
+        "total": 858,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/rosiya-skoyila-858-zlochyniv-proty-zhurnalistiv-i-media-v-ukrayini-vid-pochatku-povnomasshtabnoyi-vijny"
+      },
+      {
+        "date": "2025-11-24",
+        "total": 868,
+        "killedTotal": 119,
+        "killedOnDuty": 15,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/news/868-zlochyniv-skoyila-rosiya-proty-zhurnalistiv-i-media-v-ukrayini-vid-pochatku-povnomasshtabnoyi-vijny"
       },
       {
         "date": "2025-12-24",
@@ -523,7 +699,18 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://www.ukrinform.net/rubric-ato/4073919-russia-commits-870-crimes-against-journalists-media-during-fullscale-war.html"
+        "source": "https://imi.org.ua/monitorings/z-pochatku-povnomasshtabnoyi-vijny-rosiya-skoyila-870-zlochyniv-proty-zhurnalistiv-i-media-v-ukrayini"
+      },
+      {
+        "date": "2026-01-24",
+        "total": 872,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/z-pochatku-povnomasshtabnoyi-vijny-rosiya-vchynyla-872-zlochyny-proty-zhurnalistiv-i-media-v-ukrayini"
       },
       {
         "date": "2026-02-24",
@@ -534,7 +721,18 @@
           "uk": "Чотири роки повномасштабної війни",
           "en": "Four years of the full-scale war"
         },
-        "source": "https://imi.org.ua/en/monitorings/russia-commits-896-crimes-against-ukrainian-journalists-media-in-4-years-of-full-scale-war"
+        "source": "https://imi.org.ua/monitorings/za-chotyry-roky-povnomasshtabnoyi-vijny-rf-skoyila-896-zlochyniv-proty-zhurnalistiv-ta-media"
+      },
+      {
+        "date": "2026-03-24",
+        "total": 901,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/rosiya-skoyila-901-zlochyn-proty-media-ta-zhurnalistiv-v-ukrayini-za-chotyry-roky-ta-misyats-velykoyi-vijny"
       },
       {
         "date": "2026-04-24",
@@ -545,7 +743,7 @@
           "uk": "",
           "en": ""
         },
-        "source": "https://imi.org.ua/en/monitorings/russia-commits-937-crimes-against-journalists-media-in-ukraine-in-4-years-2-months-of-full-scale-war"
+        "source": "https://imi.org.ua/monitorings/rosiya-vchynyla-937-zlochyniv-proty-media-i-zhurnalistiv-v-ukrayini-vid-pochatku-vtorgnennya"
       },
       {
         "date": "2026-05-24",
@@ -556,18 +754,51 @@
           "uk": "Показник уточнено з 949 до 950",
           "en": "Figure updated from 949 to 950"
         },
-        "source": "https://imi.org.ua/en/monitorings/russia-commits-949-crimes-against-journalists-media-in-ukraine-in-4-years-3-months-of-full-scale-war"
+        "source": "https://imi.org.ua/monitorings/za-chotyry-roky-i-try-misyatsi-velykoyi-vijny-rf-vchynyla-949-zlochyniv-proty-media-i-zhurnalistiv-v-ukrayini"
       },
       {
-        "date": "2026-09-24",
-        "total": 977,
+        "date": "2026-06-24",
+        "total": 958,
         "killedTotal": null,
         "killedOnDuty": null,
         "note": {
           "uk": "",
           "en": ""
         },
-        "source": "https://www.ukrinform.net/amp/rubric-society/4167643-russia-commits-977-crimes-against-journalists-and-media-during-fullscale-war-imi.html"
+        "source": "https://imi.org.ua/monitorings/za-chotyry-roky-j-chotyry-misyatsi-velykoyi-vijny-rf-skoyila-958-zlochyniv-proty-media-i-zhurnalistiv-v-ukrayini"
+      },
+      {
+        "date": "2026-07-24",
+        "total": 966,
+        "killedTotal": 134,
+        "killedOnDuty": 15,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/za-chotyry-roky-j-pyat-misyatsiv-velykoyi-vijny-rf-skoyila-966-zlochyniv-proty-media-i-zhurnalistiv-v-ukrayini"
+      },
+      {
+        "date": "2026-08-24",
+        "total": 971,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/za-chotyry-z-polovynoyu-roky-povnomasshtabnoyi-vijny-rf-skoyila-971-zlochyn-proty-zhurnalistiv-i-media"
+      },
+      {
+        "date": "2026-09-24",
+        "total": 977,
+        "killedTotal": 139,
+        "killedOnDuty": 15,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/monitorings/za-chotyry-roky-i-sim-misyatsiv-povnomasshtabnoyi-vijny-rf-skoyila-977-zlochyniv-proty-zhurnalistiv-i-media"
       }
     ],
     "years": [
@@ -578,7 +809,7 @@
           "uk": "Найважчий рік: за перший місяць ІМІ зафіксував 148 злочинів, за десять місяців — 467.",
           "en": "The heaviest year: 148 crimes in the first month, 467 in ten months."
         },
-        "source": "https://imi.org.ua/en/monitorings/freedom-of-speech-barometer/page/8"
+        "source": "https://imi.org.ua/en/monitorings/467-crimes-against-journalists-and-media-in-ukraine-committed-by-russia-in-ten-months-of-the-war-i49772"
       },
       {
         "year": 2023,
@@ -602,10 +833,10 @@
         "year": 2025,
         "killedInYear": 26,
         "note": {
-          "uk": "Дрони стали головною смертельною загрозою для журналістів. Щонайменше 16 редакцій зруйновано або пошкоджено.",
-          "en": "Drones became the main deadly threat to journalists. At least 16 newsrooms destroyed or damaged."
+          "uk": "Головною загрозою стали дрони: троє медійників загинули від цілеспрямованих атак російських дронів.",
+          "en": "Drones became the main threat: three media workers were killed in targeted Russian drone strikes."
         },
-        "source": "https://www.radiosvoboda.org/a/news-imi-ataky-rf-zhurnalisty/33649855.html"
+        "source": "https://imi.org.ua/monitorings/pidsumky-stanu-svobody-slova-v-ukrayini-u-2025-rotsi-130-porushen-bilshist-z-yakyh-vchynyla-rf"
       },
       {
         "year": 2026,

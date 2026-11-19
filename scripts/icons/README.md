@@ -16,5 +16,7 @@ Pipeline (Python 3, `pip install lxml svgelements`):
    - ids are prefixed per icon, so several icons can be inlined on one page.
 4. `node scripts/icons/build-icons.mjs` validates the SVGs against an element/attribute allowlist and regenerates `src/lib/icons/category-icons.generated.ts`.
 
+The "broadcast-takeover" icon (megaphone with a cross) was replaced in November 2026 with the SVG supplied by IMI; it went through the same normalisation by hand (grey fill → `currentColor`, fitted into `0 0 64 64`).
+
 The infographic SVG itself (12 MB with embedded raster images) is not committed.
 Keep it in your local design archive if you want to re-run the extraction.

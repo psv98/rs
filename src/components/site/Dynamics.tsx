@@ -45,15 +45,13 @@ export function Dynamics({ locale, snap }: { locale: Locale; snap: PublicSnapsho
           <h2 id="dyn-title" className="section__title">
             {d.title}
           </h2>
-          <div className="section__aside">
-            <p className="section__lead">{d.lead}</p>
-          </div>
+          <p className="section__lead">{d.lead}</p>
         </header>
         <DynamicsChart
           points={points}
           start={data.monitoringStart}
           ariaLabel={d.chartAria(points.length, formatShortDate(points[0]!.date), formatShortDate(data.asOfDate))}
-          labels={{ killed: d.killed, source: d.source, start: d.start, brand: d.brand }}
+          labels={{ killed: d.killed, source: d.source, start: d.start }}
         />
         <ol className="years" aria-label={d.yearsTitle}>
           {cards.map(({ yr, last, delta, meta, future }, i) => (

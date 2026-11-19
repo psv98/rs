@@ -4,7 +4,6 @@ import { getDb } from "@/lib/db";
 import { getSnapshot, listPublished } from "@/lib/data/repository";
 import { toPublicData, type PublicSnapshot } from "@/lib/data/schema";
 import { HomePage } from "@/components/site/HomePage";
-import { parseFilters } from "@/lib/seo";
 import { config } from "@/lib/config";
 import { STATUS_LABEL } from "@/components/admin/labels";
 import { DomainError } from "@/lib/data/errors";
@@ -38,7 +37,6 @@ export default async function PreviewPage(props: { params: Promise<{ id: string;
     <HomePage
       locale={lang}
       state={{ current, history }}
-      initial={parseFilters(await props.searchParams)}
       siteUrl={config.siteUrl}
       exportMode={{ kind: "admin", id: snap.id }}
       banner={banner}
