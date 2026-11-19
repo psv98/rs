@@ -42,6 +42,11 @@ export function diffSnapshots(before: SnapshotData | null, after: SnapshotData):
     const b = show(get(after));
     if (a !== b) changes.push({ path, label, before: a, after: b });
   }
+  const hp = (d: SnapshotData) => d.history.points.map((p) => `${p.date}:${p.total ?? "—"}`).join(", ");
+  if (hp(before) !== hp(after))
+    changes.push({ path: "history.points", label: "Динаміка: точки", before: `${before.history.points.length} точок`, after: `${after.history.points.length} точок` });
+  if (JSON.stringify(before.history.years) !== JSON.stringify(after.history.years))
+    changes.push({ path: "history.years", label: "Динаміка: описи років", before: `${before.history.years.length}`, after: `${after.history.years.length}` });
   const ids = new Set([...before.categories.map((c) => c.id), ...after.categories.map((c) => c.id)]);
   for (const id of ids) {
     const a = before.categories.find((c) => c.id === id);

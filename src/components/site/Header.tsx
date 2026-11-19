@@ -22,9 +22,8 @@ export function Header({ locale, ukPath, enPath }: { locale: Locale; ukPath?: st
           <span>{d.projectKickerSub}</span>
         </div>
         <nav className="site-nav" aria-label={locale === "uk" ? "Розділи сторінки" : "Page sections"}>
-          <a className="navlink" href="#stats">{d.nav.stats}</a>
-          <a className="navlink" href="#analytics">{d.nav.analytics}</a>
-          <a className="navlink" href="#history">{d.nav.history}</a>
+          <a className="navlink" href="#types-title">{d.nav.stats}</a>
+          <a className="navlink" href="#dynamics">{d.nav.dynamics}</a>
           <a className="navlink" href="#export">{d.nav.export}</a>
           <a className="navlink" href="#methodology">{d.nav.methodology}</a>
           <LanguageSwitch locale={locale} label={d.langSwitch} ukPath={ukPath} enPath={enPath} />

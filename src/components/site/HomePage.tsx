@@ -7,8 +7,8 @@ import { Hero } from "./Hero";
 import { Ticker } from "./Ticker";
 import { CategoryLedger } from "./CategoryLedger";
 import { Analytics, type AnalyticsInitial } from "./Analytics";
-import { History } from "./History";
-import { Methodology } from "./Methodology";
+import { Dynamics } from "./Dynamics";
+import { AboutData } from "./AboutData";
 import { ExportPanel, type ExportLinks } from "./ExportPanel";
 import { Footer } from "./Footer";
 
@@ -92,6 +92,7 @@ export function HomePage({
         <Hero locale={locale} snap={snap} siteUrl={siteUrl} />
         <Ticker locale={locale} snap={snap} />
         <CategoryLedger locale={locale} snap={snap} />
+        <Dynamics locale={locale} snap={snap} />
         <section className="section" id="analytics" aria-labelledby="analytics-title">
           <div className="shell">
             <div className="section__head">
@@ -103,7 +104,6 @@ export function HomePage({
             <Analytics locale={locale} history={state.history} initial={initial} />
           </div>
         </section>
-        <History locale={locale} history={state.history} initialYear={initial.year} />
         <section className="section" id="export" aria-labelledby="export-title">
           <div className="shell">
             <div className="section__head">
@@ -115,7 +115,7 @@ export function HomePage({
             <ExportPanel locale={locale} links={links} />
           </div>
         </section>
-        <Methodology locale={locale} snap={snap} />
+        <AboutData locale={locale} snap={snap} history={state.history} />
       </main>
       <Footer locale={locale} />
     </>

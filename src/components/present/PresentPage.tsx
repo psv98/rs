@@ -1,12 +1,14 @@
 import type { Locale } from "@/lib/data/schema";
 import { visibleCategories } from "@/lib/data/schema";
 import { dynamicInServerMode, getPublicState } from "@/lib/data/public";
-import { formatLongDate } from "@/lib/data/dates";
+
 import { t } from "@/lib/i18n/dictionaries";
 import { pageHref, withBase } from "@/lib/site";
 import { CategoryIcon } from "../ui/CategoryIcon";
 import { Glyph } from "../ui/Glyph";
 import { FullscreenButton } from "./FullscreenButton";
+import { HeroRing } from "../site/HeroRing";
+import { formatShortDate } from "@/lib/data/dates";
 
 /** Large-screen mode: the headline figure and all categories, nothing else. */
 export async function PresentPage({ locale }: { locale: Locale }) {
@@ -29,20 +31,16 @@ export async function PresentPage({ locale }: { locale: Locale }) {
       </div>
       {current ? (
         <div className="present__main">
-          <div>
+          <div style={{ display: "grid", gap: "1.5rem", justifyItems: "start" }}>
             <p className="hero__period">{current.data.texts.periodLabel[locale]}</p>
-            <h1>
-              <span className="hero__figure">{fmt(current.data.totalCrimes)}</span>
-              <span className="hero__label" style={{ display: "block" }}>
-                {d.heroLabel(current.data.totalCrimes)}
-              </span>
-            </h1>
-            <p className="hero__dates">
-              <span>
-                <strong>{d.hero.since(formatLongDate(current.data.monitoringStart, locale))}</strong>
-              </span>
-              <span>{d.hero.asOf(formatLongDate(current.data.asOfDate, locale))}</span>
-            </p>
+            <h1 className="hero__title" style={{ marginTop: 0 }}>{d.hero.title}</h1>
+            <HeroRing
+              total={current.data.totalCrimes}
+              categories={visibleCategories(current.data).map((c) => ({ id: c.id, iconId: c.iconId, value: c.value, name: c.name[locale] }))}
+              label={d.hero.ringLabel(current.data.totalCrimes)}
+              caption={d.hero.asOf(formatShortDate(current.data.asOfDate))}
+              ariaLabel={d.hero.ringAria(current.data.totalCrimes)}
+            />
           </div>
           <div className="present-grid" role="list" aria-label={d.categories.title}>
             {visibleCategories(current.data).map((c) => (

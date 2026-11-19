@@ -112,3 +112,33 @@ describe("period label", () => {
     expect(suggestPeriodLabel("2022-02-24", "2027-02-24").uk).toBe("5 років повномасштабної війни");
   });
 });
+
+describe("history (dynamics by year)", () => {
+  it("seed history is valid and sourced", () => {
+    const d = confirmed(seedOct());
+    expect(d.history.points.length).toBeGreaterThan(20);
+    expect(d.history.points.every((p) => p.source.startsWith("https://"))).toBe(true);
+    expect(codes(validateSnapshot(d, ctx)).filter((c) => c.startsWith("history"))).toEqual([]);
+  });
+  it("defaults to empty history for older documents", () => {
+    const raw = structuredClone(seedOct()) as Record<string, unknown>;
+    delete raw.history;
+    expect(snapshotDataSchema.parse(raw).history).toEqual({ points: [], years: [] });
+  });
+  it("rejects unordered, out-of-range and duplicate entries", () => {
+    const d = confirmed(seedOct());
+    const [a, b] = d.history.points;
+    d.history.points[0] = b!;
+    d.history.points[1] = a!;
+    d.history.points.push({ ...a!, date: d.asOfDate });
+    d.history.years.push({ ...d.history.years[0]! });
+    const r = validateSnapshot(d, ctx);
+    expect(codes(r)).toEqual(expect.arrayContaining(["history-order", "history-date", "history-years"]));
+    expect(r.canSubmit).toBe(false);
+  });
+  it("warns when a past value exceeds the current total", () => {
+    const d = confirmed(seedOct());
+    d.history.points.at(-1)!.total = 5000;
+    expect(codes(validateSnapshot(d, ctx))).toContain("history-gt-total");
+  });
+});

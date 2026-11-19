@@ -58,6 +58,26 @@ export const categorySchema = z.object({
 });
 export type Category = z.infer<typeof categorySchema>;
 
+/** A published IMI figure at an earlier date — the dynamics chart. Every point needs a source. */
+export const historyPointSchema = z.object({
+  date: isoDate,
+  total: z.number().int().min(0).max(1_000_000).nullable(),
+  killedTotal: z.number().int().min(0).max(100_000).nullable(),
+  killedOnDuty: z.number().int().min(0).max(100_000).nullable(),
+  note: localizedText(300),
+  source: httpsUrl,
+});
+export type HistoryPoint = z.infer<typeof historyPointSchema>;
+
+/** Short editorial summary per calendar year. */
+export const historyYearSchema = z.object({
+  year: z.number().int().min(2022).max(2100),
+  killedInYear: z.number().int().min(0).max(100_000).nullable(),
+  note: localizedText(300),
+  source: httpsUrl,
+});
+export type HistoryYear = z.infer<typeof historyYearSchema>;
+
 export const snapshotDataSchema = z.object({
   schemaVersion: z.literal(1),
   /** Main cumulative figure, as published by IMI. Never derived from categories. */
@@ -86,6 +106,13 @@ export const snapshotDataSchema = z.object({
     registry: httpsUrl,
   }),
   categories: z.array(categorySchema).max(40),
+  /** Earlier published totals (dynamics chart) and per-year notes. */
+  history: z
+    .object({
+      points: z.array(historyPointSchema).max(500),
+      years: z.array(historyYearSchema).max(100),
+    })
+    .default({ points: [], years: [] }),
   verification: z.object({
     /** Editor confirms the figures were checked against the IMI source publication. */
     sourceChecked: z.boolean(),

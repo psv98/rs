@@ -12,14 +12,14 @@ function pngSize(buf: Buffer) {
 describe("PNG export", () => {
   const data = toPublicData(seedOct());
 
-  it("plans 2 social slides and 1 wide slide for 14 categories", () => {
-    expect(planSlides(data, "social").map((s) => s.categories.length)).toEqual([6, 8]);
+  it("plans an overview + 1 list slide for social and 1 wide slide for 14 categories", () => {
+    expect(planSlides(data, "social").map((s) => s.categories.length)).toEqual([0, 14]);
     expect(planSlides(data, "wide").map((s) => s.categories.length)).toEqual([14]);
   });
 
   it("adds slides automatically when categories are added", () => {
     const more = { ...data, categories: [...data.categories, ...data.categories.map((c, i) => ({ ...c, id: `${c.id}-x`, order: 500 + i }))] };
-    expect(planSlides(more, "social").length).toBe(4); // 28 = 6 + 8 + 8 + 6
+    expect(planSlides(more, "social").length).toBe(3); // overview + 14 + 14
     expect(planSlides(more, "wide").length).toBe(2);
   });
 

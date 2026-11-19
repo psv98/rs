@@ -30,7 +30,7 @@ interface Rec {
   publishedBy: string | null;
 }
 type Ref = { id: number; periodKey: string; data: SnapshotData } | null;
-type Tab = "main" | "categories" | "texts" | "check" | "preview" | "diff";
+type Tab = "main" | "categories" | "history" | "texts" | "check" | "preview" | "diff";
 
 const clone = <T,>(v: T): T => JSON.parse(JSON.stringify(v));
 const numOrNull = (s: string) => (s.trim() === "" ? null : Number(s));
@@ -221,6 +221,7 @@ export function SnapshotEditor({
           [
             ["main", "Основне"],
             ["categories", `Категорії (${data.categories.length})`],
+            ["history", `Динаміка (${data.history.points.length})`],
             ["texts", "Тексти UA/EN"],
             ["check", "Перевірка"],
             ["preview", "Попередній перегляд"],
@@ -236,6 +237,7 @@ export function SnapshotEditor({
 
       {tab === "main" && <MainTab data={data} update={update} editable={editable} changeNote={changeNote} setChangeNote={(s) => (setChangeNote(s), setDirty(true))} issues={v.issues} />}
       {tab === "categories" && <CategoriesTab data={data} update={update} editable={editable} />}
+      {tab === "history" && <HistoryTab data={data} update={update} editable={editable} />}
       {tab === "texts" && <TextsTab data={data} update={update} editable={editable} />}
       {tab === "check" && (
         <CheckTab
@@ -489,6 +491,120 @@ function AddCategory({ data, update }: { data: SnapshotData; update: Upd }) {
       >
         Додати (прихованою)
       </button>
+    </div>
+  );
+}
+
+function HistoryTab({ data, update, editable }: { data: SnapshotData; update: Upd; editable: boolean }) {
+  const pts = data.history.points;
+  const yrs = data.history.years;
+  const sorted = pts.every((p, i) => i === 0 || pts[i - 1]!.date < p.date);
+  const cell = { padding: "0.35rem 0.4rem", verticalAlign: "top" } as const;
+  return (
+    <div style={{ display: "grid", gap: "1.25rem" }}>
+      <div className="adm-card">
+        <h2 style={{ marginTop: 0 }}>Точки динаміки</h2>
+        <p className="muted">
+          Опубліковані раніше загальні показники ІМІ. З них сайт будує графік «Як змінювалися цифри» та картки років; поточний знімок додається до графіка автоматично. Кожна точка
+          потребує посилання на публікацію ІМІ. Примітка показується на графіку (заповнюйте обидві мови або жодної).
+        </p>
+        <div style={{ overflowX: "auto", marginTop: "0.75rem" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.85rem" }}>
+            <thead>
+              <tr className="muted" style={{ textAlign: "left" }}>
+                <th style={cell}>Дата</th>
+                <th style={cell}>Усього</th>
+                <th style={cell}>Загинули</th>
+                <th style={cell}>Під час роботи</th>
+                <th style={cell}>Джерело</th>
+                <th style={cell}>Примітка UA / EN</th>
+                <th style={cell} />
+              </tr>
+            </thead>
+            <tbody>
+              {pts.map((p, i) => (
+                <tr key={i} style={{ borderTop: "1px solid rgba(255,255,255,.08)" }}>
+                  <td style={cell}>
+                    <input className="adm-input" type="date" style={{ width: "9.5rem" }} disabled={!editable} value={p.date} onChange={(e) => update((d) => void (d.history.points[i]!.date = e.target.value))} />
+                  </td>
+                  <td style={cell}>
+                    <input className="adm-input num" type="number" min={0} style={{ width: "6rem" }} disabled={!editable} value={p.total ?? ""} onChange={(e) => update((d) => void (d.history.points[i]!.total = numOrNull(e.target.value)))} />
+                  </td>
+                  <td style={cell}>
+                    <input className="adm-input num" type="number" min={0} style={{ width: "5rem" }} disabled={!editable} value={p.killedTotal ?? ""} onChange={(e) => update((d) => void (d.history.points[i]!.killedTotal = numOrNull(e.target.value)))} />
+                  </td>
+                  <td style={cell}>
+                    <input className="adm-input num" type="number" min={0} style={{ width: "5rem" }} disabled={!editable} value={p.killedOnDuty ?? ""} onChange={(e) => update((d) => void (d.history.points[i]!.killedOnDuty = numOrNull(e.target.value)))} />
+                  </td>
+                  <td style={cell}>
+                    <input className="adm-input" type="url" style={{ minWidth: "14rem" }} disabled={!editable} value={p.source} aria-invalid={!p.source ? "true" : undefined} onChange={(e) => update((d) => void (d.history.points[i]!.source = e.target.value.trim()))} />
+                  </td>
+                  <td style={cell}>
+                    <div style={{ display: "grid", gap: "0.3rem", minWidth: "14rem" }}>
+                      <input className="adm-input" maxLength={300} disabled={!editable} value={p.note.uk} placeholder="UA" onChange={(e) => update((d) => void (d.history.points[i]!.note.uk = e.target.value))} />
+                      <input className="adm-input" maxLength={300} disabled={!editable} value={p.note.en} placeholder="EN" onChange={(e) => update((d) => void (d.history.points[i]!.note.en = e.target.value))} />
+                    </div>
+                  </td>
+                  <td style={cell}>
+                    <button className="btn" disabled={!editable} aria-label={`Видалити точку ${p.date}`} onClick={() => update((d) => void d.history.points.splice(i, 1))}>
+                      Видалити
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {editable && (
+          <div style={{ display: "flex", gap: "0.6rem", marginTop: "0.75rem", flexWrap: "wrap" }}>
+            <button className="btn" onClick={() => update((d) => void d.history.points.push({ date: "", total: null, killedTotal: null, killedOnDuty: null, note: { uk: "", en: "" }, source: "" }))}>
+              Додати точку
+            </button>
+            {!sorted && (
+              <button className="btn" onClick={() => update((d) => void d.history.points.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0)))}>
+                Впорядкувати за датою
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+      <div className="adm-card">
+        <h2 style={{ marginTop: 0 }}>Підсумки років</h2>
+        <p className="muted">Короткий підсумок для картки року: скільки медійників загинуло за рік і одне речення про головне. Зміну показника за рік сайт рахує сам.</p>
+        <div style={{ display: "grid", gap: "0.75rem", marginTop: "0.75rem" }}>
+          {yrs.map((y, i) => (
+            <div key={i} style={{ display: "grid", gridTemplateColumns: "6rem 7rem 1fr 1fr auto", gap: "0.6rem", alignItems: "end" }}>
+              <Field label="Рік">
+                <input className="adm-input num" type="number" min={2022} max={2100} disabled={!editable} value={y.year} onChange={(e) => update((d) => void (d.history.years[i]!.year = Number(e.target.value)))} />
+              </Field>
+              <Field label="Загинули за рік">
+                <input className="adm-input num" type="number" min={0} disabled={!editable} value={y.killedInYear ?? ""} onChange={(e) => update((d) => void (d.history.years[i]!.killedInYear = numOrNull(e.target.value)))} />
+              </Field>
+              <Field label="Підсумок UA / EN">
+                <div style={{ display: "grid", gap: "0.3rem" }}>
+                  <input className="adm-input" maxLength={300} disabled={!editable} value={y.note.uk} onChange={(e) => update((d) => void (d.history.years[i]!.note.uk = e.target.value))} />
+                  <input className="adm-input" maxLength={300} disabled={!editable} value={y.note.en} onChange={(e) => update((d) => void (d.history.years[i]!.note.en = e.target.value))} />
+                </div>
+              </Field>
+              <Field label="Джерело">
+                <input className="adm-input" type="url" disabled={!editable} value={y.source} aria-invalid={!y.source ? "true" : undefined} onChange={(e) => update((d) => void (d.history.years[i]!.source = e.target.value.trim()))} />
+              </Field>
+              <button className="btn" disabled={!editable} onClick={() => update((d) => void d.history.years.splice(i, 1))}>
+                Видалити
+              </button>
+            </div>
+          ))}
+        </div>
+        {editable && (
+          <button
+            className="btn"
+            style={{ marginTop: "0.75rem" }}
+            onClick={() => update((d) => void d.history.years.push({ year: Math.max(2021, ...d.history.years.map((x) => x.year)) + 1, killedInYear: null, note: { uk: "", en: "" }, source: "" }))}
+          >
+            Додати рік
+          </button>
+        )}
+      </div>
     </div>
   );
 }

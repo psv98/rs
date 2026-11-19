@@ -6,6 +6,8 @@ export function Footer({ locale }: { locale: Locale }) {
   const d = t(locale);
   return (
     <footer className="site-footer">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img className="site-footer__mark" src={withBase("/brand/favicon.svg")} alt="" aria-hidden="true" />
       <div className="shell site-footer__row">
         <div style={{ display: "grid", gap: "1rem" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -105,6 +105,24 @@ export function validateSnapshot(input: unknown, ctx: ValidationContext): Valida
     if (v && !/^https:\/\/(www\.)?imi\.org\.ua\//.test(v)) warn("source-domain", `Посилання ${k} веде не на imi.org.ua`, `sources.${k}`);
   }
 
+  // ---- History (dynamics chart) -------------------------------------------------
+  const pts = d.history.points;
+  pts.forEach((p, i) => {
+    if (!p.source) err("history-source", `Динаміка, ${p.date}: додайте посилання на джерело`, `history.points.${i}.source`);
+    if (isoCompare(p.date, d.asOfDate) >= 0) err("history-date", `Динаміка, ${p.date}: дата має бути раніше за дату знімка`, `history.points.${i}.date`);
+    if (isoCompare(p.date, d.monitoringStart) < 0) err("history-date", `Динаміка, ${p.date}: дата раніше за початок моніторингу`, `history.points.${i}.date`);
+    if (i > 0 && isoCompare(pts[i - 1]!.date, p.date) >= 0) err("history-order", `Динаміка: точки мають іти за зростанням дат (${p.date})`, `history.points.${i}.date`);
+    if (!!p.note.uk !== !!p.note.en) err("translation-missing", `Динаміка, ${p.date}: примітка лише однією мовою`, `history.points.${i}.note`);
+  });
+  const lastTotal = [...pts].reverse().find((p) => p.total !== null)?.total;
+  if (lastTotal != null && lastTotal > d.totalCrimes) warn("history-gt-total", `В історії є значення ${lastTotal}, більше за поточний показник ${d.totalCrimes}`, "history.points");
+  const yrs = d.history.years.map((y) => y.year);
+  if (new Set(yrs).size !== yrs.length) err("history-years", "Рік в історії повторюється", "history.years");
+  d.history.years.forEach((y, i) => {
+    if (!y.source) err("history-source", `Рік ${y.year}: додайте посилання на джерело`, `history.years.${i}.source`);
+    if (!!y.note.uk !== !!y.note.en) err("translation-missing", `Рік ${y.year}: опис лише однією мовою`, `history.years.${i}.note`);
+  });
+
   // ---- Sum vs total (never auto-corrected) ---------------------------------
   const sum = categorySum(d);
   if (sum !== d.totalCrimes) {

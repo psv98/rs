@@ -247,5 +247,375 @@
       "en": ""
     },
     "internalNote": "Стартовий набір. Головний показник 989, 12 нових випадків (24.09–24.10.2026), 143 загиблі медійники, з них 15 під час роботи — за публікаціями ІМІ від 26.10.2026 (UA та EN). Значення 14 категорій — за офіційною інфографікою ІМІ «4 роки і 8 місяців повномасштабної війни» (SVG у UA та EN версіях, категорія мовлення = 42). Сума категорій = 990, головний показник = 989: розбіжність не виправлялася, її має пояснити редактор."
+  },
+  "history": {
+    "points": [
+      {
+        "date": "2022-03-24",
+        "total": 148,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://www.slovoidilo.ua/2022/03/25/novyna/suspilstvo/misyacz-vijny-stalo-vidomo-skilky-zlochyniv-skoyila-rf-proty-zhurnalistiv-ta-media-ukrayini"
+      },
+      {
+        "date": "2022-04-24",
+        "total": 243,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://ifex.org/?p=333173"
+      },
+      {
+        "date": "2022-05-25",
+        "total": 280,
+        "killedTotal": 29,
+        "killedOnDuty": 7,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://armyinform.com.ua/2022/05/25/280-zlochyniv-proty-zhurnalistiv-ta-media-skoyila-rosiya-v-ukrayini-za-try-misyaczi-vijny/"
+      },
+      {
+        "date": "2022-10-24",
+        "total": 457,
+        "killedTotal": null,
+        "killedOnDuty": 8,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://armyinform.com.ua/2022/10/24/457-zlochyniv-proty-zhurnalistiv-skoyila-rf-za-8-misyacziv-shyrokomasshtabnoyi-vijny-v-ukrayini/"
+      },
+      {
+        "date": "2022-11-24",
+        "total": 462,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/en/monitorings/freedom-of-speech-barometer/page/8"
+      },
+      {
+        "date": "2022-12-24",
+        "total": 467,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/en/monitorings/freedom-of-speech-barometer/page/8"
+      },
+      {
+        "date": "2023-01-24",
+        "total": 477,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/en/monitorings/freedom-of-speech-barometer/page/8"
+      },
+      {
+        "date": "2023-02-24",
+        "total": 497,
+        "killedTotal": 48,
+        "killedOnDuty": 8,
+        "note": {
+          "uk": "Перший рік повномасштабної війни",
+          "en": "First year of the full-scale war"
+        },
+        "source": "https://imi.org.ua/en/news/a-year-of-the-big-war-497-crimes-against-journalists-and-media-committed-by-russia-in-ukraine-i51010"
+      },
+      {
+        "date": "2023-07-24",
+        "total": 524,
+        "killedTotal": 65,
+        "killedOnDuty": 10,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://fakty.com.ua/ua/ukraine/20230724-tysk-vykradennya-ta-vbyvstva-rf-skoyila-524-zlochyny-proty-zhurnalistiv-v-ukrayini/"
+      },
+      {
+        "date": "2023-09-24",
+        "total": 536,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://old.imi.org.ua/en/news/536-crimes-against-journalists-and-media-committed-by-russia-in-ukraine-in-the-year-and-seven-i55614"
+      },
+      {
+        "date": "2023-12-24",
+        "total": 548,
+        "killedTotal": 70,
+        "killedOnDuty": 10,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/en/news/548-crimes-against-the-media-and-journalists-committed-by-russia-in-the-year-and-ten-months-of-the-i57949"
+      },
+      {
+        "date": "2024-01-24",
+        "total": 558,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/en/news/558-crimes-against-the-media-and-journalists-committed-by-russia-in-the-year-and-11-months-of-the-i58696"
+      },
+      {
+        "date": "2024-02-24",
+        "total": 567,
+        "killedTotal": 70,
+        "killedOnDuty": 10,
+        "note": {
+          "uk": "Два роки повномасштабної війни",
+          "en": "Two years of the full-scale war"
+        },
+        "source": "https://imi.org.ua/en/news/two-years-since-the-start-of-the-invasion-russia-commits-567-crimes-against-journalists-and-the-i59439"
+      },
+      {
+        "date": "2024-03-24",
+        "total": 575,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://unn.ua/en/news/more-than-80-media-workers-have-been-killed-in-the-10-years-of-russias-war-against-ukraine"
+      },
+      {
+        "date": "2024-07-24",
+        "total": 607,
+        "killedTotal": 82,
+        "killedOnDuty": 10,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://old.imi.org.ua/en/news/607-crimes-against-the-media-and-journalists-in-ukraine-committed-by-russia-in-the-two-years-and-i62665"
+      },
+      {
+        "date": "2024-09-24",
+        "total": 637,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/en/news/637-crimes-against-the-media-and-journalists-committed-by-russia-in-the-2-years-and-7-months-of-the-i63829"
+      },
+      {
+        "date": "2024-10-24",
+        "total": 664,
+        "killedTotal": 91,
+        "killedOnDuty": 12,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/en/news/664-crimes-against-the-media-and-journalists-committed-by-russia-in-the-2-years-and-8-months-of-the-i64453"
+      },
+      {
+        "date": "2024-11-24",
+        "total": 762,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "ІМІ додав до загального показника дані про медіа, що припинили роботу через агресію Росії (329)",
+          "en": "IMI added data on media outlets closed due to Russia's aggression (329) to the total"
+        },
+        "source": "https://imi.org.ua/en/news/762-crimes-against-the-media-and-journalists-committed-by-russia-in-the-2-years-and-9-months-of-the-i65063"
+      },
+      {
+        "date": "2024-12-24",
+        "total": 801,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/en/news/801-crime-against-the-media-and-journalists-committed-by-russia-in-the-2-years-and-10-months-of-the-i65656"
+      },
+      {
+        "date": "2025-01-24",
+        "total": 807,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/en/news/807-crimes-against-the-media-and-journalists-committed-by-russia-in-the-2-years-and-11-months-of-i66248"
+      },
+      {
+        "date": "2025-02-24",
+        "total": 823,
+        "killedTotal": 97,
+        "killedOnDuty": 12,
+        "note": {
+          "uk": "Три роки повномасштабної війни",
+          "en": "Three years of the full-scale war"
+        },
+        "source": "https://imi.org.ua/en/news/three-years-of-the-full-scale-war-russia-commits-823-crimes-against-journalists-and-the-media-in-i66795"
+      },
+      {
+        "date": "2025-04-24",
+        "total": 833,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://old.imi.org.ua/en/news/833-crimes-against-media-and-journalists-committed-by-russia-in-3-years-2-months-of-full-scale-i67862"
+      },
+      {
+        "date": "2025-06-24",
+        "total": 839,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://fakty.com.ua/ua/ukraine/suspilstvo/20250624-rosiya-skoyila-ponad-800-zlochyniv-proty-zhurnalistiv-i-media-z-pochatku-povnomasshtabnogo-vtorgnennya-imi/"
+      },
+      {
+        "date": "2025-07-24",
+        "total": 840,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://www.kyivpost.com/uk/post/56917"
+      },
+      {
+        "date": "2025-12-24",
+        "total": 870,
+        "killedTotal": 121,
+        "killedOnDuty": 15,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://www.ukrinform.net/rubric-ato/4073919-russia-commits-870-crimes-against-journalists-media-during-fullscale-war.html"
+      },
+      {
+        "date": "2026-02-24",
+        "total": 896,
+        "killedTotal": 125,
+        "killedOnDuty": 15,
+        "note": {
+          "uk": "Чотири роки повномасштабної війни",
+          "en": "Four years of the full-scale war"
+        },
+        "source": "https://imi.org.ua/en/monitorings/russia-commits-896-crimes-against-ukrainian-journalists-media-in-4-years-of-full-scale-war"
+      },
+      {
+        "date": "2026-04-24",
+        "total": 937,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://imi.org.ua/en/monitorings/russia-commits-937-crimes-against-journalists-media-in-ukraine-in-4-years-2-months-of-full-scale-war"
+      },
+      {
+        "date": "2026-05-24",
+        "total": 950,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "Показник уточнено з 949 до 950",
+          "en": "Figure updated from 949 to 950"
+        },
+        "source": "https://imi.org.ua/en/monitorings/russia-commits-949-crimes-against-journalists-media-in-ukraine-in-4-years-3-months-of-full-scale-war"
+      },
+      {
+        "date": "2026-09-24",
+        "total": 977,
+        "killedTotal": null,
+        "killedOnDuty": null,
+        "note": {
+          "uk": "",
+          "en": ""
+        },
+        "source": "https://www.ukrinform.net/amp/rubric-society/4167643-russia-commits-977-crimes-against-journalists-and-media-during-fullscale-war-imi.html"
+      }
+    ],
+    "years": [
+      {
+        "year": 2022,
+        "killedInYear": null,
+        "note": {
+          "uk": "Найважчий рік: за перший місяць ІМІ зафіксував 148 злочинів, за десять місяців — 467.",
+          "en": "The heaviest year: 148 crimes in the first month, 467 in ten months."
+        },
+        "source": "https://imi.org.ua/en/monitorings/freedom-of-speech-barometer/page/8"
+      },
+      {
+        "year": 2023,
+        "killedInYear": 27,
+        "note": {
+          "uk": "27 медійників загинули, двоє — під час роботи. На кінець року — 548 злочинів.",
+          "en": "27 media workers killed, two while reporting. 548 crimes by year-end."
+        },
+        "source": "https://imi.org.ua/en/news/imi-records-150-freedom-of-speech-violations-in-ukraine-in-2023-nearly-half-committed-by-russia-i58407"
+      },
+      {
+        "year": 2024,
+        "killedInYear": 24,
+        "note": {
+          "uk": "Більше обстрілів телевеж, кіберзлочинів і залякувань. У листопаді ІМІ включив до показника дані про закриті медіа.",
+          "en": "More strikes on TV towers, cyber crimes and intimidation. In November IMI added closed media outlets to the total."
+        },
+        "source": "https://imi.org.ua/en/news/trends-in-russia-s-crimes-against-the-media-in-2024-shelling-tv-towers-cyber-crime-intimidation-i65762"
+      },
+      {
+        "year": 2025,
+        "killedInYear": 26,
+        "note": {
+          "uk": "Дрони стали головною смертельною загрозою для журналістів. Щонайменше 16 редакцій зруйновано або пошкоджено.",
+          "en": "Drones became the main deadly threat to journalists. At least 16 newsrooms destroyed or damaged."
+        },
+        "source": "https://www.radiosvoboda.org/a/news-imi-ataky-rf-zhurnalisty/33649855.html"
+      },
+      {
+        "year": 2026,
+        "killedInYear": null,
+        "note": {
+          "uk": "За чотири роки — 896 злочинів, станом на 24 жовтня — 989.",
+          "en": "896 crimes in four years, 989 as of 24 October."
+        },
+        "source": "https://imi.org.ua/en/monitorings/russia-commits-896-crimes-against-ukrainian-journalists-media-in-4-years-of-full-scale-war"
+      }
+    ]
   }
 }

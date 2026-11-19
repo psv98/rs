@@ -1,8 +1,10 @@
-import type { Locale, PublicSnapshot } from "@/lib/data/schema";
+import type { CSSProperties } from "react";
+import { visibleCategories, type Locale, type PublicSnapshot } from "@/lib/data/schema";
 import { formatLongDate, formatShortDate } from "@/lib/data/dates";
 import { t } from "@/lib/i18n/dictionaries";
 import { pageHref, routePath } from "@/lib/site";
-import { CountUp } from "./CountUp";
+import { groupDigits } from "@/lib/viz/geometry";
+import { HeroRing } from "./HeroRing";
 import { ShareTools } from "./ShareTools";
 
 export function Hero({ locale, snap, siteUrl }: { locale: Locale; snap: PublicSnapshot; siteUrl: string }) {
@@ -12,29 +14,42 @@ export function Hero({ locale, snap, siteUrl }: { locale: Locale; snap: PublicSn
   const asOf = formatLongDate(data.asOfDate, locale);
   const p = data.period;
   const k = data.casualties;
-  const fmt = (n: number) => new Intl.NumberFormat(locale === "uk" ? "uk-UA" : "en-GB").format(n).replace(/ /g, " ");
+  const cats = visibleCategories(data);
+  const stats: Array<{ value: string; label: string; tone?: "ember" }> = [];
+  if (p.newCases !== null)
+    stats.push({
+      value: `+${groupDigits(p.newCases)}`,
+      label: p.start && p.end ? d.hero.statNew(formatShortDate(p.start), formatShortDate(p.end)) : d.hero.rowNew,
+      tone: "ember",
+    });
+  if (k.killedTotal !== null) stats.push({ value: groupDigits(k.killedTotal), label: d.hero.statKilled });
+  if (k.killedOnDuty !== null) stats.push({ value: groupDigits(k.killedOnDuty), label: d.hero.statOnDuty });
   return (
     <section className="hero" id="stats" aria-labelledby="hero-title">
-      <div className="shell hero__grid">
-        <div>
-          <p className="hero__period">{data.texts.periodLabel[locale]}</p>
-          <h1 id="hero-title">
-            <span className="hero__figure">
-              <CountUp value={data.totalCrimes} locale={locale} />
-              <span className="hero__scan" aria-hidden="true" />
-            </span>
-            <span className="sr-only">{`${fmt(data.totalCrimes)} `}</span>
-            <span className="hero__underline" aria-hidden="true" style={{ display: "block" }} />
-            <span className="hero__label" style={{ display: "block" }}>
-              {d.heroLabel(data.totalCrimes)}
-            </span>
-          </h1>
-          <p className="hero__dates">
-            <span>
-              <strong>{d.hero.since(since)}</strong>
-            </span>
-            <span>{d.hero.asOf(asOf)}</span>
+      <div className="aurora" aria-hidden="true" />
+      <div className="hero__grid shell">
+        <div className="hero__copy">
+          <p className="hero__period" style={{ "--d": "0ms" } as CSSProperties}>
+            <span className="hero__live" aria-hidden="true" />
+            {data.texts.periodLabel[locale]}
           </p>
+          <h1 id="hero-title" className="hero__title">
+            {d.hero.title}
+          </h1>
+          <p className="hero__dek">
+            <span className="sr-only">{`${groupDigits(data.totalCrimes)} ${d.heroLabel(data.totalCrimes)}. `}</span>
+            {d.hero.dek(since, asOf)}
+          </p>
+          {stats.length > 0 && (
+            <dl className="hero__stats">
+              {stats.map((s, i) => (
+                <div key={s.label} className="hero__stat" style={{ "--i": i } as CSSProperties}>
+                  <dt>{s.label}</dt>
+                  <dd data-tone={s.tone}>{s.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
           <ShareTools
             statsText={d.share.statsText(data.totalCrimes, asOf, since, `${siteUrl}${routePath(locale)}`)}
             labels={{ copyStats: d.share.copyStats, copied: d.share.copied, share: d.share.share, present: d.share.present }}
@@ -42,54 +57,16 @@ export function Hero({ locale, snap, siteUrl }: { locale: Locale; snap: PublicSn
             title={d.projectName}
           />
         </div>
-        <aside className="casefile" aria-label={d.hero.statusTitle}>
-          <p className="casefile__title">
-            <span className="casefile__pulse" aria-hidden="true" />
-            {d.hero.statusTitle}
-          </p>
-          <dl>
-            <div className="casefile__row">
-              <dt>{d.hero.rowPeriod}</dt>
-              <dd>
-                {formatShortDate(data.monitoringStart)} — {formatShortDate(data.asOfDate)}
-              </dd>
-            </div>
-            {p.newCases !== null && (
-              <div className="casefile__row">
-                <dt>{d.hero.rowNew}</dt>
-                <dd>
-                  <span className="delta">{d.hero.newValue(p.newCases)}</span>
-                  {p.start && p.end && (
-                    <small>
-                      {formatShortDate(p.start)} — {formatShortDate(p.end)}
-                    </small>
-                  )}
-                </dd>
-              </div>
-            )}
-            {k.killedTotal !== null && (
-              <div className="casefile__row">
-                <dt>{d.hero.rowKilled}</dt>
-                <dd>
-                  {fmt(k.killedTotal)}
-                  {k.killedOnDuty !== null && <small>{locale === "uk" ? `з них ${k.killedOnDuty} — під час роботи` : `${k.killedOnDuty} of them while reporting`}</small>}
-                </dd>
-              </div>
-            )}
-            <div className="casefile__row">
-              <dt>{d.hero.rowAsOf}</dt>
-              <dd>{formatShortDate(data.asOfDate)}</dd>
-            </div>
-            <div className="casefile__row">
-              <dt>{d.hero.rowSource}</dt>
-              <dd>
-                <a className="link" href={locale === "uk" ? data.sources.articleUk || "https://imi.org.ua/" : data.sources.articleEn || data.sources.articleUk || "https://imi.org.ua/en/"} rel="noopener" target="_blank">
-                  {d.hero.sourceValue}
-                </a>
-              </dd>
-            </div>
-          </dl>
-        </aside>
+        <div className="hero__visual">
+          <HeroRing
+            total={data.totalCrimes}
+            categories={cats.map((c) => ({ id: c.id, iconId: c.iconId, value: c.value, name: c.name[locale] }))}
+            label={d.hero.ringLabel(data.totalCrimes)}
+            caption={d.hero.asOf(formatShortDate(data.asOfDate))}
+            ariaLabel={d.hero.ringAria(data.totalCrimes)}
+          />
+          <p className="hero__legend">{d.hero.legend}</p>
+        </div>
       </div>
     </section>
   );
