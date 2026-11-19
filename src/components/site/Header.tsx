@@ -10,9 +10,6 @@ export function Header({ locale, ukPath, enPath }: { locale: Locale; ukPath?: st
   enPath ??= pageHref("en");
   return (
     <header className="site-header">
-      <a className="skip-link" href="#main">
-        {d.skipToContent}
-      </a>
       <div className="shell site-header__row">
         <a className="site-header__logo" href={pageHref(locale)} aria-label={d.org}>
           {/* eslint-disable-next-line @next/next/no-img-element */}

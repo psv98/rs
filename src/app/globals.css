@@ -65,21 +65,6 @@ body {
   border-radius: 4px;
 }
 
-.skip-link {
-  position: absolute;
-  left: 1rem;
-  top: -4rem;
-  z-index: 100;
-  background: var(--color-paper);
-  color: var(--color-night);
-  padding: 0.6rem 1rem;
-  border-radius: 6px;
-  font-weight: 600;
-}
-.skip-link:focus {
-  top: 1rem;
-}
-
 .shell {
   width: 100%;
   max-width: var(--max);
@@ -219,10 +204,7 @@ body {
   color: var(--color-ash);
   transition: background-color 0.25s, color 0.25s;
 }
-.lang-switch a > * { display: block; }
-@supports (text-box: trim-both cap alphabetic) {
-  .lang-switch a { text-box: trim-both cap alphabetic; }
-}
+.lang-switch a > span { display: block; text-box: trim-both cap alphabetic; }
 .lang-switch a[aria-current="true"] {
   background: var(--color-paper);
   color: var(--color-night);
@@ -318,8 +300,32 @@ body {
 .hero {
   position: relative;
   isolation: isolate;
-  padding-block: clamp(2rem, 5vw, 4.5rem) clamp(2.5rem, 5vw, 4.5rem);
+  padding-block: clamp(2rem, 5vw, 4.5rem) clamp(3.5rem, 6vw, 6rem);
   overflow: hidden;
+}
+.hero__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--color-ash-2);
+}
+.hero__hint::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--color-signal);
+  box-shadow: 0 0 0 3px rgba(237, 76, 92, 0.2);
+}
+.hint--touch { display: none; }
+@media (hover: none) {
+  .hint--hover { display: none; }
+  .hint--touch { display: inline; }
+}
+@media (max-width: 760px) {
+  .hero__facts { display: none; }
 }
 .hero__grid {
   display: grid;
@@ -999,9 +1005,6 @@ body {
 /* ---------------------------------------------------------------------------
    About the data
 --------------------------------------------------------------------------- */
-.section--about {
-  background: radial-gradient(50rem 30rem at 0% 100%, rgba(168, 29, 48, 0.14), transparent 60%);
-}
 .about { display: grid; gap: 2.5rem 4rem; }
 @media (min-width: 1000px) { .about { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); } }
 .about__quote {
@@ -1057,10 +1060,33 @@ body {
    Export (infographics)
 --------------------------------------------------------------------------- */
 .exports { display: grid; gap: 1rem; }
-@media (min-width: 1000px) { .exports { grid-template-columns: 1.15fr 1fr; align-items: start; } }
-.export-card { border: 1px solid var(--color-rule-soft); border-radius: 20px; padding: 1.25rem; background: rgba(20, 20, 26, 0.6); }
-.export-card h3 { font-weight: 600; margin-bottom: 1rem; }
-.thumbs { display: grid; gap: 0.75rem; grid-template-columns: repeat(var(--n, 2), minmax(0, 1fr)); }
+@media (min-width: 1000px) { .exports { grid-template-columns: 1fr 1fr; align-items: stretch; } }
+.export-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  border: 1px solid var(--color-rule-soft);
+  border-radius: 20px;
+  padding: 1.4rem;
+  background: rgba(20, 20, 26, 0.6);
+}
+.export-card__head { display: flex; align-items: center; gap: 1rem; }
+.export-card__head h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; line-height: 1.1; }
+.export-card__head p { margin-top: 0.3rem; color: var(--color-ash); font-size: 0.9rem; }
+.export-card__head p b { color: #ff9aa4; font-weight: 700; font-variant-numeric: tabular-nums; }
+.export-card__head p span { color: var(--color-ash-2); margin-inline: 0.25rem; }
+/* A tiny frame in the real proportions of the format. */
+.fmt-shape {
+  flex: none;
+  height: 2.6rem;
+  border-radius: 5px;
+  border: 2px solid var(--color-signal);
+  background: linear-gradient(160deg, rgba(237, 76, 92, 0.35), rgba(237, 76, 92, 0.05));
+  box-shadow: 0 0 18px -4px rgba(237, 76, 92, 0.7);
+}
+/* Same preview height in both cards, so the cards line up. */
+.thumbs { display: flex; gap: 0.75rem; height: clamp(12rem, 23vw, 21rem); }
+.thumbs .thumb { height: 100%; width: auto; flex: 0 1 auto; min-width: 0; }
 .thumb { position: relative; display: block; border-radius: 12px; overflow: hidden; border: 1px solid var(--color-rule); background: var(--color-graphite); transition: transform 0.35s var(--ease-out), box-shadow 0.35s; }
 .thumb:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 20px 40px -20px rgba(237, 76, 92, 0.6); }
 .thumb figure { height: 100%; }
@@ -1076,7 +1102,7 @@ body {
 }
 @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 .thumb figcaption { position: absolute; left: 0.5rem; bottom: 0.5rem; font-size: 0.75rem; background: rgba(13, 13, 20, 0.85); padding: 0.2rem 0.55rem; border-radius: 999px; color: var(--color-ash); }
-.export-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
+.export-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: auto; }
 
 /* ---------------------------------------------------------------------------
    Footer
@@ -1101,17 +1127,41 @@ body {
 .site-footer__inner {
   display: grid;
   justify-items: center;
-  gap: 1.4rem;
+  gap: 1.5rem;
   text-align: center;
 }
 .site-footer__logo { display: inline-flex; border-radius: 10px; }
 .site-footer__logo img { height: 3.8rem; width: auto; }
 .site-footer__rights {
+  position: relative;
+  padding-left: 1.25rem;
+  text-align: left;
   color: var(--color-ash);
-  font-size: 0.92rem;
-  line-height: 1.5;
-  max-width: 52ch;
-  text-wrap: balance;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+/* The red bar beside the attribution, as in the earlier footer. */
+.site-footer__rights::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  bottom: 0.15em;
+  width: 3px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #ff6f7d, var(--color-signal));
+  box-shadow: 0 0 14px rgba(237, 76, 92, 0.6);
+}
+@media (min-width: 760px) {
+  .site-footer__inner {
+    grid-template-columns: auto minmax(0, 1fr);
+    justify-items: start;
+    align-items: center;
+    column-gap: 3.5rem;
+  }
+  .site-footer__rights { justify-self: end; }
 }
 .link { color: var(--color-paper); text-decoration: underline; text-decoration-color: var(--color-signal); text-underline-offset: 3px; }
 

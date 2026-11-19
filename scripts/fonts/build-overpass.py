@@ -12,7 +12,7 @@ from fontTools.ttLib import TTFont
 SRC = pathlib.Path("node_modules/@fontsource/overpass/files")
 OUT = pathlib.Path("src/app/fonts/overpass")
 OUT.mkdir(parents=True, exist_ok=True)
-ASC, DESC = 1900, 640  # units per em = 2000
+ASC, DESC = 1970, 570  # units per em = 2000: cap height (1400) centred in the line box
 
 for weight in (400, 500, 600, 700):
     for subset in ("cyrillic-ext", "cyrillic", "latin-ext", "latin"):

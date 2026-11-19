@@ -45,6 +45,10 @@ export function Hero({ locale, snap }: { locale: Locale; snap: PublicSnapshot })
             caption={d.hero.asOf(formatShortDate(data.asOfDate))}
             ariaLabel={d.hero.ringAria(data.totalCrimes)}
           />
+          <p className="hero__hint" aria-hidden="true">
+            <span className="hint--hover">{d.hero.hintHover}</span>
+            <span className="hint--touch">{d.hero.hintTouch}</span>
+          </p>
         </div>
       </div>
     </section>

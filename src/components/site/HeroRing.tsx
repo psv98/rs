@@ -1,5 +1,5 @@
 "use client";
-import { useState, type CSSProperties } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import { RING, ringTicks, ringWedges, groupDigits } from "@/lib/viz/geometry";
 import { CATEGORY_ICONS, CATEGORY_ICON_VIEWBOX, type CategoryIconId } from "@/lib/icons/category-icons.generated";
 import { Odometer } from "./Odometer";
@@ -29,6 +29,7 @@ export function HeroRing({
   ariaLabel: string;
 }) {
   const [active, setActive] = useState<string | null>(null);
+  const pointer = useRef<string>("mouse");
   const wedges = ringWedges(categories);
   const cur = categories.find((c) => c.id === active) ?? null;
   const S = RING.size;
@@ -98,11 +99,17 @@ export function HeroRing({
                 tabIndex={0}
                 role="button"
                 aria-label={`${cat.name}: ${groupDigits(cat.value)}`}
-                onMouseEnter={() => setActive(w.id)}
-                onMouseLeave={() => setActive(null)}
+                onPointerDown={(e) => (pointer.current = e.pointerType)}
+                onPointerEnter={(e) => e.pointerType === "mouse" && setActive(w.id)}
+                onPointerLeave={(e) => e.pointerType === "mouse" && setActive(null)}
                 onFocus={() => setActive(w.id)}
                 onBlur={() => setActive(null)}
                 onClick={() => {
+                  // Touch: a tap shows the number in the centre. Mouse/keyboard: go to the card.
+                  if (pointer.current === "touch" || pointer.current === "pen") {
+                    setActive((a) => (a === w.id ? null : w.id));
+                    return;
+                  }
                   const el = document.getElementById(`category-${w.id}`);
                   el?.scrollIntoView({ behavior: "smooth", block: "center" });
                 }}

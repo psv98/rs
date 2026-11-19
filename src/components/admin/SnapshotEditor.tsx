@@ -360,7 +360,7 @@ export function MainTab({
       <div className="adm-card">
         <div className="adm-grid">
           <Field label="Головний показник (злочинів)" hint="Як у публікації ІМІ. Не розраховується з категорій.">
-            <input className="adm-input num" style={{ fontSize: "1.6rem" }} type="number" min={0} disabled={!editable} value={Number.isFinite(data.totalCrimes) ? data.totalCrimes : ""} aria-invalid={bad("totalCrimes")} onChange={(e) => update((d) => void (d.totalCrimes = e.target.value === "" ? Number.NaN : Number(e.target.value)))} />
+            <input className="adm-input num num--lead" type="number" min={0} disabled={!editable} value={Number.isFinite(data.totalCrimes) ? data.totalCrimes : ""} aria-invalid={bad("totalCrimes")} onChange={(e) => update((d) => void (d.totalCrimes = e.target.value === "" ? Number.NaN : Number(e.target.value)))} />
           </Field>
           <Field label="Станом на" hint="Дата, на яку актуальні дані">
             <input className="adm-input" type="date" disabled={!editable} value={data.asOfDate} aria-invalid={bad("asOfDate")} onChange={(e) => update((d) => void (d.asOfDate = e.target.value))} />
@@ -439,19 +439,21 @@ export function CategoriesTab({ data, update, editable }: { data: SnapshotData; 
       <div style={{ display: "grid", gap: "0.75rem" }}>
         {sorted.map(({ c, idx }, pos) => (
           <div key={idx} className="adm-card" style={{ opacity: c.hidden ? 0.6 : 1 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "auto 7rem 1fr auto", gap: "1rem", alignItems: "start" }}>
-              <div style={{ display: "grid", gap: "0.35rem", justifyItems: "center" }}>
-                <CategoryIcon id={c.iconId} className="adm-cat-icon" />
-                <select className="adm-select" style={{ width: "9rem", fontSize: "0.78rem" }} disabled={!editable} value={c.iconId} aria-label="Іконка" onChange={(e) => update((d) => void (d.categories[idx]!.iconId = e.target.value))}>
-                  {CATEGORY_ICON_IDS.map((i) => (
-                    <option key={i} value={i}>
-                      {i}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div className="adm-cat-row">
+              <Field label="Іконка">
+                <span className="adm-iconpick">
+                  <CategoryIcon id={c.iconId} className="adm-cat-icon" />
+                  <select className="adm-select" disabled={!editable} value={c.iconId} aria-label="Іконка" onChange={(e) => update((d) => void (d.categories[idx]!.iconId = e.target.value))}>
+                    {CATEGORY_ICON_IDS.map((i) => (
+                      <option key={i} value={i}>
+                        {i}
+                      </option>
+                    ))}
+                  </select>
+                </span>
+              </Field>
               <Field label="Значення">
-                <input className="adm-input num" style={{ fontSize: "1.3rem" }} type="number" min={0} disabled={!editable} value={Number.isFinite(c.value) ? c.value : ""} onChange={(e) => update((d) => void (d.categories[idx]!.value = e.target.value === "" ? Number.NaN : Number(e.target.value)))} />
+                <input className="adm-input num num--lead" aria-label="Значення" type="number" min={0} disabled={!editable} value={Number.isFinite(c.value) ? c.value : ""} onChange={(e) => update((d) => void (d.categories[idx]!.value = e.target.value === "" ? Number.NaN : Number(e.target.value)))} />
               </Field>
               <div style={{ display: "grid", gap: "0.6rem", gridTemplateColumns: "1fr 1fr" }}>
                 <Field label="Назва (UA)">
@@ -467,15 +469,16 @@ export function CategoriesTab({ data, update, editable }: { data: SnapshotData; 
                   <textarea className="adm-textarea" disabled={!editable} maxLength={600} value={c.description.en} onChange={(e) => update((d) => void (d.categories[idx]!.description.en = e.target.value))} />
                 </Field>
               </div>
-              <div style={{ display: "grid", gap: "0.4rem" }}>
-                <span className="muted" style={{ fontSize: "0.75rem" }}>id: {c.id}</span>
-                <button className="btn" disabled={!editable || pos === 0} onClick={() => move(idx, -1)} aria-label="Вище">
-                  ↑
-                </button>
-                <button className="btn" disabled={!editable || pos === sorted.length - 1} onClick={() => move(idx, 1)} aria-label="Нижче">
-                  ↓
-                </button>
-                <label style={{ display: "flex", gap: "0.4rem", fontSize: "0.82rem", alignItems: "center" }}>
+              <div className="adm-cat-side">
+                <div className="adm-order" role="group" aria-label="Порядок">
+                  <button className="adm-iconbtn" disabled={!editable || pos === 0} onClick={() => move(idx, -1)} aria-label="Вище" title="Вище">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3.5 3.5 8h3v4.5h3V8h3z" fill="currentColor" /></svg>
+                  </button>
+                  <button className="adm-iconbtn" disabled={!editable || pos === sorted.length - 1} onClick={() => move(idx, 1)} aria-label="Нижче" title="Нижче">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 12.5 12.5 8h-3V3.5h-3V8h-3z" fill="currentColor" /></svg>
+                  </button>
+                </div>
+                <label className="adm-hide">
                   <input type="checkbox" disabled={!editable} checked={c.hidden} onChange={(e) => update((d) => void (d.categories[idx]!.hidden = e.target.checked))} />
                   Сховати
                 </label>

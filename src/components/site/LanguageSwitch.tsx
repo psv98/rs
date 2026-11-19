@@ -14,10 +14,10 @@ export function LanguageSwitch({ locale, label, ukPath, enPath }: { locale: Loca
   return (
     <nav className="lang-switch" aria-label={label}>
       <Link href={route(ukPath)} hrefLang="uk" lang="uk" scroll={false} aria-current={locale === "uk" ? "true" : undefined}>
-        UA
+        <span>UA</span>
       </Link>
       <Link href={route(enPath)} hrefLang="en" lang="en" scroll={false} aria-current={locale === "en" ? "true" : undefined}>
-        EN
+        <span>EN</span>
       </Link>
     </nav>
   );

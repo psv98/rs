@@ -28,11 +28,22 @@ export function ExportPanel({ locale, links }: { locale: Locale; links: ExportLi
   const d = t(locale).exportBlock;
   const socialCount = links.social.length;
   const wideCount = links.wide.length;
+  const Head = ({ caption, count, ratio }: { caption: [string, string]; count: number; ratio: string }) => (
+    <header className="export-card__head">
+      <span className="fmt-shape" style={{ aspectRatio: ratio }} aria-hidden="true" />
+      <div>
+        <h3>{caption[0]}</h3>
+        <p>
+          <b>{caption[1]}</b> px <span aria-hidden="true">/</span> {d.slidesCount(count)}
+        </p>
+      </div>
+    </header>
+  );
   return (
     <div className="exports">
       <div className="export-card">
-        <h3>{d.socialCaption[0]} <span style={{ color: "var(--color-ash-2)", fontWeight: 500 }}>{d.socialCaption[1]}</span></h3>
-        <div className="thumbs" style={{ ["--n" as string]: Math.min(socialCount, 3) }}>
+        <Head caption={d.socialCaption} count={socialCount} ratio="1080 / 1350" />
+        <div className="thumbs">
           {links.social.map((l, i) => (
             <Thumb key={i} ratio="1080 / 1350" src={l.src} href={l.download} filename={l.filename} caption={socialCount > 1 ? d.slide(i + 1, socialCount) : "1080 × 1350"} />
           ))}
@@ -45,19 +56,19 @@ export function ExportPanel({ locale, links }: { locale: Locale; links: ExportLi
         </div>
       </div>
       <div className="export-card">
-        <h3>{d.wideCaption[0]} <span style={{ color: "var(--color-ash-2)", fontWeight: 500 }}>{d.wideCaption[1]}</span></h3>
-        <div className="thumbs" style={{ ["--n" as string]: 1 }}>
+        <Head caption={d.wideCaption} count={wideCount} ratio="1920 / 1080" />
+        <div className="thumbs">
           {links.wide.map((l, i) => (
             <Thumb key={i} ratio="1920 / 1080" src={l.src} href={l.download} filename={l.filename} caption={wideCount > 1 ? d.slide(i + 1, wideCount) : "1920 × 1080"} />
           ))}
         </div>
         <div className="export-actions">
-          <a className="btn" href={links.wide[0]?.download} download={links.wide[0]?.filename ?? true}>
+          <a className="btn btn--primary" href={links.wide[0]?.download} download={links.wide[0]?.filename ?? true}>
             <Glyph name="download" />
             <span>{d.wide}</span>
           </a>
           {links.allZip && (
-            <a className="btn" href={links.allZip} download>
+            <a className="btn btn--primary" href={links.allZip} download>
               <Glyph name="download" />
               <span>{d.all}</span>
             </a>
