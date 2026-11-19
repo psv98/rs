@@ -9,7 +9,7 @@ import { config } from "./config";
 export async function pageMetadata(locale: Locale, path: "" | "/present" = ""): Promise<Metadata> {
   const { current } = await getPublicState();
   const d = t(locale).meta;
-  const title = current ? d.title(current.data.totalCrimes) : d.fallbackTitle;
+  const title = d.title;
   const description = current ? d.description(current.data.totalCrimes, formatLongDate(current.data.asOfDate, locale)) : d.fallbackDescription;
   const base = config.siteUrl;
   const isStatic = process.env.STATIC_EXPORT === "1";

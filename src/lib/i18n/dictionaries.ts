@@ -25,7 +25,8 @@ const uk = {
     statusTitle: "Моніторинг ІМІ",
     title: "Злочини Росії проти журналістів і медіа в Україні",
     titleParts: ["Злочини Росії проти ", "журналістів і медіа", " в Україні"] as [string, string, string],
-    dek: (since: string, asOf: string) => `Інститут масової інформації документує кожен випадок з ${since}. Дані станом на ${asOf}.`,
+    dek: (since: string) => `Інститут масової інформації документує кожен випадок з ${since}.`,
+    dekAsOf: (asOf: string) => `Дані станом на ${asOf}.`,
     statNew: (a: string, b: string) => `нових випадків ${a} — ${b}`,
     statKilled: "медійників загинули",
     statOnDuty: "з них під час роботи",
@@ -47,16 +48,7 @@ const uk = {
   },
   heroLabel: (n: number) =>
     `${ukForm(n, { one: "задокументований злочин", few: "задокументовані злочини", many: "задокументованих злочинів" })} Росії проти журналістів і медіа в Україні`,
-  ticker: {
-    total: (n: number, since: string) =>
-      `${fmtUk(n)} ${ukForm(n, { one: "злочин", few: "злочини", many: "злочинів" })} Росії проти журналістів і медіа з ${since}`,
-    killed: (n: number, onDuty: number | null) =>
-      `${fmtUk(n)} ${ukForm(n, { one: "медійник загинув", few: "медійники загинули", many: "медійників загинули" })}${onDuty !== null ? `, ${fmtUk(onDuty)} з них під час роботи` : ""}`,
-    fresh: (n: number, a: string, b: string) => `${ukForm(n, { one: "Новий випадок", few: "Нові випадки", many: "Нових випадків" })} з ${a} до ${b}: ${fmtUk(n)}`,
-    category: (name: string, n: number) => `${name}: ${fmtUk(n)}`,
-    source: (asOf: string) => `Дані Інституту масової інформації станом на ${asOf}`,
-    region: "Коротко про моніторинг",
-  },
+
   facts: {
     period: "Період моніторингу",
     updated: "Останнє оновлення",
@@ -68,7 +60,7 @@ const uk = {
     index: "02",
     kicker: "Класифікація",
     title: "Види та кількість порушень",
-    lead: "Кількість задокументованих випадків за кожним видом порушень з 24 лютого 2022 року. Один випадок може стосуватися кількох медійників або редакцій.",
+    lead: "Кількість задокументованих випадків за кожним видом порушень з 24 лютого 2022 року. Один випадок може стосуватися кількох медійників або редакцій.",
     share: "Частка від суми категорій",
     copyLink: "Скопіювати посилання на категорію",
     linkCopied: "Посилання скопійовано",
@@ -121,7 +113,7 @@ const uk = {
     title: "Про моніторинг",
     aboutTitle: "Що це за дані",
     about:
-      "Інститут масової інформації веде моніторинг злочинів Росії проти журналістів і медіа в Україні з першого дня повномасштабного вторгнення — 24 лютого 2022 року. Дані публікуються щомісяця.",
+      "Інститут масової інформації веде моніторинг злочинів Росії проти журналістів і медіа в Україні з першого дня повномасштабного вторгнення — 24 лютого 2022 року. Дані публікуються щомісяця.",
     whoTitle: "Хто збирає дані",
     who: "Дані збирають і перевіряють експерти Інституту масової інформації — громадської медійної організації, яка захищає права журналістів в Україні.",
     periodTitle: "Період документування",
@@ -143,7 +135,7 @@ const uk = {
   },
   dynamics: {
     title: "Як змінювалися цифри",
-    lead: "Загальний показник моніторингу ІМІ щомісяця з 2022 року. Кожна точка на графіку — цифра, яку ІМІ оприлюднив на свою дату.",
+    lead: "Загальний показник моніторингу ІМІ щомісяця з 2022 року. Кожна точка на графіку — цифра, яку ІМІ оприлюднив на свою дату.",
     chartAria: (n: number, a: string, b: string) => `Графік загального показника за ${n} датами, від ${a} до ${b}.`,
     killed: "Загинули медійники",
     source: "Джерело",
@@ -170,7 +162,7 @@ const uk = {
     whatTitle: "Що рахується",
     what: "Лише злочини Росії проти журналістів і медіа в Україні. Інші порушення свободи слова ІМІ рахує окремо, у Барометрі свободи слова, і до цього показника не додає.",
     howTitle: "Як оновлюється",
-    how: "Щомісяця: дані публікуються станом на 24-те число. Показник накопичувальний, тобто охоплює весь період з 24 лютого 2022 року.",
+    how: "Щомісяця: дані публікуються станом на 24-те число. Показник накопичувальний, тобто охоплює весь період з 24 лютого 2022 року.",
     readTitle: "Як читати категорії",
     legalTitle: "Важливо",
     legal: "Це випадки, задокументовані ІМІ, а не остаточна юридична кваліфікація кожної події. Таку оцінку дають слідство і суд.",
@@ -212,7 +204,7 @@ const uk = {
       })} проти журналістів і медіа в Україні. Джерело: ІМІ, ${url}`,
   },
   footer: {
-    monitoring: "Моніторинг злочинів Росії проти журналістів і медіа в Україні з 24 лютого 2022 року веде Інститут масової інформації.",
+    monitoring: "Моніторинг злочинів Росії проти журналістів і медіа в Україні з 24 лютого 2022 року веде Інститут масової інформації.",
     rights: "Під час цитування, поширення або іншого використання даних посилання на ІМІ як на джерело обов'язкове.",
     site: "imi.org.ua",
   },
@@ -234,11 +226,10 @@ const uk = {
     continued: "Продовження",
   },
   meta: {
-    title: (n: number) => `${n} злочинів Росії проти журналістів і медіа в Україні — ІМІ`,
+    title: "Злочини Росії проти журналістів і медіа в Україні",
     description: (n: number, asOf: string) =>
-      `Моніторинг Інституту масової інформації: ${n} задокументованих злочинів Росії проти журналістів і медіа в Україні з 24 лютого 2022 року станом на ${asOf}.`,
-    fallbackTitle: "Злочини Росії проти журналістів і медіа в Україні — ІМІ",
-    fallbackDescription: "Моніторинг Інституту масової інформації: злочини Росії проти журналістів і медіа в Україні з 24 лютого 2022 року.",
+      `Моніторинг Інституту масової інформації: ${n} задокументованих злочинів Росії проти журналістів і медіа в Україні з 24 лютого 2022 року станом на ${asOf}.`,
+    fallbackDescription: "Моніторинг Інституту масової інформації: злочини Росії проти журналістів і медіа в Україні з 24 лютого 2022 року.",
   },
 };
 
@@ -261,7 +252,8 @@ const en: Dictionary = {
     statusTitle: "IMI monitoring",
     title: "Russia's crimes against journalists and media in Ukraine",
     titleParts: ["Russia's crimes against ", "journalists and media", " in Ukraine"],
-    dek: (since, asOf) => `The Institute of Mass Information has documented every case since ${since}. Data as of ${asOf}.`,
+    dek: (since) => `The Institute of Mass Information has documented every case since ${since}.`,
+    dekAsOf: (asOf) => `Data as of ${asOf}.`,
     statNew: (a, b) => `new cases ${a} — ${b}`,
     statKilled: "media workers killed",
     statOnDuty: "of them while reporting",
@@ -280,14 +272,7 @@ const en: Dictionary = {
     sourceValue: "IMI",
   },
   heroLabel: (n) => `documented ${n === 1 ? "crime" : "crimes"} committed by Russia against journalists and media in Ukraine`,
-  ticker: {
-    total: (n, since) => `${fmtEn(n)} ${n === 1 ? "crime" : "crimes"} by Russia against journalists and media since ${since}`,
-    killed: (n, onDuty) => `${fmtEn(n)} media ${n === 1 ? "worker" : "workers"} killed${onDuty !== null ? `, ${fmtEn(onDuty)} of them while reporting` : ""}`,
-    fresh: (n, a, b) => `New cases between ${a} and ${b}: ${fmtEn(n)}`,
-    category: (name, n) => `${name}: ${fmtEn(n)}`,
-    source: (asOf) => `Institute of Mass Information data as of ${asOf}`,
-    region: "Monitoring at a glance",
-  },
+
   facts: {
     period: "Monitoring period",
     updated: "Last update",
@@ -299,7 +284,7 @@ const en: Dictionary = {
     index: "02",
     kicker: "Classification",
     title: "Types and numbers of violations",
-    lead: "Documented cases for each type of violation since 24 February 2022. A single case may involve several media workers or newsrooms.",
+    lead: "Documented cases for each type of violation since 24 February 2022. A single case may involve several media workers or newsrooms.",
     share: "Share of the category sum",
     copyLink: "Copy link to this category",
     linkCopied: "Link copied",
@@ -350,7 +335,7 @@ const en: Dictionary = {
     title: "About the monitoring",
     aboutTitle: "What this data is",
     about:
-      "The Institute of Mass Information has monitored Russia's crimes against journalists and media in Ukraine since the first day of the full-scale invasion, 24 February 2022. The data is published monthly.",
+      "The Institute of Mass Information has monitored Russia's crimes against journalists and media in Ukraine since the first day of the full-scale invasion, 24 February 2022. The data is published monthly.",
     whoTitle: "Who collects the data",
     who: "The data is collected and verified by experts of the Institute of Mass Information, a Ukrainian media NGO that defends the rights of journalists.",
     periodTitle: "Documentation period",
@@ -399,7 +384,7 @@ const en: Dictionary = {
     whatTitle: "What is counted",
     what: "Only Russia's crimes against journalists and media in Ukraine. Other freedom-of-speech violations are counted separately in IMI's Freedom of Speech Barometer and are not added to this figure.",
     howTitle: "How it is updated",
-    how: "Monthly: data is published as of the 24th. The figure is cumulative and covers the whole period since 24 February 2022.",
+    how: "Monthly: data is published as of the 24th. The figure is cumulative and covers the whole period since 24 February 2022.",
     readTitle: "How to read the categories",
     legalTitle: "Important",
     legal: "These are cases documented by IMI, not a final legal qualification of each event. That is for investigators and courts.",
@@ -437,7 +422,7 @@ const en: Dictionary = {
       `According to the Institute of Mass Information, Russia committed ${total} documented ${total === 1 ? "crime" : "crimes"} against journalists and media in Ukraine between ${since} and ${asOf}. Source: IMI, ${url}`,
   },
   footer: {
-    monitoring: "The Institute of Mass Information has monitored Russia's crimes against journalists and media in Ukraine since 24 February 2022.",
+    monitoring: "The Institute of Mass Information has monitored Russia's crimes against journalists and media in Ukraine since 24 February 2022.",
     rights: "Any quotation, distribution or other use of the data must credit IMI as the source.",
     site: "imi.org.ua",
   },
@@ -459,11 +444,10 @@ const en: Dictionary = {
     continued: "Continued",
   },
   meta: {
-    title: (n) => `${n} crimes by Russia against journalists and media in Ukraine — IMI`,
+    title: "Russia's crimes against journalists and media in Ukraine",
     description: (n, asOf) =>
-      `Institute of Mass Information monitoring: ${n} documented crimes committed by Russia against journalists and media in Ukraine since 24 February 2022, as of ${asOf}.`,
-    fallbackTitle: "Russia's crimes against journalists and media in Ukraine — IMI",
-    fallbackDescription: "Institute of Mass Information monitoring of Russia's crimes against journalists and media in Ukraine since 24 February 2022.",
+      `Institute of Mass Information monitoring: ${n} documented crimes committed by Russia against journalists and media in Ukraine since 24 February 2022, as of ${asOf}.`,
+    fallbackDescription: "Institute of Mass Information monitoring of Russia's crimes against journalists and media in Ukraine since 24 February 2022.",
   },
 };
 

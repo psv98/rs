@@ -17,8 +17,9 @@ function parts(iso: string) {
 /** "24 жовтня 2026 року" / "24 October 2026" */
 export function formatLongDate(iso: string, locale: Locale, withYearWord = true): string {
   const { y, m, d } = parts(iso);
-  if (locale === "uk") return `${d} ${UK_MONTHS_GEN[m - 1]} ${y}${withYearWord ? " року" : ""}`;
-  return `${d} ${EN_MONTHS[m - 1]} ${y}`;
+  // Non-breaking spaces keep "24 лютого 2022 року" from splitting after the day or before "року".
+  if (locale === "uk") return `${d}\u00a0${UK_MONTHS_GEN[m - 1]} ${y}${withYearWord ? "\u00a0року" : ""}`;
+  return `${d}\u00a0${EN_MONTHS[m - 1]} ${y}`;
 }
 
 /** "24.10.2026" */

@@ -27,7 +27,7 @@ export function Hero({ locale, snap }: { locale: Locale; snap: PublicSnapshot })
           <WarPlaque label={data.texts.periodLabel[locale]} className="hero__war" />
           <p className="hero__dek">
             <span className="sr-only">{`${groupDigits(data.totalCrimes)} ${d.heroLabel(data.totalCrimes)}. `}</span>
-            {d.hero.dek(since, asOf)}
+            {d.hero.dek(since)} <strong className="lead-strong">{d.hero.dekAsOf(asOf)}</strong>
           </p>
         </div>
         <div className="hero__facts">

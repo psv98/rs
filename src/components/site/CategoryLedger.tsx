@@ -19,7 +19,7 @@ export function CategoryLedger({ locale, snap }: { locale: Locale; snap: PublicS
   const k = data.casualties;
   const mismatch = sum !== data.totalCrimes;
   return (
-    <section className="section section--cats" aria-labelledby="types-title">
+    <section className="section section--cats section--glow" aria-labelledby="types-title">
       <div className="shell">
         <header className="section__head">
           <h2 id="types-title" className="section__title">

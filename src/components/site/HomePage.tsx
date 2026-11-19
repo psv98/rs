@@ -4,7 +4,6 @@ import type { PublicState } from "@/lib/data/public-types";
 import { t } from "@/lib/i18n/dictionaries";
 import { Header } from "./Header";
 import { Hero } from "./Hero";
-import { Ticker } from "./Ticker";
 import { CategoryLedger } from "./CategoryLedger";
 import { Dynamics } from "./Dynamics";
 import { AboutData } from "./AboutData";
@@ -87,7 +86,6 @@ export function HomePage({
       <Header locale={locale} ukPath={ukPath} enPath={enPath} />
       <main id="main">
         <Hero locale={locale} snap={snap} />
-        <Ticker locale={locale} snap={snap} />
         <CategoryLedger locale={locale} snap={snap} />
         <Dynamics locale={locale} snap={snap} />
         <section className="section" id="export" aria-labelledby="export-title">

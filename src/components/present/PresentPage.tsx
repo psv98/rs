@@ -74,11 +74,11 @@ export async function PresentPage({ locale }: { locale: Locale }) {
                     );
                   })}
                 </div>
-                <p className="present__note">
-                  {current.data.casualties.killedTotal !== null && `* ${d.categories.killedFootnote(current.data.casualties.killedTotal, current.data.casualties.killedOnDuty)} `}
-                  {d.exportText.source}. imi.org.ua
-                </p>
               </div>
+              <p className="present__note">
+                {current.data.casualties.killedTotal !== null && `* ${d.categories.killedFootnote(current.data.casualties.killedTotal, current.data.casualties.killedOnDuty)} `}
+                {d.exportText.source}. imi.org.ua
+              </p>
             </div>
           </>
         ) : (
