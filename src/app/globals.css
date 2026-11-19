@@ -304,20 +304,13 @@ body {
   overflow: hidden;
 }
 .hero__hint {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-  font-size: 0.82rem;
+  margin-top: 1.5rem;
+  max-width: 14rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  text-align: center;
+  text-wrap: balance;
   color: var(--color-ash-2);
-}
-.hero__hint::before {
-  content: "";
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 50%;
-  background: var(--color-signal);
-  box-shadow: 0 0 0 3px rgba(237, 76, 92, 0.2);
 }
 .hint--touch { display: none; }
 @media (hover: none) {
@@ -363,7 +356,6 @@ body {
 .war-plaque {
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
   padding: 0.7rem 1.15rem;
   border-radius: 12px;
   background: linear-gradient(120deg, #c4243a 0%, #9e1830 100%);
@@ -375,19 +367,9 @@ body {
   line-height: 1.15;
   letter-spacing: -0.005em;
 }
-.war-plaque::before {
-  content: "";
-  flex: none;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: #fff;
-  animation: pulse-white 2.4s ease-out infinite;
-}
-@keyframes pulse-white {
-  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6); }
-  70% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+.war-plaque { column-gap: 0.32em; flex-wrap: wrap; }
+@media (max-width: 560px) {
+  .war-plaque { flex-direction: column; align-items: flex-start; }
 }
 .hero__war { margin-top: 1.5rem; }
 .hero__title-accent {
@@ -1005,24 +987,11 @@ body {
 /* ---------------------------------------------------------------------------
    About the data
 --------------------------------------------------------------------------- */
-.about { display: grid; gap: 2.5rem 4rem; }
-@media (min-width: 1000px) { .about { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); } }
-.about__quote {
-  margin-top: 2rem;
-  padding-left: 1.4rem;
-  border-left: 3px solid var(--color-signal);
-}
-.about__quote p {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
-  line-height: 1.15;
-  text-wrap: balance;
-}
-.about__quote footer { margin-top: 0.75rem; color: var(--color-ash); font-size: 0.92rem; }
-.about__legal { margin-top: 1.5rem; color: var(--color-ash); max-width: 52ch; font-size: 0.95rem; }
-.about__legal b { color: var(--color-paper); }
-.about__facts { display: grid; gap: 0.75rem; }
+.about__title { margin-bottom: 2.5rem; }
+.lead-strong { color: var(--color-paper); font-weight: 700; }
+.about__facts { display: grid; gap: 1rem; }
 @media (min-width: 640px) { .about__facts { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1100px) { .about__facts { grid-template-columns: repeat(4, 1fr); } }
 .about__facts li {
   padding: 1.3rem;
   border-radius: 16px;
@@ -1032,7 +1001,7 @@ body {
 .about__icon { width: 1.6rem; height: 1.6rem; color: var(--color-signal); }
 .about__facts h3 { margin-top: 0.8rem; font-weight: 700; font-size: 1.02rem; }
 .about__facts p { margin-top: 0.4rem; font-size: 0.92rem; color: var(--color-ash); line-height: 1.5; }
-.sources { margin-top: clamp(2.5rem, 5vw, 4rem); }
+.sources { margin-top: 1rem; }
 .sources__title { font-weight: 700; font-size: 1.05rem; margin-bottom: 1rem; }
 .sources__list { display: grid; gap: 0.6rem; }
 @media (min-width: 720px) { .sources__list { grid-template-columns: repeat(2, 1fr); } }
@@ -1074,7 +1043,6 @@ body {
 .export-card__head h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; line-height: 1.1; }
 .export-card__head p { margin-top: 0.3rem; color: var(--color-ash); font-size: 0.9rem; }
 .export-card__head p b { color: #ff9aa4; font-weight: 700; font-variant-numeric: tabular-nums; }
-.export-card__head p span { color: var(--color-ash-2); margin-inline: 0.25rem; }
 /* A tiny frame in the real proportions of the format. */
 .fmt-shape {
   flex: none;
@@ -1131,7 +1099,7 @@ body {
   text-align: center;
 }
 .site-footer__logo { display: inline-flex; border-radius: 10px; }
-.site-footer__logo img { height: 3.8rem; width: auto; }
+.site-footer__logo img { height: 3rem; width: auto; }
 .site-footer__rights {
   position: relative;
   padding-left: 1.25rem;

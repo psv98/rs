@@ -24,17 +24,59 @@ function Thumb({ src, href, caption, ratio, filename }: { src: string; href: str
   );
 }
 
+type SavePicker = (o: { suggestedName: string; types: Array<{ description: string; accept: Record<string, string[]> }> }) => Promise<{
+  createWritable: () => Promise<{ write: (b: Blob) => Promise<void>; close: () => Promise<void> }>;
+}>;
+
+/**
+ * Opens the system "Save as" window where the browser supports it (Chrome, Edge, Opera on
+ * desktop). Other browsers use their usual download behaviour; Safari and Firefox ask
+ * where to save if "Ask where to save each file" is on in their settings.
+ */
+function SaveButton({ href, name, label }: { href?: string; name?: string; label: string }) {
+  if (!href) return null;
+  const file = (name ?? href).split("/").pop()!.split("?")[0]!;
+  return (
+    <a
+      className="btn btn--primary"
+      href={href}
+      download={file}
+      onClick={async (e) => {
+        const picker = (window as unknown as { showSaveFilePicker?: SavePicker }).showSaveFilePicker;
+        if (!picker) return; // regular download
+        e.preventDefault();
+        const zip = file.endsWith(".zip");
+        try {
+          const handle = await picker({
+            suggestedName: file,
+            types: [zip ? { description: "ZIP", accept: { "application/zip": [".zip"] } } : { description: "PNG", accept: { "image/png": [".png"] } }],
+          });
+          const blob = await (await fetch(href)).blob();
+          const w = await handle.createWritable();
+          await w.write(blob);
+          await w.close();
+        } catch (err) {
+          if ((err as Error).name !== "AbortError") window.location.href = href; // fall back to a normal download
+        }
+      }}
+    >
+      <Glyph name="download" />
+      <span>{label}</span>
+    </a>
+  );
+}
+
 export function ExportPanel({ locale, links }: { locale: Locale; links: ExportLinks }) {
   const d = t(locale).exportBlock;
   const socialCount = links.social.length;
   const wideCount = links.wide.length;
-  const Head = ({ caption, count, ratio }: { caption: [string, string]; count: number; ratio: string }) => (
+  const Head = ({ caption, ratio }: { caption: [string, string]; ratio: string }) => (
     <header className="export-card__head">
       <span className="fmt-shape" style={{ aspectRatio: ratio }} aria-hidden="true" />
       <div>
         <h3>{caption[0]}</h3>
         <p>
-          <b>{caption[1]}</b> px <span aria-hidden="true">/</span> {d.slidesCount(count)}
+          <b>{caption[1]}</b> px
         </p>
       </div>
     </header>
@@ -42,37 +84,29 @@ export function ExportPanel({ locale, links }: { locale: Locale; links: ExportLi
   return (
     <div className="exports">
       <div className="export-card">
-        <Head caption={d.socialCaption} count={socialCount} ratio="1080 / 1350" />
+        <Head caption={d.socialCaption} ratio="1080 / 1350" />
         <div className="thumbs">
           {links.social.map((l, i) => (
             <Thumb key={i} ratio="1080 / 1350" src={l.src} href={l.download} filename={l.filename} caption={socialCount > 1 ? d.slide(i + 1, socialCount) : "1080 × 1350"} />
           ))}
         </div>
         <div className="export-actions">
-          <a className="btn btn--primary" href={socialCount > 1 && links.socialZip ? links.socialZip : links.social[0]?.download} download>
-            <Glyph name="download" />
-            <span>{d.social}</span>
-          </a>
+          <SaveButton
+            href={socialCount > 1 && links.socialZip ? links.socialZip : links.social[0]?.download}
+            name={socialCount > 1 && links.socialZip ? links.social[0]?.filename?.replace(/(_\d+-of-\d+)?\.png$/, ".zip") : links.social[0]?.filename}
+            label={d.social}
+          />
         </div>
       </div>
       <div className="export-card">
-        <Head caption={d.wideCaption} count={wideCount} ratio="1920 / 1080" />
+        <Head caption={d.wideCaption} ratio="1920 / 1080" />
         <div className="thumbs">
           {links.wide.map((l, i) => (
             <Thumb key={i} ratio="1920 / 1080" src={l.src} href={l.download} filename={l.filename} caption={wideCount > 1 ? d.slide(i + 1, wideCount) : "1920 × 1080"} />
           ))}
         </div>
         <div className="export-actions">
-          <a className="btn btn--primary" href={links.wide[0]?.download} download={links.wide[0]?.filename ?? true}>
-            <Glyph name="download" />
-            <span>{d.wide}</span>
-          </a>
-          {links.allZip && (
-            <a className="btn btn--primary" href={links.allZip} download>
-              <Glyph name="download" />
-              <span>{d.all}</span>
-            </a>
-          )}
+          <SaveButton href={links.wide[0]?.download} name={links.wide[0]?.filename ?? links.wide[0]?.download} label={d.wide} />
         </div>
       </div>
     </div>

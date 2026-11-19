@@ -5,6 +5,7 @@ import { pageHref } from "@/lib/site";
 import { groupDigits } from "@/lib/viz/geometry";
 import { Glyph } from "../ui/Glyph";
 import { HeroRing } from "./HeroRing";
+import { WarPlaque } from "./WarPlaque";
 
 export function Hero({ locale, snap }: { locale: Locale; snap: PublicSnapshot }) {
   const d = t(locale);
@@ -23,7 +24,7 @@ export function Hero({ locale, snap }: { locale: Locale; snap: PublicSnapshot })
             <span className="hero__title-accent">{t2}</span>
             {t3}
           </h1>
-          <p className="hero__war war-plaque">{data.texts.periodLabel[locale]}</p>
+          <WarPlaque label={data.texts.periodLabel[locale]} className="hero__war" />
           <p className="hero__dek">
             <span className="sr-only">{`${groupDigits(data.totalCrimes)} ${d.heroLabel(data.totalCrimes)}. `}</span>
             {d.hero.dek(since, asOf)}

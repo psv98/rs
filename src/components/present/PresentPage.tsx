@@ -10,6 +10,7 @@ import { Glyph } from "../ui/Glyph";
 import { FullscreenButton } from "./FullscreenButton";
 import { HeroRing } from "../site/HeroRing";
 import { PresentStage } from "./PresentStage";
+import { WarPlaque } from "../site/WarPlaque";
 
 /**
  * Presentation mode: the headline figure and all categories on one 1920×1080 canvas,
@@ -30,7 +31,7 @@ export async function PresentPage({ locale }: { locale: Locale }) {
         <header className="present__top">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={withBase(`/brand/imi-logo-${locale}.svg`)} alt={d.org} className="present__logo" />
-          {current && <p className="war-plaque present__plaque">{current.data.texts.periodLabel[locale]}</p>}
+          {current && <WarPlaque label={current.data.texts.periodLabel[locale]} className="present__plaque" />}
           <div className="present__actions">
             <FullscreenButton label={d.present.fullscreen} />
             <a className="btn btn--lg" href={pageHref(locale)}>

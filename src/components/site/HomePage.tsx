@@ -96,7 +96,9 @@ export function HomePage({
               <h2 id="export-title" className="section__title">
                 {d.exportBlock.title}
               </h2>
-              <p className="section__lead">{d.exportBlock.lead}</p>
+              <p className="section__lead">
+                {d.exportBlock.lead} <strong className="lead-strong">{d.exportBlock.leadStrong}</strong>
+              </p>
             </div>
             <ExportPanel locale={locale} links={links} />
           </div>
