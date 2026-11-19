@@ -27,8 +27,9 @@ const securityHeaders = [
 
 const common: NextConfig = {
   // Files that need a Node.js server (admin pages, API routes, proxy) end in
-  // .server.ts(x); the static build simply does not pick them up.
-  pageExtensions: isStatic ? ["tsx", "ts"] : ["server.tsx", "server.ts", "tsx", "ts"],
+  // .server.ts(x); the static build simply does not pick them up. The GitHub-backed
+  // editor for the static site (src/app/editor/*.static.tsx) exists only in the static build.
+  pageExtensions: isStatic ? ["static.tsx", "tsx", "ts"] : ["server.tsx", "server.ts", "tsx", "ts"],
   poweredByHeader: false,
   reactStrictMode: true,
   env: {

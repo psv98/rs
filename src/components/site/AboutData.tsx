@@ -61,7 +61,6 @@ export function AboutData({ locale, snap }: { locale: Locale; snap: PublicSnapsh
           </ul>
         </div>
         <div className="sources">
-          <h3 className="sources__title">{m.sourcesTitle}</h3>
           <ul className="sources__list">
             {sources.map(([label, url]) => (
               <li key={url}>

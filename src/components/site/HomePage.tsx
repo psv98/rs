@@ -86,7 +86,7 @@ export function HomePage({
       {banner && <div className="preview-banner">{banner}</div>}
       <Header locale={locale} ukPath={ukPath} enPath={enPath} />
       <main id="main">
-        <Hero locale={locale} snap={snap} siteUrl={siteUrl} />
+        <Hero locale={locale} snap={snap} />
         <Ticker locale={locale} snap={snap} />
         <CategoryLedger locale={locale} snap={snap} />
         <Dynamics locale={locale} snap={snap} />

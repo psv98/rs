@@ -325,7 +325,7 @@ function issuesFor(issues: Issue[], prefix: string) {
   return issues.filter((i) => i.field?.startsWith(prefix) && i.severity === "error");
 }
 
-function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
+export function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
     <label className="adm-field">
       <span>{label}</span>
@@ -335,9 +335,25 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
   );
 }
 
-type Upd = (fn: (d: SnapshotData) => void) => void;
+export type Upd = (fn: (d: SnapshotData) => void) => void;
 
-function MainTab({ data, update, editable, changeNote, setChangeNote, issues }: { data: SnapshotData; update: Upd; editable: boolean; changeNote: string; setChangeNote: (s: string) => void; issues: Issue[] }) {
+export function MainTab({
+  data,
+  update,
+  editable,
+  changeNote,
+  setChangeNote,
+  issues,
+  hideChangeNote = false,
+}: {
+  data: SnapshotData;
+  update: Upd;
+  editable: boolean;
+  changeNote: string;
+  setChangeNote: (s: string) => void;
+  issues: Issue[];
+  hideChangeNote?: boolean;
+}) {
   const bad = (p: string) => (issuesFor(issues, p).length ? "true" : undefined);
   return (
     <div style={{ display: "grid", gap: "1.25rem" }}>
@@ -391,16 +407,18 @@ function MainTab({ data, update, editable, changeNote, setChangeNote, issues }: 
           <Field label="Реєстр ІМІ">
             <input className="adm-input" type="url" disabled={!editable} value={data.sources.registry} onChange={(e) => update((d) => void (d.sources.registry = e.target.value))} />
           </Field>
-          <Field label="Примітка до версії (внутрішня)" hint="Що змінилося в цій версії — видно лише в адмінці">
-            <input className="adm-input" maxLength={500} disabled={!editable} value={changeNote} onChange={(e) => setChangeNote(e.target.value)} />
-          </Field>
+          {!hideChangeNote && (
+            <Field label="Примітка до версії (внутрішня)" hint="Що змінилося в цій версії — видно лише в адмінці">
+              <input className="adm-input" maxLength={500} disabled={!editable} value={changeNote} onChange={(e) => setChangeNote(e.target.value)} />
+            </Field>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-function CategoriesTab({ data, update, editable }: { data: SnapshotData; update: Upd; editable: boolean }) {
+export function CategoriesTab({ data, update, editable }: { data: SnapshotData; update: Upd; editable: boolean }) {
   const sorted = [...data.categories].map((c, idx) => ({ c, idx })).sort((a, b) => a.c.order - b.c.order);
   const move = (idx: number, dir: -1 | 1) =>
     update((d) => {
@@ -495,7 +513,7 @@ function AddCategory({ data, update }: { data: SnapshotData; update: Upd }) {
   );
 }
 
-function HistoryTab({ data, update, editable }: { data: SnapshotData; update: Upd; editable: boolean }) {
+export function HistoryTab({ data, update, editable }: { data: SnapshotData; update: Upd; editable: boolean }) {
   const pts = data.history.points;
   const yrs = data.history.years;
   const sorted = pts.every((p, i) => i === 0 || pts[i - 1]!.date < p.date);
@@ -609,7 +627,7 @@ function HistoryTab({ data, update, editable }: { data: SnapshotData; update: Up
   );
 }
 
-function TextsTab({ data, update, editable }: { data: SnapshotData; update: Upd; editable: boolean }) {
+export function TextsTab({ data, update, editable }: { data: SnapshotData; update: Upd; editable: boolean }) {
   const suggestion = suggestPeriodLabel(data.monitoringStart, data.asOfDate);
   return (
     <div style={{ display: "grid", gap: "1.25rem" }}>
@@ -648,7 +666,7 @@ function TextsTab({ data, update, editable }: { data: SnapshotData; update: Upd;
   );
 }
 
-function CheckTab({
+export function CheckTab({
   data,
   update,
   editable,
@@ -659,6 +677,8 @@ function CheckTab({
   dirty,
   busy,
   onSaveVerification,
+  hideSave = false,
+  hideInternal = false,
 }: {
   data: SnapshotData;
   update: Upd;
@@ -670,6 +690,8 @@ function CheckTab({
   dirty: boolean;
   busy: boolean;
   onSaveVerification: () => void;
+  hideSave?: boolean;
+  hideInternal?: boolean;
 }) {
   const diff = sum - total;
   const order = { error: 0, warning: 1, info: 2 } as const;
@@ -737,10 +759,12 @@ function CheckTab({
             </div>
           </>
         )}
-        <Field label="Внутрішня нотатка (не публікується)">
-          <textarea className="adm-textarea" disabled={!editable} maxLength={2000} value={vf.internalNote} onChange={(e) => update((d) => void (d.verification.internalNote = e.target.value))} />
-        </Field>
-        {editable && (
+        {!hideInternal && (
+          <Field label="Внутрішня нотатка (не публікується)">
+            <textarea className="adm-textarea" disabled={!editable} maxLength={2000} value={vf.internalNote} onChange={(e) => update((d) => void (d.verification.internalNote = e.target.value))} />
+          </Field>
+        )}
+        {editable && !hideSave && (
           <div>
             <button className="btn btn--primary" disabled={busy || !dirty} onClick={onSaveVerification}>
               {status === "review" ? "Зберегти підтвердження" : "Зберегти чернетку"}

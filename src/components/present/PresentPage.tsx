@@ -8,7 +8,6 @@ import { CategoryIcon } from "../ui/CategoryIcon";
 import { Glyph } from "../ui/Glyph";
 import { FullscreenButton } from "./FullscreenButton";
 import { HeroRing } from "../site/HeroRing";
-import { WarTimeline } from "../site/WarTimeline";
 import { formatShortDate } from "@/lib/data/dates";
 
 /** Large-screen mode: the headline figure and all categories, nothing else. */
@@ -33,7 +32,10 @@ export async function PresentPage({ locale }: { locale: Locale }) {
       {current ? (
         <div className="present__main">
           <div style={{ display: "grid", gap: "1.5rem", justifyItems: "start" }}>
-            <WarTimeline label={current.data.texts.periodLabel[locale]} start={current.data.monitoringStart} end={current.data.asOfDate} />
+            <p className="hero__war">
+              <span className="hero__war-line" aria-hidden="true" />
+              {current.data.texts.periodLabel[locale]}
+            </p>
             <h1 className="hero__title" style={{ marginTop: 0 }}>{d.hero.title}</h1>
             <HeroRing
               total={current.data.totalCrimes}

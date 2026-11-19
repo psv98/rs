@@ -6,7 +6,6 @@ import { visibleCategories, type Category, type Locale, type PublicSnapshot } fr
 import { formatLongDate, formatShortDate } from "../data/dates";
 import { t } from "../i18n/dictionaries";
 import { groupDigits } from "../viz/geometry";
-import { warMonths } from "../data/war";
 import { iconUri, logoFor } from "./assets";
 import type { SlideSpec } from "./plan";
 
@@ -67,118 +66,109 @@ const numWidth = (text: string, fs: number) => [...text].reduce((w, ch) => w + (
 const fitNumber = (text: string, room: number, max: number) => Math.min(max, Math.floor(max * (room / Math.max(room, numWidth(text, max)))));
 
 /** The project title on two fixed lines, sized so the longer line fills the width. */
-function Title({ locale, size, width, wrap = false }: { locale: Locale; size: number; width: number; wrap?: boolean }) {
+function Title({ locale, size, width, wrap = false, center = false }: { locale: Locale; size: number; width: number; wrap?: boolean; center?: boolean }) {
   if (wrap)
     return (
-      <div style={{ display: "flex", width, fontFamily: "Kyiv", fontSize: size, lineHeight: 1.06, letterSpacing: -size * 0.012 }}>
-        {t(locale).hero.title}
+      <div style={{ display: "flex", flexWrap: "wrap", width, fontFamily: "Kyiv", fontSize: size, lineHeight: 1.06, letterSpacing: -size * 0.012 }}>
+        {t(locale)
+          .hero.titleParts.map((part, i) => part.trim().split(" ").map((w) => [w, i === 1] as const))
+          .flat()
+          .map(([w, red], j) => (
+            <span key={j} style={{ color: red ? "#FF5A6A" : C.text, marginRight: size * 0.26 }}>
+              {w}
+            </span>
+          ))}
       </div>
     );
   const lines = t(locale).exportText.titleLines;
   const longest = Math.max(...lines.map((l) => l.length));
   const fs = Math.min(size, Math.floor(width / (longest * 0.56)));
   return (
-    <div style={{ display: "flex", flexDirection: "column", width, fontFamily: "Kyiv", fontSize: fs, lineHeight: 1.06, letterSpacing: -fs * 0.012 }}>
-      {lines.map((l) => (
-        <div key={l} style={{ display: "flex" }}>
-          {l}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/** War duration: a mark per month since 24.02.2022, grouped by year (same as the site). */
-function WarStrip({ data, locale, width, size = 1 }: { data: Data; locale: Locale; width: number; size?: number }) {
-  const groups = warMonths(data.monitoringStart, data.asOfDate);
-  const total = groups.reduce((s, g) => s + g.months, 0);
-  const yearGap = 12 * size;
-  const tickGap = 3 * size;
-  const unit = (width - yearGap * (groups.length - 1) - tickGap * (total - groups.length)) / total;
-  let n = 0;
-  return (
-    <div style={{ display: "flex", flexDirection: "column", width, gap: 14 * size }}>
-      <div style={{ display: "flex", fontSize: 26 * size, color: "#FF9AA4" }}>{data.texts.periodLabel[locale]}</div>
-      <div style={{ display: "flex", gap: yearGap }}>
-        {groups.map((g) => (
-          <div key={g.year} style={{ display: "flex", flexDirection: "column", gap: 8 * size }}>
-            <div style={{ display: "flex", gap: tickGap }}>
-              {Array.from({ length: g.months }, () => {
-                const now = n++ === total - 1;
-                return (
-                  <div
-                    key={n}
-                    style={{
-                      display: "flex",
-                      width: unit,
-                      height: 30 * size,
-                      borderRadius: 3,
-                      backgroundImage: now ? `linear-gradient(180deg, #FFC27A, ${C.ember})` : `linear-gradient(180deg, ${C.red}, #8F1A2C)`,
-                    }}
-                  />
-                );
-              })}
-            </div>
-            <div style={{ display: "flex", fontSize: 17 * size, color: C.muted, borderTop: `1.5px solid ${C.lineStrong}`, paddingTop: 6 * size }}>{String(g.year)}</div>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: center ? "center" : "flex-start", width, fontFamily: "Kyiv", fontSize: fs, lineHeight: 1.06, letterSpacing: -fs * 0.012 }}>
+      {lines.map((l, i) => {
+        // Same accent as the site headline: "журналістів і медіа" in red.
+        const accent = t(locale).hero.titleParts[1];
+        const full = lines.join(" ");
+        const at = full.indexOf(accent);
+        const start = lines.slice(0, i).join(" ").length + (i > 0 ? 1 : 0);
+        const from = Math.max(0, at - start);
+        const to = Math.min(l.length, at + accent.length - start);
+        const parts = at < 0 || to <= 0 || from >= l.length ? [[l, false]] : [[l.slice(0, from), false], [l.slice(from, to), true], [l.slice(to), false]];
+        return (
+          <div key={l} style={{ display: "flex", whiteSpace: "pre" }}>
+            {(parts as Array<[string, boolean]>)
+              .filter(([x]) => x)
+              .map(([x, red], j) => (
+                <span key={j} style={{ color: red ? "#FF5A6A" : C.text }}>
+                  {x}
+                </span>
+              ))}
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }
 
-/** The headline block: total crimes and the period it covers. */
-function TotalBlock({ data, locale, width, height, max }: { data: Data; locale: Locale; width: number; height: number; max: number }) {
+/** War duration as a single line with fading rules (no per-month marks). */
+function WarLine({ data, locale, size = 1, center = false }: { data: Data; locale: Locale; size?: number; center?: boolean }) {
+  const rule = (dir: "l" | "r") => (
+    <div
+      style={{
+        display: "flex",
+        width: 64 * size,
+        height: 2,
+        backgroundImage: `linear-gradient(${dir === "l" ? "90deg" : "270deg"}, rgba(237,76,92,0), ${C.red})`,
+      }}
+    />
+  );
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: center ? "center" : "flex-start", gap: 18 * size }}>
+      {rule("l")}
+      <div style={{ display: "flex", fontFamily: "Kyiv", fontSize: 30 * size, color: "#FF9AA4" }}>{data.texts.periodLabel[locale]}</div>
+      {center && rule("r")}
+    </div>
+  );
+}
+
+/** The headline block: the total, the word under it, the period, then new cases. */
+function TotalBlock({ data, locale, width, height, max, center = false }: { data: Data; locale: Locale; width: number; height: number; max: number; center?: boolean }) {
   const d = t(locale);
   const text = num(data.totalCrimes);
-  const pad = Math.round(height * 0.13);
-  const fs = fitNumber(text, width * 0.58, max);
+  const pad = Math.round(Math.min(height * 0.1, 52));
+  const fs = fitNumber(text, width - pad * 2, max);
+  const side = Math.round(Math.max(18, max * 0.11));
+  const p = data.period;
+  const fresh = p.newCases !== null && p.start && p.end ? { v: `+${num(p.newCases)}`, l: d.hero.statNew(formatShortDate(p.start), formatShortDate(p.end)) } : null;
+  const align = center ? "center" : "flex-start";
   return (
     <div
       style={{
         ...BLOCK,
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: align,
         width,
         height,
         padding: `0 ${pad}px`,
-        alignItems: "center",
-        gap: pad * 0.8,
+        textAlign: center ? "center" : "left",
         border: "1.5px solid rgba(237,76,92,0.45)",
-        backgroundImage: "linear-gradient(135deg, rgba(168,29,48,0.42), rgba(20,20,26,0.95) 62%)",
+        backgroundImage: center
+          ? "radial-gradient(circle at 50% 35%, rgba(237,76,92,0.30) 0%, rgba(20,20,26,0.95) 62%)"
+          : "linear-gradient(135deg, rgba(168,29,48,0.45), rgba(20,20,26,0.95) 62%)",
       }}
     >
-      <div style={{ display: "flex", fontFamily: "Kyiv", fontSize: fs, lineHeight: 1, letterSpacing: -fs * 0.03, color: "#FF6F7D", paddingTop: fs * 0.08 }}>{text}</div>
-      <div style={{ display: "flex", flexDirection: "column", flex: 1, gap: 10 }}>
-        <div style={{ display: "flex", fontFamily: "Kyiv", fontSize: Math.round(max * 0.2), lineHeight: 1.05 }}>{d.hero.ringLabel(data.totalCrimes)}</div>
-        <div style={{ display: "flex", fontSize: Math.round(max * 0.105), color: C.text2, lineHeight: 1.3 }}>
-          {nb(d.exportText.crimesBetween(formatLongDate(data.monitoringStart, locale), formatLongDate(data.asOfDate, locale)).replace(/^\S+\s/, ""))}
-        </div>
+      <div style={{ display: "flex", fontFamily: "Kyiv", fontSize: fs, lineHeight: 0.9, letterSpacing: -fs * 0.03, color: "#FF6F7D", paddingTop: fs * 0.06 }}>{text}</div>
+      <div style={{ display: "flex", fontFamily: "Kyiv", fontSize: Math.round(max * 0.2), lineHeight: 1.1, marginTop: max * 0.05 }}>{d.hero.crimesWord(data.totalCrimes)}</div>
+      <div style={{ display: "flex", justifyContent: align, fontSize: side, color: C.text2, lineHeight: 1.35, marginTop: side * 0.7, maxWidth: width - pad * 2 }}>
+        {nb(d.exportText.crimesBetween(formatLongDate(data.monitoringStart, locale), formatLongDate(data.asOfDate, locale)).replace(/^\S+\s/, ""))}
       </div>
-    </div>
-  );
-}
-
-function statItems(data: Data, locale: Locale) {
-  const d = t(locale);
-  const items: Array<{ v: string; l: string; c?: string }> = [];
-  const p = data.period;
-  if (p.newCases !== null)
-    items.push({ v: `+${num(p.newCases)}`, l: p.start && p.end ? d.hero.statNew(formatShortDate(p.start), formatShortDate(p.end)) : d.hero.rowNew, c: C.ember });
-  if (data.casualties.killedTotal !== null) items.push({ v: num(data.casualties.killedTotal), l: d.hero.statKilled });
-  if (data.casualties.killedOnDuty !== null) items.push({ v: num(data.casualties.killedOnDuty), l: d.hero.statOnDuty });
-  return items;
-}
-
-function StatBlocks({ data, locale, width, height, gap = 16, size = 1 }: { data: Data; locale: Locale; width: number; height: number; gap?: number; size?: number }) {
-  const items = statItems(data, locale);
-  const w = (width - (items.length - 1) * gap) / Math.max(1, items.length);
-  return (
-    <div style={{ display: "flex", gap, width }}>
-      {items.map((it) => (
-        <div key={it.l} style={{ ...BLOCK, flexDirection: "column", justifyContent: "space-between", width: w, height, padding: `${24 * size}px ${26 * size}px` }}>
-          <div style={{ display: "flex", fontFamily: "Kyiv", fontSize: fitNumber(it.v, w - 52 * size, 72 * size), lineHeight: 1, color: it.c ?? C.text }}>{it.v}</div>
-          <div style={{ display: "flex", fontSize: 20 * size, color: C.text2, lineHeight: 1.25 }}>{it.l}</div>
+      {fresh && (
+        <div style={{ display: "flex", alignItems: "center", gap: side * 0.7, marginTop: side * 1.1, paddingTop: side * 0.9, borderTop: `1.5px solid ${C.lineStrong}` }}>
+          <div style={{ display: "flex", fontFamily: "Kyiv", fontSize: side * 1.6, lineHeight: 1, color: C.ember }}>{fresh.v}</div>
+          <div style={{ display: "flex", fontSize: side * 0.85, color: C.text2 }}>{fresh.l}</div>
         </div>
-      ))}
+      )}
     </div>
   );
 }
@@ -291,10 +281,10 @@ function CatGrid({
   );
 }
 
-function Footer({ locale, data, size = 1 }: { locale: Locale; data: Data; size?: number }) {
+function Footer({ locale, data, size = 1, width }: { locale: Locale; data: Data; size?: number; width?: number }) {
   const d = t(locale).exportText;
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 24, fontSize: 19 * size, color: C.muted, lineHeight: 1.35 }}>
+    <div style={{ display: "flex", width, justifyContent: "space-between", alignItems: "flex-end", gap: 24, fontSize: 19 * size, color: C.muted, lineHeight: 1.35 }}>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div style={{ display: "flex", color: C.text2 }}>{d.source}</div>
         <div style={{ display: "flex" }}>{nb(d.asOf(formatLongDate(data.asOfDate, locale)))}</div>
@@ -321,13 +311,14 @@ export function SocialSlide({ locale, data, spec }: { locale: Locale; data: Data
   if (spec.index === 1) {
     return (
       <Frame w={W} h={H}>
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: P, width: W, height: H, boxSizing: "border-box" }}>
-          <Logo locale={locale} height={64} />
-          <Title locale={locale} size={66} width={inner} />
-          <WarStrip data={data} locale={locale} width={inner} />
-          <TotalBlock data={data} locale={locale} width={inner} height={320} max={230} />
-          <StatBlocks data={data} locale={locale} width={inner} height={190} />
-          <Footer locale={locale} data={data} />
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", padding: P, width: W, height: H, boxSizing: "border-box" }}>
+          <Logo locale={locale} height={76} />
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 30 }}>
+            <Title locale={locale} size={70} width={inner} center />
+            <WarLine data={data} locale={locale} center />
+          </div>
+          <TotalBlock data={data} locale={locale} width={inner} height={640} max={270} center />
+          <Footer locale={locale} data={data} width={inner} />
         </div>
       </Frame>
     );
@@ -336,7 +327,9 @@ export function SocialSlide({ locale, data, spec }: { locale: Locale; data: Data
   return (
     <Frame w={W} h={H}>
       <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: P, width: W, height: H, boxSizing: "border-box" }}>
-        <Logo locale={locale} height={64} />
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Logo locale={locale} height={64} />
+        </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <div style={{ display: "flex", fontFamily: "Kyiv", fontSize: 60, lineHeight: 1.04 }}>{spec.index > 2 ? `${d.exportText.typesTitle} (${d.exportText.continued.toLowerCase()})` : d.exportText.typesTitle}</div>
           <div style={{ display: "flex", fontSize: 22, color: C.text2 }}>{nb(d.hero.asOf(formatLongDate(data.asOfDate, locale)))}</div>
@@ -368,10 +361,9 @@ export function WideSlide({ locale, data, spec }: { locale: Locale; data: Data; 
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: leftW }}>
           <Logo locale={locale} height={58} />
           <Title locale={locale} size={56} width={leftW} wrap />
-          <WarStrip data={data} locale={locale} width={leftW} size={0.8} />
-          <TotalBlock data={data} locale={locale} width={leftW} height={230} max={160} />
-          <StatBlocks data={data} locale={locale} width={leftW} height={150} gap={12} size={0.78} />
-          <Footer locale={locale} data={data} size={0.85} />
+          <WarLine data={data} locale={locale} size={0.8} />
+          <TotalBlock data={data} locale={locale} width={leftW} height={420} max={180} />
+          <Footer locale={locale} data={data} size={0.85} width={leftW} />
         </div>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: rightW }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", height: 58 }}>
@@ -396,7 +388,7 @@ export function OgImage({ locale, data }: { locale: Locale; data: Data | null })
       <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: P, width: W, height: H, boxSizing: "border-box" }}>
         <Logo locale={locale} height={56} />
         <Title locale={locale} size={62} width={W - 2 * P} />
-        {data ? <TotalBlock data={data} locale={locale} width={W - 2 * P} height={200} max={140} /> : <div style={{ display: "flex", fontSize: 24, color: C.text2 }}>imi.org.ua</div>}
+        {data ? <TotalBlock data={data} locale={locale} width={W - 2 * P} height={250} max={150} /> : <div style={{ display: "flex", fontSize: 24, color: C.text2 }}>imi.org.ua</div>}
       </div>
     </Frame>
   );

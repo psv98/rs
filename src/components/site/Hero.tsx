@@ -2,13 +2,12 @@ import type { CSSProperties } from "react";
 import { visibleCategories, type Locale, type PublicSnapshot } from "@/lib/data/schema";
 import { formatLongDate, formatShortDate } from "@/lib/data/dates";
 import { t } from "@/lib/i18n/dictionaries";
-import { pageHref, routePath } from "@/lib/site";
+import { pageHref } from "@/lib/site";
 import { groupDigits } from "@/lib/viz/geometry";
+import { Glyph } from "../ui/Glyph";
 import { HeroRing } from "./HeroRing";
-import { ShareTools } from "./ShareTools";
-import { WarTimeline } from "./WarTimeline";
 
-export function Hero({ locale, snap, siteUrl }: { locale: Locale; snap: PublicSnapshot; siteUrl: string }) {
+export function Hero({ locale, snap }: { locale: Locale; snap: PublicSnapshot }) {
   const d = t(locale);
   const data = snap.data;
   const since = formatLongDate(data.monitoringStart, locale);
@@ -16,6 +15,7 @@ export function Hero({ locale, snap, siteUrl }: { locale: Locale; snap: PublicSn
   const p = data.period;
   const k = data.casualties;
   const cats = visibleCategories(data);
+  const [t1, t2, t3] = d.hero.titleParts;
   const stats: Array<{ value: string; label: string; tone?: "ember" }> = [];
   if (p.newCases !== null)
     stats.push({
@@ -30,10 +30,15 @@ export function Hero({ locale, snap, siteUrl }: { locale: Locale; snap: PublicSn
       <div className="aurora" aria-hidden="true" />
       <div className="hero__grid shell">
         <div className="hero__copy">
-          <WarTimeline label={data.texts.periodLabel[locale]} start={data.monitoringStart} end={data.asOfDate} />
           <h1 id="hero-title" className="hero__title">
-            {d.hero.title}
+            {t1}
+            <span className="hero__title-accent">{t2}</span>
+            {t3}
           </h1>
+          <p className="hero__war">
+            <span className="hero__war-line" aria-hidden="true" />
+            {data.texts.periodLabel[locale]}
+          </p>
           <p className="hero__dek">
             <span className="sr-only">{`${groupDigits(data.totalCrimes)} ${d.heroLabel(data.totalCrimes)}. `}</span>
             {d.hero.dek(since, asOf)}
@@ -50,18 +55,14 @@ export function Hero({ locale, snap, siteUrl }: { locale: Locale; snap: PublicSn
               ))}
             </dl>
           )}
-          <ShareTools
-            statsText={d.share.statsText(data.totalCrimes, asOf, since, `${siteUrl}${routePath(locale)}`)}
-            labels={{ copyStats: d.share.copyStats, copied: d.share.copied, share: d.share.share, present: d.share.present }}
-            presentHref={pageHref(locale, "/present")}
-            title={d.projectName}
-          />
+          <div className="hero__actions">
+            <a className="btn btn--primary" href={pageHref(locale, "/present")}>
+              <Glyph name="screen" />
+              <span>{d.share.present}</span>
+            </a>
+          </div>
         </div>
         <div className="hero__visual">
-          <div className="hero__ringhead">
-            <h2 className="hero__ringtitle">{d.hero.ringTitle}</h2>
-            <p className="hero__legend">{d.hero.legend}</p>
-          </div>
           <HeroRing
             total={data.totalCrimes}
             categories={cats.map((c) => ({ id: c.id, iconId: c.iconId, value: c.value, name: c.name[locale] }))}

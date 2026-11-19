@@ -27,9 +27,16 @@ run("npx tsx --conditions=react-server scripts/render-static-exports.ts");
 fs.rmSync(".next", { recursive: true, force: true });
 run("npx next build");
 fs.writeFileSync("out/.nojekyll", "");
+// UA and EN share one root layout (so switching language is a client-side transition);
+// the static English pages get their own <html lang>.
+for (const f of fs.readdirSync("out/en", { recursive: true })) {
+  if (!String(f).endsWith(".html")) continue;
+  const file = `out/en/${f}`;
+  fs.writeFileSync(file, fs.readFileSync(file, "utf8").replace('<html lang="uk"', '<html lang="en"'));
+}
 // robots.txt / sitemap.xml (in server mode these are dynamic routes).
 const site = env.SITE_URL.replace(/\/+$/, "");
-fs.writeFileSync("out/robots.txt", `User-agent: *\nAllow: /\nDisallow: /present/\nDisallow: /en/present/\n\nSitemap: ${site}/sitemap.xml\n`);
+fs.writeFileSync("out/robots.txt", `User-agent: *\nAllow: /\nDisallow: /present/\nDisallow: /en/present/\nDisallow: /editor/\n\nSitemap: ${site}/sitemap.xml\n`);
 const today = new Date().toISOString().slice(0, 10);
 const alt = `<xhtml:link rel="alternate" hreflang="uk" href="${site}/"/><xhtml:link rel="alternate" hreflang="en" href="${site}/en/"/>`;
 fs.writeFileSync(

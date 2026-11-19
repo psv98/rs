@@ -4,7 +4,6 @@ import { t } from "@/lib/i18n/dictionaries";
 import { withBase } from "@/lib/site";
 import { groupDigits } from "@/lib/viz/geometry";
 import { LedgerReveal } from "./LedgerReveal";
-import { CopyLink } from "./CopyLink";
 
 export const categoryAnchor = (id: string) => `category-${id}`;
 
@@ -42,7 +41,6 @@ export function CategoryLedger({ locale, snap }: { locale: Locale; snap: PublicS
               >
                 <div className="cat__top">
                   <span className="cat__icon" aria-hidden="true" />
-                  <CopyLink anchor={anchor} label={d.categories.copyLink} doneLabel={d.categories.linkCopied} />
                 </div>
                 <p className="cat__value">
                   {groupDigits(c.value)}

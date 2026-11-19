@@ -1,6 +1,9 @@
 import type { Locale } from "../data/schema";
 import { ukForm } from "../data/dates";
 
+const fmtUk = (n: number) => new Intl.NumberFormat("uk-UA").format(n).replace(/\s/g, "\u202f");
+const fmtEn = (n: number) => new Intl.NumberFormat("en-GB").format(n);
+
 /**
  * Interface strings. Content (category names, period labels, notes) lives in the
  * snapshot and is edited in the admin panel; numbers are never written here.
@@ -21,15 +24,15 @@ const uk = {
     asOf: (d: string) => `Станом на ${d}`,
     statusTitle: "Моніторинг ІМІ",
     title: "Злочини Росії проти журналістів і медіа в Україні",
+    titleParts: ["Злочини Росії проти ", "журналістів і медіа", " в Україні"] as [string, string, string],
     dek: (since: string, asOf: string) => `Інститут масової інформації документує кожен випадок з ${since}. Дані станом на ${asOf}.`,
     statNew: (a: string, b: string) => `нових випадків ${a} — ${b}`,
     statKilled: "медійників загинули",
     statOnDuty: "з них під час роботи",
-    ringLabel: (n: number) => ukForm(n, { one: "злочин", few: "злочини", many: "злочинів" }),
+    ringLabel: (n: number) => ukForm(n, { one: "підтверджений злочин", few: "підтверджені злочини", many: "підтверджених злочинів" }),
+    crimesWord: (n: number) => ukForm(n, { one: "злочин", few: "злочини", many: "злочинів" }),
     ringAria: (n: number) =>
       `Діаграма: ${n} задокументованих злочинів, розподіл за видами порушень. Розмір сектора відповідає кількості випадків.`,
-    ringTitle: "Структура злочинів",
-    legend: "Кожен сектор — окремий вид порушень. Наведіть або торкніться сектора, щоб побачити кількість.",
     rowPeriod: "Період",
     rowAsOf: "Станом на",
     rowNew: "Нові випадки",
@@ -42,15 +45,16 @@ const uk = {
   },
   heroLabel: (n: number) =>
     `${ukForm(n, { one: "задокументований злочин", few: "задокументовані злочини", many: "задокументованих злочинів" })} Росії проти журналістів і медіа в Україні`,
-  ticker: (asOf: string, since: string, newCases: number | null) =>
-    [
-      "ЗАДОКУМЕНТОВАНО ІМІ",
-      `З ${since}`,
-      "НЕЗАЛЕЖНИЙ МОНІТОРИНГ",
-      `СТАНОМ НА ${asOf}`,
-      ...(newCases !== null ? [`+${newCases} ЗА ОСТАННІЙ ПЕРІОД`] : []),
-      "ЗА КОЖНОЮ ЦИФРОЮ — ІМ'Я, ІСТОРІЯ І ДОКАЗИ",
-    ],
+  ticker: {
+    total: (n: number, since: string) =>
+      `${fmtUk(n)} ${ukForm(n, { one: "злочин", few: "злочини", many: "злочинів" })} Росії проти журналістів і медіа з ${since}`,
+    killed: (n: number, onDuty: number | null) =>
+      `${fmtUk(n)} ${ukForm(n, { one: "медійник загинув", few: "медійники загинули", many: "медійників загинули" })}${onDuty !== null ? `, ${fmtUk(onDuty)} з них під час роботи` : ""}`,
+    fresh: (n: number, a: string, b: string) => `${ukForm(n, { one: "Новий випадок", few: "Нові випадки", many: "Нових випадків" })} з ${a} до ${b}: ${fmtUk(n)}`,
+    category: (name: string, n: number) => `${name}: ${fmtUk(n)}`,
+    source: (asOf: string) => `Дані Інституту масової інформації станом на ${asOf}`,
+    region: "Коротко про моніторинг",
+  },
   facts: {
     period: "Період моніторингу",
     updated: "Останнє оновлення",
@@ -137,7 +141,7 @@ const uk = {
   },
   dynamics: {
     title: "Як змінювалися цифри",
-    lead: "Загальний показник моніторингу ІМІ на дати публікацій з 2022 року. Кожна точка — опублікована цифра ІМІ з посиланням на джерело.",
+    lead: "Загальний показник моніторингу ІМІ щомісяця з 2022 року. Кожна точка на графіку — цифра, яку ІМІ оприлюднив на свою дату.",
     chartAria: (n: number, a: string, b: string) => `Графік загального показника за ${n} датами, від ${a} до ${b}.`,
     killed: "Загинули медійники",
     source: "Джерело",
@@ -253,14 +257,14 @@ const en: Dictionary = {
     asOf: (d) => `As of ${d}`,
     statusTitle: "IMI monitoring",
     title: "Russia's crimes against journalists and media in Ukraine",
+    titleParts: ["Russia's crimes against ", "journalists and media", " in Ukraine"],
     dek: (since, asOf) => `The Institute of Mass Information has documented every case since ${since}. Data as of ${asOf}.`,
     statNew: (a, b) => `new cases ${a} — ${b}`,
     statKilled: "media workers killed",
     statOnDuty: "of them while reporting",
-    ringLabel: (n) => (n === 1 ? "crime" : "crimes"),
+    ringLabel: (n) => (n === 1 ? "verified crime" : "verified crimes"),
+    crimesWord: (n) => (n === 1 ? "crime" : "crimes"),
     ringAria: (n) => `Chart: ${n} documented crimes by type of violation. The size of each sector reflects the number of cases.`,
-    ringTitle: "Crimes by type",
-    legend: "Each sector is one type of violation. Hover over or tap a sector to see the number.",
     rowPeriod: "Period",
     rowAsOf: "As of",
     rowNew: "New cases",
@@ -271,14 +275,14 @@ const en: Dictionary = {
     sourceValue: "IMI",
   },
   heroLabel: (n) => `documented ${n === 1 ? "crime" : "crimes"} committed by Russia against journalists and media in Ukraine`,
-  ticker: (asOf, since, newCases) => [
-    "DOCUMENTED BY IMI",
-    `SINCE ${since}`,
-    "INDEPENDENT MONITORING",
-    `AS OF ${asOf}`,
-    ...(newCases !== null ? [`+${newCases} IN THE LATEST PERIOD`] : []),
-    "BEHIND EVERY FIGURE — A NAME, A STORY, EVIDENCE",
-  ],
+  ticker: {
+    total: (n, since) => `${fmtEn(n)} ${n === 1 ? "crime" : "crimes"} by Russia against journalists and media since ${since}`,
+    killed: (n, onDuty) => `${fmtEn(n)} media ${n === 1 ? "worker" : "workers"} killed${onDuty !== null ? `, ${fmtEn(onDuty)} of them while reporting` : ""}`,
+    fresh: (n, a, b) => `New cases between ${a} and ${b}: ${fmtEn(n)}`,
+    category: (name, n) => `${name}: ${fmtEn(n)}`,
+    source: (asOf) => `Institute of Mass Information data as of ${asOf}`,
+    region: "Monitoring at a glance",
+  },
   facts: {
     period: "Monitoring period",
     updated: "Last update",
@@ -363,7 +367,7 @@ const en: Dictionary = {
   },
   dynamics: {
     title: "How the figures changed",
-    lead: "IMI's headline figure on its publication dates since 2022. Every point is a published IMI figure with a link to the source.",
+    lead: "IMI's headline figure month by month since 2022. Every point on the chart is a figure IMI published on that date.",
     chartAria: (n, a, b) => `Chart of the headline figure at ${n} dates, from ${a} to ${b}.`,
     killed: "Media workers killed",
     source: "Source",

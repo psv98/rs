@@ -80,11 +80,6 @@ export function Dynamics({ locale, snap }: { locale: Locale; snap: PublicSnapsho
                     )}
                   </dl>
                   {meta?.note[locale] && <p className="year__note">{meta.note[locale]}</p>}
-                  {meta?.source && (
-                    <a className="year__src" href={meta.source} target="_blank" rel="noopener">
-                      {d.source}
-                    </a>
-                  )}
                 </>
               ) : (
                 <p className="year__empty">{future ? d.future : d.noData}</p>
@@ -92,44 +87,6 @@ export function Dynamics({ locale, snap }: { locale: Locale; snap: PublicSnapsho
             </li>
           ))}
         </ol>
-        <details className="dyn-table">
-          <summary>{d.allPoints(points.length)}</summary>
-          <div className="table-wrap">
-            <table className="datatable">
-              <thead>
-                <tr>
-                  <th scope="col">{d.colDate}</th>
-                  <th scope="col" className="num">
-                    {d.colTotal}
-                  </th>
-                  <th scope="col" className="num">
-                    {d.killed}
-                  </th>
-                  <th scope="col">{d.colNote}</th>
-                  <th scope="col">{d.source}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...points].reverse().map((p) => (
-                  <tr key={p.date}>
-                    <td>{p.label}</td>
-                    <td className="num">{groupDigits(p.total)}</td>
-                    <td className="num">{p.killedTotal !== null ? groupDigits(p.killedTotal) : "—"}</td>
-                    <td>{p.note}</td>
-                    <td>
-                      {p.source && (
-                        <a className="link" href={p.source} target="_blank" rel="noopener">
-                          {new URL(p.source).host.replace(/^www\./, "")}
-                        </a>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="dyn-table__note">{d.footnote}</p>
-        </details>
       </div>
     </section>
   );
