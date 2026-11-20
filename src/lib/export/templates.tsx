@@ -47,6 +47,11 @@ function Frame({ w, h, children }: { w: number; h: number; children: ReactNode }
   );
 }
 
+/* Rule: within one format the IMI logo has the same height and position on every slide,
+   so a carousel posted to social media never shows the logo jumping in size.
+   Social 1080×1350: 64px high, centred, 72px from the top. Wide 1920×1080: 58px, top left. */
+export const LOGO_HEIGHT = { social: 64, wide: 58 } as const;
+
 function Logo({ locale, height }: { locale: Locale; height: number }) {
   const l = logoFor(locale);
   // eslint-disable-next-line @next/next/no-img-element
@@ -304,7 +309,7 @@ export function SocialSlide({ locale, data, spec }: { locale: Locale; data: Data
     return (
       <Frame w={W} h={H}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", padding: P, width: W, height: H, boxSizing: "border-box" }}>
-          <Logo locale={locale} height={76} />
+          <Logo locale={locale} height={LOGO_HEIGHT.social} />
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 30 }}>
             <Title locale={locale} size={70} width={inner} center />
             <WarLine data={data} locale={locale} center />
@@ -320,7 +325,7 @@ export function SocialSlide({ locale, data, spec }: { locale: Locale; data: Data
     <Frame w={W} h={H}>
       <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: P, width: W, height: H, boxSizing: "border-box" }}>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Logo locale={locale} height={64} />
+          <Logo locale={locale} height={LOGO_HEIGHT.social} />
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <div style={{ display: "flex", fontFamily: "Kyiv", fontSize: 60, lineHeight: 1.04 }}>{spec.index > 2 ? `${d.exportText.typesTitle} (${d.exportText.continued.toLowerCase()})` : d.exportText.typesTitle}</div>
@@ -351,7 +356,7 @@ export function WideSlide({ locale, data, spec }: { locale: Locale; data: Data; 
     <Frame w={W} h={H}>
       <div style={{ display: "flex", padding: P, width: W, height: H, gap, boxSizing: "border-box" }}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: leftW }}>
-          <Logo locale={locale} height={58} />
+          <Logo locale={locale} height={LOGO_HEIGHT.wide} />
           <Title locale={locale} size={56} width={leftW} wrap />
           <WarLine data={data} locale={locale} size={0.8} />
           <TotalBlock data={data} locale={locale} width={leftW} height={420} max={180} />
