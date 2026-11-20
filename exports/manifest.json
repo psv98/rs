@@ -1,0 +1,16 @@
+{
+  "asOfDate": "2026-10-24",
+  "checksum": "c623b8eb65f33756c5418d30216b1ef1963dc2dcf277a1352b40e94d7a4a7514",
+  "files": {
+    "uk": {
+      "social-1.png": "imi-russias-crimes_2026-10-24_uk_1080x1350_1-of-2.png",
+      "social-2.png": "imi-russias-crimes_2026-10-24_uk_1080x1350_2-of-2.png",
+      "wide-1.png": "imi-russias-crimes_2026-10-24_uk_1920x1080.png"
+    },
+    "en": {
+      "social-1.png": "imi-russias-crimes_2026-10-24_en_1080x1350_1-of-2.png",
+      "social-2.png": "imi-russias-crimes_2026-10-24_en_1080x1350_2-of-2.png",
+      "wide-1.png": "imi-russias-crimes_2026-10-24_en_1920x1080.png"
+    }
+  }
+}
