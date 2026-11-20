@@ -342,8 +342,7 @@ body {
   .hint--touch { display: inline; }
 }
 @media (max-width: 760px) {
-  /* No presentation button on phones; the citation note moves up under the text. */
-  .hero__facts .hero__actions { display: none; }
+  .hero__facts { display: none; }
 }
 .hero__grid {
   display: grid;
@@ -353,9 +352,6 @@ body {
   align-items: center;
 }
 .hero__copy { grid-area: copy; }
-@media (max-width: 760px) {
-  .hero__grid { grid-template-areas: "copy" "facts" "visual"; }
-}
 .hero__facts { grid-area: facts; }
 .hero__visual { grid-area: visual; }
 @media (min-width: 1000px) {
@@ -448,13 +444,6 @@ body {
 }
 .hero__cite svg { flex: none; width: 1rem; height: 1rem; color: var(--color-signal); }
 .hero__cite b { color: var(--color-paper); font-weight: 600; }
-@media (max-width: 999px) {
-  .hero__cite { justify-content: center; text-align: left; }
-}
-@media (max-width: 760px) {
-  /* Sits 16px under the text it belongs to, not a full grid row away. */
-  .hero__cite { margin-top: -1.25rem; justify-content: flex-start; }
-}
 .hero__visual {
   position: relative;
   display: grid;

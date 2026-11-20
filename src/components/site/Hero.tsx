@@ -30,6 +30,12 @@ export function Hero({ locale, snap }: { locale: Locale; snap: PublicSnapshot })
             <span className="sr-only">{`${groupDigits(data.totalCrimes)} ${d.heroLabel(data.totalCrimes)}. `}</span>
             {d.hero.dek(since)} <strong className="lead-strong">{d.hero.dekAsOf(asOf)}</strong>
           </p>
+          <p className="hero__cite">
+            <Glyph name="link" />
+            <span>
+              {d.hero.cite[0]} <b>{d.hero.cite[1]}</b>
+            </span>
+          </p>
         </div>
         <div className="hero__facts">
           <div className="hero__actions">
@@ -38,12 +44,6 @@ export function Hero({ locale, snap }: { locale: Locale; snap: PublicSnapshot })
               <span>{d.share.present}</span>
             </a>
           </div>
-          <p className="hero__cite">
-            <Glyph name="link" />
-            <span>
-              {d.hero.cite[0]} <b>{d.hero.cite[1]}</b>
-            </span>
-          </p>
         </div>
         <div className="hero__visual">
           <HeroRing
