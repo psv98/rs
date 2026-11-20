@@ -3,8 +3,8 @@
   "version": 1,
   "snapshots": [
     {
-      "revision": 3,
-      "publishedAt": "2026-11-19T22:16:31.185Z",
+      "revision": 4,
+      "publishedAt": "2026-11-20T06:50:43.470Z",
       "data": {
         "schemaVersion": 1,
         "totalCrimes": 1003,
@@ -21,8 +21,8 @@
         },
         "texts": {
           "periodLabel": {
-            "uk": "4 роки і 8 місяців повномасштабної війни",
-            "en": "4 years, 8 months of the full-scale war"
+            "uk": "4 роки і 9 місяців повномасштабної війни",
+            "en": "4 years, 9 months of the full-scale war"
           },
           "editorNote": {
             "uk": "",
