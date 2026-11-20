@@ -51,8 +51,8 @@ function Frame({ w, h, children }: { w: number; h: number; children: ReactNode }
    so a carousel posted to social media never shows the logo jumping in size.
    Social 1080×1350: 64px high, centred, 72px from the top. Wide 1920×1080: 58px, top left. */
 export const LOGO_HEIGHT = { social: 64, wide: 58 } as const;
-/* Corner radius of the big total block on social slide 1. */
-const SOCIAL_TOTAL_RADIUS = 90;
+/* Corner radius of the big total block (social slide 1 and the wide slide). */
+const TOTAL_RADIUS = 90;
 
 function Logo({ locale, height }: { locale: Locale; height: number }) {
   const l = logoFor(locale);
@@ -317,7 +317,7 @@ export function SocialSlide({ locale, data, spec }: { locale: Locale; data: Data
             <Title locale={locale} size={70} width={inner} center />
             <WarLine data={data} locale={locale} center />
           </div>
-          <TotalBlock data={data} locale={locale} width={inner} height={640} max={270} center radius={SOCIAL_TOTAL_RADIUS} />
+          <TotalBlock data={data} locale={locale} width={inner} height={640} max={270} center radius={TOTAL_RADIUS} />
           <Footer locale={locale} data={data} width={inner} />
         </div>
       </Frame>
@@ -362,7 +362,7 @@ export function WideSlide({ locale, data, spec }: { locale: Locale; data: Data; 
           <Logo locale={locale} height={LOGO_HEIGHT.wide} />
           <Title locale={locale} size={56} width={leftW} wrap />
           <WarLine data={data} locale={locale} size={0.8} />
-          <TotalBlock data={data} locale={locale} width={leftW} height={420} max={180} />
+          <TotalBlock data={data} locale={locale} width={leftW} height={420} max={180} radius={TOTAL_RADIUS} />
           <Footer locale={locale} data={data} size={0.85} width={leftW} />
         </div>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: rightW }}>
