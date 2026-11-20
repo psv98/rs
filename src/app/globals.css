@@ -435,9 +435,15 @@ body {
 }
 .hero__cite {
   display: flex;
+  width: fit-content;
+  max-width: 100%;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding: 0.75rem 1rem;
+  /* Dashed outline, no fill: noticeable next to the text without competing with the red plaque. */
+  border: 1px dashed rgba(237, 76, 92, 0.8);
+  border-radius: 16px;
   font-size: 0.875rem;
   line-height: 1.4;
   color: var(--color-ash);
