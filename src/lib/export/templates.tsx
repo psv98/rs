@@ -51,8 +51,8 @@ function Frame({ w, h, children }: { w: number; h: number; children: ReactNode }
    so a carousel posted to social media never shows the logo jumping in size.
    Social 1080×1350: 64px high, centred, 72px from the top. Wide 1920×1080: 58px, top left. */
 export const LOGO_HEIGHT = { social: 64, wide: 58 } as const;
-/* Corner radius of the big total block (social slide 1 and the wide slide). */
-const TOTAL_RADIUS = 90;
+/* Corner radius of the big total block: social slide 1 and the wide slide. */
+const TOTAL_RADIUS = { social: 90, wide: 60 } as const;
 
 function Logo({ locale, height }: { locale: Locale; height: number }) {
   const l = logoFor(locale);
@@ -317,7 +317,7 @@ export function SocialSlide({ locale, data, spec }: { locale: Locale; data: Data
             <Title locale={locale} size={70} width={inner} center />
             <WarLine data={data} locale={locale} center />
           </div>
-          <TotalBlock data={data} locale={locale} width={inner} height={640} max={270} center radius={TOTAL_RADIUS} />
+          <TotalBlock data={data} locale={locale} width={inner} height={640} max={270} center radius={TOTAL_RADIUS.social} />
           <Footer locale={locale} data={data} width={inner} />
         </div>
       </Frame>
@@ -362,12 +362,13 @@ export function WideSlide({ locale, data, spec }: { locale: Locale; data: Data; 
           <Logo locale={locale} height={LOGO_HEIGHT.wide} />
           <Title locale={locale} size={56} width={leftW} wrap />
           <WarLine data={data} locale={locale} size={0.8} />
-          <TotalBlock data={data} locale={locale} width={leftW} height={420} max={180} radius={TOTAL_RADIUS} />
+          <TotalBlock data={data} locale={locale} width={leftW} height={420} max={180} radius={TOTAL_RADIUS.wide} />
           <Footer locale={locale} data={data} size={0.85} width={leftW} />
         </div>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: rightW }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", height: 58 }}>
-            <div style={{ display: "flex", fontFamily: "Kyiv", fontSize: 40, lineHeight: 1 }}>{d.exportText.typesTitle}</div>
+          {/* Same height as the logo and centred on it, so the heading and the logo share one axis. */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: LOGO_HEIGHT.wide }}>
+            <div style={{ display: "flex", fontFamily: "Kyiv", fontSize: 40, lineHeight: 1, position: "relative", top: -2 }}>{d.exportText.typesTitle}</div>
             {spec.count > 1 && <div style={{ display: "flex", fontSize: 20, color: C.text2 }}>{`${spec.index} / ${spec.count}`}</div>}
           </div>
           <CatGrid cats={spec.categories} data={data} locale={locale} width={rightW} height={H - 2 * P - 58 - 28} cols={3} gap={12} scale={0.9} note={hasKilled ? killedLine(locale, data) : null} />
