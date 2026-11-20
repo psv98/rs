@@ -444,11 +444,11 @@ body {
   /* Dashed outline, no fill: noticeable next to the text without competing with the red plaque. */
   border: 1px dashed rgba(237, 76, 92, 0.8);
   border-radius: 16px;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   line-height: 1.4;
   color: var(--color-ash);
 }
-.hero__cite svg { flex: none; width: 1rem; height: 1rem; color: var(--color-signal); }
+.hero__cite svg { flex: none; width: 0.875rem; height: 0.875rem; color: var(--color-signal); }
 .hero__cite b { color: var(--color-paper); font-weight: 600; }
 .hero__visual {
   position: relative;
