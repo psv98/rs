@@ -4,6 +4,7 @@ import { t } from "@/lib/i18n/dictionaries";
 import { pageHref } from "@/lib/site";
 import { groupDigits } from "@/lib/viz/geometry";
 import { Glyph } from "../ui/Glyph";
+import { RingCaption } from "@/components/site/RingCaption";
 import { HeroRing } from "./HeroRing";
 import { WarPlaque } from "./WarPlaque";
 
@@ -37,13 +38,19 @@ export function Hero({ locale, snap }: { locale: Locale; snap: PublicSnapshot })
               <span>{d.share.present}</span>
             </a>
           </div>
+          <p className="hero__cite">
+            <Glyph name="link" />
+            <span>
+              {d.hero.cite[0]} <b>{d.hero.cite[1]}</b>
+            </span>
+          </p>
         </div>
         <div className="hero__visual">
           <HeroRing
             total={data.totalCrimes}
             categories={cats.map((c) => ({ id: c.id, iconId: c.iconId, value: c.value, name: c.name[locale] }))}
             label={d.hero.ringLabel(data.totalCrimes)}
-            caption={d.hero.ringAsOf(formatShortDate(data.asOfDate))}
+            caption={<RingCaption locale={locale} date={formatShortDate(data.asOfDate)} />}
             ariaLabel={d.hero.ringAria(data.totalCrimes)}
           />
           <p className="hero__hint" aria-hidden="true">

@@ -342,15 +342,20 @@ body {
   .hint--touch { display: inline; }
 }
 @media (max-width: 760px) {
-  .hero__facts { display: none; }
+  /* No presentation button on phones; the citation note moves up under the text. */
+  .hero__facts .hero__actions { display: none; }
 }
 .hero__grid {
   display: grid;
   grid-template-areas: "copy" "visual" "facts";
+
   row-gap: 2.25rem;
   align-items: center;
 }
 .hero__copy { grid-area: copy; }
+@media (max-width: 760px) {
+  .hero__grid { grid-template-areas: "copy" "facts" "visual"; }
+}
 .hero__facts { grid-area: facts; }
 .hero__visual { grid-area: visual; }
 @media (min-width: 1000px) {
@@ -431,6 +436,24 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+.hero__cite {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--color-ash);
+}
+.hero__cite svg { flex: none; width: 1rem; height: 1rem; color: var(--color-signal); }
+.hero__cite b { color: var(--color-paper); font-weight: 600; }
+@media (max-width: 999px) {
+  .hero__cite { justify-content: center; text-align: left; }
+}
+@media (max-width: 760px) {
+  /* Sits 16px under the text it belongs to, not a full grid row away. */
+  .hero__cite { margin-top: -1.25rem; justify-content: flex-start; }
 }
 .hero__visual {
   position: relative;
@@ -548,6 +571,37 @@ body {
 .ring__caption {
   font-size: max(0.75rem, 2.2cqi);
   color: var(--color-ash-2);
+}
+.ring__source { color: var(--color-paper); font-weight: 600; }
+.nowrap { white-space: nowrap; }
+
+/* Notice after copying: the clipboard text got a line naming IMI as the source. */
+.copy-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 2rem;
+  z-index: 60;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: calc(100vw - 2rem);
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  background: #1b1b24;
+  border: 1px solid rgba(237, 76, 92, 0.45);
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.9);
+  font-size: 0.875rem;
+  color: var(--color-paper);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, translate 0.25s var(--ease-out);
+}
+.copy-toast[data-shown] { opacity: 1; translate: -50% -0.5rem; }
+.copy-toast svg { flex: none; width: 1rem; height: 1rem; color: var(--color-signal); }
+.copy-toast span { color: var(--color-ash); }
+@media (max-width: 560px) {
+  .copy-toast { flex-wrap: wrap; justify-content: center; border-radius: 1rem; text-align: center; }
 }
 
 /* Odometer */

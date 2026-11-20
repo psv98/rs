@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { RING, ringTicks, ringWedges, groupDigits } from "@/lib/viz/geometry";
 import { Odometer } from "./Odometer";
 
@@ -24,7 +24,7 @@ export function HeroRing({
   total: number;
   categories: RingCategory[];
   label: string;
-  caption: string;
+  caption: ReactNode;
   ariaLabel: string;
 }) {
   const [active, setActive] = useState<string | null>(null);

@@ -8,6 +8,7 @@ import { formatShortDate } from "@/lib/data/dates";
 import { CategoryIcon } from "../ui/CategoryIcon";
 import { Glyph } from "../ui/Glyph";
 import { FullscreenButton } from "./FullscreenButton";
+import { RingCaption } from "@/components/site/RingCaption";
 import { HeroRing } from "../site/HeroRing";
 import { PresentStage } from "./PresentStage";
 import { WarPlaque } from "../site/WarPlaque";
@@ -53,7 +54,7 @@ export async function PresentPage({ locale }: { locale: Locale }) {
                   total={current.data.totalCrimes}
                   categories={cats.map((c) => ({ id: c.id, iconId: c.iconId, value: c.value, name: c.name[locale] }))}
                   label={d.hero.ringLabel(current.data.totalCrimes)}
-                  caption={d.hero.ringAsOf(formatShortDate(current.data.asOfDate))}
+                  caption={<RingCaption locale={locale} date={formatShortDate(current.data.asOfDate)} />}
                   ariaLabel={d.hero.ringAria(current.data.totalCrimes)}
                 />
               </div>
