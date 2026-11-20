@@ -51,6 +51,8 @@ function Frame({ w, h, children }: { w: number; h: number; children: ReactNode }
    so a carousel posted to social media never shows the logo jumping in size.
    Social 1080×1350: 64px high, centred, 72px from the top. Wide 1920×1080: 58px, top left. */
 export const LOGO_HEIGHT = { social: 64, wide: 58 } as const;
+/* Corner radius of the big total block on social slide 1. */
+const SOCIAL_TOTAL_RADIUS = 90;
 
 function Logo({ locale, height }: { locale: Locale; height: number }) {
   const l = logoFor(locale);
@@ -137,7 +139,7 @@ function WarLine({ data, locale, size = 1, center = false }: { data: Data; local
 }
 
 /** The headline block: the total, the word under it, the period, then new cases. */
-function TotalBlock({ data, locale, width, height, max, center = false }: { data: Data; locale: Locale; width: number; height: number; max: number; center?: boolean }) {
+function TotalBlock({ data, locale, width, height, max, center = false, radius }: { data: Data; locale: Locale; width: number; height: number; max: number; center?: boolean; radius?: number }) {
   const d = t(locale);
   const text = num(data.totalCrimes);
   const pad = Math.round(Math.min(height * 0.1, 52));
@@ -154,6 +156,7 @@ function TotalBlock({ data, locale, width, height, max, center = false }: { data
         width,
         height,
         padding: `0 ${pad}px`,
+        ...(radius ? { borderRadius: radius } : {}),
         textAlign: center ? "center" : "left",
         border: "1.5px solid rgba(237,76,92,0.45)",
         backgroundImage: center
@@ -314,7 +317,7 @@ export function SocialSlide({ locale, data, spec }: { locale: Locale; data: Data
             <Title locale={locale} size={70} width={inner} center />
             <WarLine data={data} locale={locale} center />
           </div>
-          <TotalBlock data={data} locale={locale} width={inner} height={640} max={270} center />
+          <TotalBlock data={data} locale={locale} width={inner} height={640} max={270} center radius={SOCIAL_TOTAL_RADIUS} />
           <Footer locale={locale} data={data} width={inner} />
         </div>
       </Frame>
