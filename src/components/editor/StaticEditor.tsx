@@ -357,9 +357,6 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
             <a href={site} target="_blank" rel="noopener">
               Сайт
             </a>
-            <a href={`https://github.com/${REPO.owner}/${REPO.repo}/commits/${REPO.branch}/${REPO.file}`} target="_blank" rel="noopener">
-              Журнал змін
-            </a>
             <button onClick={onLogout}>Вийти ({login})</button>
           </nav>
         </div>
