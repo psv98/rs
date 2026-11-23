@@ -3,8 +3,8 @@
   "version": 1,
   "snapshots": [
     {
-      "revision": 7,
-      "publishedAt": "2026-11-23T14:52:59.657Z",
+      "revision": 8,
+      "publishedAt": "2026-11-23T15:01:26.303Z",
       "data": {
         "schemaVersion": 1,
         "totalCrimes": 993,
@@ -797,6 +797,17 @@
                 "en": ""
               },
               "source": "https://imi.org.ua/monitorings/za-chotyry-roky-i-sim-misyatsiv-povnomasshtabnoyi-vijny-rf-skoyila-977-zlochyniv-proty-zhurnalistiv-i-media"
+            },
+            {
+              "date": "2026-10-24",
+              "total": 989,
+              "killedTotal": 143,
+              "killedOnDuty": null,
+              "note": {
+                "uk": "",
+                "en": ""
+              },
+              "source": "https://imi.org.ua/monitorings/za-chotyry-roky-j-visim-misyatsiv-povnomasshtabnoyi-vijny-rf-skoyila-989-zlochyniv-proty-zhurnalistiv-i-media"
             }
           ],
           "years": [
