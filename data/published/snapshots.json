@@ -3,21 +3,21 @@
   "version": 1,
   "snapshots": [
     {
-      "revision": 4,
-      "publishedAt": "2026-11-20T06:50:43.470Z",
+      "revision": 5,
+      "publishedAt": "2026-11-23T14:30:19.562Z",
       "data": {
         "schemaVersion": 1,
-        "totalCrimes": 1003,
+        "totalCrimes": 993,
         "monitoringStart": "2022-02-24",
-        "asOfDate": "2026-10-24",
+        "asOfDate": "2026-11-23",
         "period": {
-          "start": "2026-09-24",
-          "end": "2026-10-24",
-          "newCases": 12
+          "start": "2026-10-24",
+          "end": "2026-11-23",
+          "newCases": 4
         },
         "casualties": {
-          "killedTotal": 143,
-          "killedOnDuty": 15
+          "killedTotal": 146,
+          "killedOnDuty": 16
         },
         "texts": {
           "periodLabel": {
