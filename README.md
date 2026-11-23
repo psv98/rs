@@ -203,7 +203,7 @@ npm run typecheck && npm test && npm run build
 
 Файл також можна змінювати прямо в GitHub або вивантаженням з локальної адмінки (`npm run pages:export`). Подробиці — у [data/published/README.md](data/published/README.md).
 
-Власний домен: задайте змінні репозиторію `PAGES_BASE_PATH` (порожнє значення) і `PAGES_SITE_URL` (наприклад `https://crimes.imi.org.ua`) і додайте домен у налаштуваннях Pages.
+Власний домен: у DNS домену додайте запис CNAME `<піддомен>` → `psv98.github.io`; у репозиторії задайте змінну `PAGES_DOMAIN` (Settings → Secrets and variables → Actions → Variables), наприклад `crimes.imi.org.ua`, і перезапустіть збірку; потім у Settings → Pages впишіть той самий домен і увімкніть Enforce HTTPS. Збірка тоді йде без `/rs` у шляху й кладе файл `CNAME` у гілку gh-pages.
 
 ## Сервер і продакшн
 
