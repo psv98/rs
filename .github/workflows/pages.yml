@@ -6,6 +6,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Scheduled publications: the editor can date an update up to 14 days ahead. The build
+  # holds such entries back; this daily run puts each one live on its date (00:07 Kyiv
+  # in winter, 01:07 in summer).
+  schedule:
+    - cron: "7 22 * * *"
 
 permissions:
   contents: write
@@ -15,7 +20,29 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # On the daily schedule, rebuild only if an entry's date is today or yesterday in Kyiv
+  # (yesterday covers a delayed or skipped run).
+  due:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.check.outputs.run }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then echo "run=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          node -e '
+            const f = require("./data/published/snapshots.json");
+            const kyiv = (d) => new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Kyiv" }).format(d);
+            const today = kyiv(new Date()), yesterday = kyiv(new Date(Date.now() - 864e5));
+            const due = f.snapshots.some((s) => s.data.asOfDate === today || s.data.asOfDate === yesterday);
+            console.log(`today ${today}: ${due ? "scheduled entry due" : "nothing scheduled"}`);
+            require("fs").appendFileSync(process.env.GITHUB_OUTPUT, `run=${due}\n`);
+          '
+
   deploy:
+    needs: due
+    if: needs.due.outputs.run == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

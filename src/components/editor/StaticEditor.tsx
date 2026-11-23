@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { snapshotDataSchema, type SnapshotData } from "@/lib/data/schema";
 import { validateSnapshot } from "@/lib/data/validation";
+import { SCHEDULE_DAYS, addDaysIso } from "@/lib/data/validation-helpers";
 import { formatLongDate, suggestPeriodLabel, todayIso } from "@/lib/data/dates";
 import { CategoriesTab, Field, HistoryTab, MainTab, TextsTab } from "../admin/SnapshotEditor";
 import { diffSnapshots, type Change } from "@/lib/data/diff";
@@ -198,11 +199,16 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
   const [review, setReview] = useState(false);
   const [busy, setBusy] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [done, setDone] = useState<{ commit: string; state: RunState; asOf: string } | null>(null);
+  const [done, setDone] = useState<{ commit: string; state: RunState; asOf: string; scheduled?: boolean } | null>(null);
   const [publishError, setPublishError] = useState<string | null>(null);
 
+  const today = todayIso();
+  const maxDate = addDaysIso(today, SCHEDULE_DAYS);
   const entries = useMemo(() => (file ? [...file.snapshots].sort(byDate) : []), [file]);
-  const live = entries.at(-1)?.data ?? null;
+  // What the site shows now: the latest entry not dated in the future. Later entries are
+  // scheduled; the daily rebuild puts each one live on its date.
+  const live = useMemo(() => [...entries].reverse().find((e) => e.data.asOfDate <= today)?.data ?? entries.at(-1)?.data ?? null, [entries, today]);
+  const scheduled = useMemo(() => entries.filter((e) => e.data.asOfDate > today).map((e) => e.data), [entries, today]);
 
   const load = async () => {
     setBusy(true);
@@ -213,10 +219,12 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
       f.snapshots = f.snapshots.map((x) => ({ ...x, data: snapshotDataSchema.parse(x.data) }));
       setFile(f);
       setSha(r.sha);
-      const latest = [...f.snapshots].sort(byDate).at(-1)!.data;
+      const sorted = [...f.snapshots].sort(byDate);
+      const now = todayIso();
+      const onSite = [...sorted].reverse().find((x) => x.data.asOfDate <= now)?.data ?? sorted.at(-1)!.data;
       setMode("edit");
-      setBase(clone(latest));
-      setData(clone(latest));
+      setBase(clone(onSite));
+      setData(clone(onSite));
     } catch (e) {
       setLoadError((e as Error).message);
     } finally {
@@ -254,10 +262,12 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
 
   const previous = useMemo(() => {
     if (!data) return null;
-    const before = entries.filter((e) => e.data.asOfDate < data.asOfDate);
+    // The entry being edited is not its own predecessor (moving its date must not compare it with itself).
+    const before = entries.filter((e) => e.data.asOfDate < data.asOfDate && !(mode === "edit" && e.data.asOfDate === base?.asOfDate));
     return before.length ? before[before.length - 1]!.data : null;
-  }, [entries, data]);
-  const v = useMemo(() => (data ? validateSnapshot(data, { previous, today: todayIso() }) : null), [data, previous]);
+  }, [entries, data, mode, base]);
+  const v = useMemo(() => (data ? validateSnapshot(data, { previous, today, scheduleDays: SCHEDULE_DAYS }) : null), [data, previous, today]);
+  const isScheduled = !!data && data.asOfDate > today && data.asOfDate <= maxDate;
   const dataErrors = v ? v.issues.filter((i) => i.severity === "error" && i.kind !== "gate") : [];
   const warnings = v ? v.issues.filter((i) => i.severity === "warning") : [];
 
@@ -268,6 +278,13 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
       if (!prev) return prev;
       const next = clone(prev);
       fn(next);
+      if (next.asOfDate !== prev.asOfDate && /^\d{4}-\d{2}-\d{2}$/.test(next.asOfDate)) {
+        // Moving the date moves what depends on it, unless it was set by hand.
+        if (prev.period.end === prev.asOfDate) next.period.end = next.asOfDate;
+        const was = suggestPeriodLabel(prev.monitoringStart, prev.asOfDate);
+        if (prev.texts.periodLabel.uk === was.uk && prev.texts.periodLabel.en === was.en)
+          next.texts.periodLabel = suggestPeriodLabel(next.monitoringStart, next.asOfDate);
+      }
       const strip = (d: SnapshotData) => JSON.stringify({ ...d, verification: null });
       if (strip(next) !== strip(prev)) {
         next.verification.sourceChecked = false;
@@ -276,11 +293,11 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
       return next;
     });
 
-  const startEdit = () => {
-    if (!live || (dirty && !window.confirm("Незбережені зміни буде втрачено. Продовжити?"))) return;
+  const startEdit = (target: SnapshotData | null = live) => {
+    if (!target || (dirty && !window.confirm("Незбережені зміни буде втрачено. Продовжити?"))) return;
     setMode("edit");
-    setBase(clone(live));
-    setData(clone(live));
+    setBase(clone(target));
+    setData(clone(target));
     setStep("main");
   };
   const startNew = (asOf = todayIso()) => {
@@ -318,11 +335,20 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
       const next: FileJson = clone(file);
       // The repository is public: internal notes are not written to it.
       const out: SnapshotData = { ...clone(data), verification: { ...data.verification, internalNote: "" } };
-      const at = next.snapshots.findIndex((x) => x.data.asOfDate === (mode === "edit" ? base!.asOfDate : out.asOfDate));
+      // Editing what is on the site and moving its date into the future schedules a copy:
+      // the current figures stay live until that day.
+      const scheduling = out.asOfDate > todayIso();
+      const replaceKey = mode === "edit" && !(scheduling && base!.asOfDate <= todayIso()) ? base!.asOfDate : out.asOfDate;
+      const at = next.snapshots.findIndex((x) => x.data.asOfDate === replaceKey);
+      const clash = next.snapshots.findIndex((x, i) => i !== at && x.data.asOfDate === out.asOfDate);
+      if (clash >= 0) {
+        setPublishError(`На ${formatLongDate(out.asOfDate, "uk")} вже є дані${out.asOfDate > todayIso() ? " (заплановані)" : ""}. Відкрийте їх і змініть там або виберіть іншу дату.`);
+        return;
+      }
       if (at >= 0) next.snapshots[at] = { revision: next.snapshots[at]!.revision + 1, publishedAt: now, data: out };
       else next.snapshots.push({ revision: 1, publishedAt: now, data: out });
       next.snapshots.sort(byDate);
-      const what = mode === "new" ? "нові дані" : "виправлення";
+      const what = scheduling ? "заплановано" : mode === "new" ? "нові дані" : "виправлення";
       const r = await writeDataFile(token, next, sha, `Дані станом на ${out.asOfDate}: ${what} (редактор, ${login})`);
       setSha(r.sha);
       setFile(next);
@@ -330,12 +356,34 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
       setBase(clone(out));
       setData(clone(out));
       setReview(false);
-      setDone({ commit: r.commit, state: null, asOf: out.asOfDate });
+      setDone({ commit: r.commit, state: null, asOf: out.asOfDate, scheduled: scheduling });
     } catch (e) {
       const err = e as GitHubError;
       setPublishError(
         err.status === 409 ? "Хтось інший щойно змінив дані. Закрийте це вікно, натисніть «Завантажити заново» і внесіть зміни ще раз." : err.message,
       );
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const cancelScheduled = async (date: string) => {
+    if (!file || !window.confirm(`Скасувати заплановану публікацію на ${formatLongDate(date, "uk")}? Ці цифри не з’являться на сайті.`)) return;
+    setBusy(true);
+    setPublishError(null);
+    try {
+      const next: FileJson = clone(file);
+      next.snapshots = next.snapshots.filter((x) => x.data.asOfDate !== date);
+      const r = await writeDataFile(token, next, sha, `Дані станом на ${date}: скасовано заплановану публікацію (редактор, ${login})`);
+      setSha(r.sha);
+      setFile(next);
+      if (data?.asOfDate === date || base?.asOfDate === date) {
+        const onSite = [...next.snapshots].sort(byDate).reverse().find((x) => x.data.asOfDate <= todayIso())?.data;
+        if (onSite) (setMode("edit"), setBase(clone(onSite)), setData(clone(onSite)));
+      }
+      setDone(null);
+    } catch (e) {
+      setLoadError((e as Error).message);
     } finally {
       setBusy(false);
     }
@@ -376,9 +424,15 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
           <>
             {done && (
               <div className="ed-done" role="status">
-                <b>Опубліковано: дані станом на {formatLongDate(done.asOf, "uk")}.</b>
+                <b>
+                  {done.scheduled
+                    ? `Заплановано: дані станом на ${formatLongDate(done.asOf, "uk")} з’являться на сайті цього дня після 00:10.`
+                    : `Опубліковано: дані станом на ${formatLongDate(done.asOf, "uk")}.`}
+                </b>
                 <span>
-                  {!done.state || done.state.status !== "completed"
+                  {done.scheduled
+                    ? "До того на сайті лишаються поточні цифри. Нічого більше робити не треба."
+                    : !done.state || done.state.status !== "completed"
                     ? "Сайт і інфографіка оновлюються, це займає близько 2 хвилин."
                     : done.state.conclusion === "success"
                       ? "Сайт оновлено. Якщо бачите старі цифри, оновіть сторінку."
@@ -392,17 +446,39 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
               </div>
             )}
 
+            {scheduled.length > 0 && (
+              <section className="ed-scheduled" aria-label="Заплановані публікації">
+                <h2>Заплановано</h2>
+                {scheduled.map((s) => (
+                  <div key={s.asOfDate} className="ed-scheduled__row">
+                    <span>
+                      <b>{formatLongDate(s.asOfDate, "uk")}</b>: загальний показник {s.totalCrimes}. З’явиться на сайті цього дня після 00:10.
+                    </span>
+                    <button className="btn" disabled={busy} onClick={() => startEdit(s)}>
+                      <span>Змінити</span>
+                    </button>
+                    <button className="btn" disabled={busy} onClick={() => void cancelScheduled(s.asOfDate)}>
+                      <span>Скасувати</span>
+                    </button>
+                  </div>
+                ))}
+              </section>
+            )}
+
             <section className="ed-mode" aria-label="Що ви хочете зробити">
-              <button className="ed-choice" aria-pressed={mode === "edit"} onClick={startEdit}>
+              <button className="ed-choice" aria-pressed={mode === "edit" && base?.asOfDate === live.asOfDate} onClick={() => startEdit(live)}>
                 <b>Виправити поточні дані</b>
                 <span>
-                  Уточнити цифри станом на {formatLongDate(live.asOfDate, "uk")}. Підходить для виправлень у будь-який день.
+                  Уточнити цифри станом на {formatLongDate(live.asOfDate, "uk")}. Дату теж можна змінити, зокрема на день уперед: тоді виправлення з’явиться на сайті в цей день.
                 </span>
               </button>
               <div className="ed-choice" aria-pressed={mode === "new"} role="group">
                 <button className="ed-choice__btn" onClick={() => startNew(data.asOfDate > live.asOfDate ? data.asOfDate : todayIso())}>
                   <b>Додати нові дані</b>
-                  <span>Нові цифри на обрану дату. Поточні стануть точкою на графіку динаміки.</span>
+                  <span>
+                    Нові цифри на обрану дату. Поточні стануть точкою на графіку динаміки. Дату можна вибрати до {SCHEDULE_DAYS} днів уперед: дані з’являться на
+                    сайті в цей день автоматично.
+                  </span>
                 </button>
                 {mode === "new" && (
                   <label className="ed-date">
@@ -412,7 +488,7 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
                       type="date"
                       value={data.asOfDate}
                       min={live.asOfDate}
-                      max={todayIso()}
+                      max={maxDate}
                       onChange={(e) => e.target.value && startNew(e.target.value)}
                     />
                   </label>
@@ -449,16 +525,17 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
           <div className="ed-bar__inner">
             <span className="ed-bar__state">
               {mode === "new" ? `Нові дані станом на ${formatLongDate(data.asOfDate, "uk")}` : changes.length ? `Змінено полів: ${changes.length}` : "Змін поки немає"}
+              {isScheduled && <em className="ed-chip">Буде на сайті {formatLongDate(data.asOfDate, "uk")}</em>}
               {warnings.length > 0 && <em className="ed-chip ed-chip--warn">Попереджень: {warnings.length}</em>}
               {dataErrors.length > 0 && <em className="ed-chip ed-chip--err">Помилок: {dataErrors.length}</em>}
             </span>
             {dirty && (
-              <button className="btn" onClick={startEdit}>
+              <button className="btn" onClick={() => startEdit(live)}>
                 <span>Скасувати зміни</span>
               </button>
             )}
             <button className="btn btn--primary btn--lg" disabled={!dirty || busy} onClick={() => (setPublishError(null), setReview(true))}>
-              <span>{dirty ? "Перевірити й опублікувати" : "Немає що публікувати"}</span>
+              <span>{!dirty ? "Немає що публікувати" : isScheduled ? "Перевірити й запланувати" : "Перевірити й опублікувати"}</span>
             </button>
           </div>
         </footer>
@@ -470,6 +547,8 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
           update={update}
           changes={changes}
           isNew={mode === "new"}
+          scheduledFor={isScheduled ? data.asOfDate : null}
+          liveDate={live?.asOfDate ?? ""}
           dataErrors={dataErrors}
           warnings={warnings}
           sum={v.categorySum}
@@ -491,6 +570,8 @@ function ReviewDialog({
   update,
   changes,
   isNew,
+  scheduledFor,
+  liveDate,
   dataErrors,
   warnings,
   sum,
@@ -504,6 +585,8 @@ function ReviewDialog({
   update: (fn: (d: SnapshotData) => void) => void;
   changes: Change[];
   isNew: boolean;
+  scheduledFor: string | null;
+  liveDate: string;
   dataErrors: Issue[];
   warnings: Issue[];
   sum: number;
@@ -526,9 +609,21 @@ function ReviewDialog({
     <div className="ed-modal" role="dialog" aria-modal="true" aria-labelledby="ed-review-title" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="ed-modal__box">
         <h2 id="ed-review-title">Перевірка перед публікацією</h2>
+        {scheduledFor && (
+          <p className="ed-scheduled-note">
+            Публікацію буде заплановано: ці дані з’являться на сайті {formatLongDate(scheduledFor, "uk")} після 00:10. До того на сайті лишаються цифри станом на{" "}
+            {formatLongDate(liveDate, "uk")}.
+          </p>
+        )}
 
         <section>
-          <h3>{isNew ? `Нові дані станом на ${formatLongDate(data.asOfDate, "uk")}` : "Що зміниться на сайті"}</h3>
+          <h3>
+            {isNew
+              ? `Нові дані станом на ${formatLongDate(data.asOfDate, "uk")}`
+              : scheduledFor
+                ? `Що зміниться на сайті ${formatLongDate(scheduledFor, "uk")}`
+                : "Що зміниться на сайті"}
+          </h3>
           {changes.length === 0 ? (
             <p className="muted">Цифри ті самі, що й зараз на сайті.</p>
           ) : (
@@ -622,7 +717,7 @@ function ReviewDialog({
             <span>Повернутися до редагування</span>
           </button>
           <button className="btn btn--primary btn--lg" disabled={!ready || busy} onClick={onPublish}>
-            <span>{busy ? "Публікую…" : "Опублікувати на сайті"}</span>
+            <span>{busy ? "Зберігаю…" : scheduledFor ? "Запланувати публікацію" : "Опублікувати на сайті"}</span>
           </button>
         </div>
         {!ready && !busy && (

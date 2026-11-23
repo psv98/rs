@@ -19,6 +19,19 @@ describe("GitHub Pages data file", () => {
     expect(r.current?.data.totalCrimes).toBe(989);
     expect(JSON.stringify(r)).not.toContain("internalNote");
   });
+  it("holds back entries dated after today and keeps the current one live", () => {
+    const now = confirmed(seedOct());
+    const later = confirmed(seedOct());
+    later.asOfDate = "2026-11-24";
+    later.period = { start: "2026-10-24", end: "2026-11-24", newCases: null };
+    const before = parsePublishedFile(file([{ revision: 1, publishedAt: null, data: now }, { revision: 1, publishedAt: null, data: later }]), "2026-11-23");
+    expect(before.current?.data.asOfDate).toBe("2026-10-24");
+    expect(before.scheduled).toEqual(["2026-11-24"]);
+    expect(before.skipped).toEqual([]);
+    const after = parsePublishedFile(file([{ revision: 1, publishedAt: null, data: now }, { revision: 1, publishedAt: null, data: later }]), "2026-11-24");
+    expect(after.current?.data.asOfDate).toBe("2026-11-24");
+    expect(after.scheduled).toEqual([]);
+  });
   it("rejects malformed files and duplicates", () => {
     expect(() => parsePublishedFile({ format: "x" }, TODAY)).toThrow();
     const d = confirmed(seedOct());

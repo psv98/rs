@@ -164,3 +164,24 @@
 .ed-explain { display: grid; gap: 0.75rem; }
 .ed-modal__actions { display: flex; justify-content: flex-end; gap: 0.75rem; flex-wrap: wrap; }
 .ed-why { text-align: right; margin-top: -0.5rem; }
+
+/* Scheduled publications: entries dated after today, live on their date. */
+.ed-scheduled {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px dashed rgba(237, 76, 92, 0.8);
+  border-radius: 16px;
+}
+.ed-scheduled h2 { margin: 0; font-size: 1rem; }
+.ed-scheduled__row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+.ed-scheduled__row > span { flex: 1 1 20rem; color: var(--color-ash); }
+.ed-scheduled__row b { color: var(--color-paper); }
+.ed-scheduled-note {
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 1rem;
+  border: 1px dashed rgba(237, 76, 92, 0.8);
+  border-radius: 12px;
+  color: var(--color-ash);
+}

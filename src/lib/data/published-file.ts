@@ -38,7 +38,8 @@ export class PublishedFileError extends Error {}
 
 export interface ParsedPublishedFile extends PublicState {
   /** Entries left out because they do not pass the publication rules (never shown publicly). */
-  skipped: Array<{ asOfDate: string; problems: string[] }>;
+  skipped: Array<{ asOfDate: string; problems: string[] }>;  /** Entries dated after today: held back, they go live on their date (daily rebuild). */
+  scheduled: string[];
 }
 
 export function parsePublishedFile(json: unknown, today = todayIso()): ParsedPublishedFile {
@@ -52,7 +53,8 @@ export function parsePublishedFile(json: unknown, today = todayIso()): ParsedPub
   if (dup) throw new PublishedFileError(`${PUBLISHED_FILE}: кілька записів на дату ${dup}`);
   const accepted: typeof items = [];
   const skipped: ParsedPublishedFile["skipped"] = [];
-  for (const s of items) {
+  const scheduled = items.filter((s) => s.data.asOfDate > today).map((s) => s.data.asOfDate);
+  for (const s of items.filter((x) => x.data.asOfDate <= today)) {
     const v = validateSnapshot(s.data, { today, previous: accepted[accepted.length - 1]?.data ?? null });
     const problems = v.issues.filter((x) => x.severity === "error").map((x) => x.message);
     if (problems.length) skipped.push({ asOfDate: s.data.asOfDate, problems });
@@ -68,19 +70,24 @@ export function parsePublishedFile(json: unknown, today = todayIso()): ParsedPub
       data: toPublicData(s.data),
     }))
     .reverse();
-  return { current: history[0] ?? null, history, skipped };
+  return { current: history[0] ?? null, history, skipped, scheduled };
 }
 
 let warned = false;
+let warnedScheduled = false;
 export function loadPublishedFile(file = PUBLISHED_FILE): ParsedPublishedFile {
   const full = path.join(/*turbopackIgnore: true*/ process.cwd(), file);
-  if (!fs.existsSync(full)) return { current: null, history: [], skipped: [] };
+  if (!fs.existsSync(full)) return { current: null, history: [], skipped: [], scheduled: [] };
   const result = parsePublishedFile(JSON.parse(fs.readFileSync(full, "utf8")));
   if (result.skipped.length && !warned) {
     warned = true;
     for (const s of result.skipped) {
       console.warn(`::warning title=Знімок ${s.asOfDate} не опубліковано::${s.problems.join(" | ")}`);
     }
+  }
+  if (result.scheduled.length && !warnedScheduled) {
+    warnedScheduled = true;
+    console.log(`::notice title=Заплановано::${result.scheduled.join(", ")} — з'являться на сайті в ці дні`);
   }
   return result;
 }

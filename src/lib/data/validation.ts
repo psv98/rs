@@ -1,5 +1,5 @@
 import { snapshotDataSchema, visibleCategories, categorySum, type SnapshotData } from "./schema";
-import { suggestPeriodLabel, isoCompare } from "./validation-helpers";
+import { suggestPeriodLabel, isoCompare, addDaysIso } from "./validation-helpers";
 
 export type IssueSeverity = "error" | "warning" | "info";
 /**
@@ -22,6 +22,11 @@ export interface ValidationContext {
   previous?: SnapshotData | null;
   /** Today's date (YYYY-MM-DD, Kyiv). */
   today: string;
+  /**
+   * Days ahead a publication may be dated (static editor scheduling). The site build
+   * passes 0: an entry dated in the future is held back until that day.
+   */
+  scheduleDays?: number;
 }
 
 export interface ValidationResult {
@@ -55,7 +60,17 @@ export function validateSnapshot(input: unknown, ctx: ValidationContext): Valida
 
   // ---- Dates -------------------------------------------------------------
   if (isoCompare(d.asOfDate, d.monitoringStart) <= 0) err("dates-order", "Дата актуальності має бути пізніше за початок моніторингу", "asOfDate");
-  if (isoCompare(d.asOfDate, ctx.today) > 0) err("dates-future", "Дата актуальності не може бути в майбутньому", "asOfDate");
+  if (isoCompare(d.asOfDate, ctx.today) > 0) {
+    const days = ctx.scheduleDays ?? 0;
+    if (days > 0 && isoCompare(d.asOfDate, addDaysIso(ctx.today, days)) <= 0)
+      info("scheduled", "Дата в майбутньому: дані з’являться на сайті автоматично в цей день", "asOfDate");
+    else
+      err(
+        "dates-future",
+        days > 0 ? `Запланувати публікацію можна не далі ніж на ${days} днів уперед` : "Дата актуальності не може бути в майбутньому",
+        "asOfDate",
+      );
+  }
   const { start, end, newCases } = d.period;
   if ((start === null) !== (end === null)) err("period-incomplete", "Вкажіть обидві дати звітного періоду або жодної", "period");
   if (start && end) {
