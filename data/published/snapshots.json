@@ -3,8 +3,8 @@
   "version": 1,
   "snapshots": [
     {
-      "revision": 6,
-      "publishedAt": "2026-11-23T14:31:18.200Z",
+      "revision": 7,
+      "publishedAt": "2026-11-23T14:52:59.657Z",
       "data": {
         "schemaVersion": 1,
         "totalCrimes": 993,
@@ -87,7 +87,7 @@
             "order": 40,
             "hidden": false,
             "name": {
-              "uk": "Поранення журналістів",
+              "uk": "Поранень журналістів",
               "en": "Journalists injured"
             },
             "description": {
@@ -102,7 +102,7 @@
             "order": 50,
             "hidden": false,
             "name": {
-              "uk": "Замахи на вбивство",
+              "uk": "Замахів на вбивство",
               "en": "Assassination attempts"
             },
             "description": {
@@ -117,7 +117,7 @@
             "order": 60,
             "hidden": false,
             "name": {
-              "uk": "Обстріли телевеж",
+              "uk": "Обстрілів телевеж",
               "en": "Air strikes at TV towers"
             },
             "description": {
@@ -147,7 +147,7 @@
             "order": 80,
             "hidden": false,
             "name": {
-              "uk": "Руйнування і пошкодження редакцій",
+              "uk": "Руйнувань і пошкоджень редакцій",
               "en": "Media offices destroyed or damaged"
             },
             "description": {
@@ -192,7 +192,7 @@
             "order": 110,
             "hidden": false,
             "name": {
-              "uk": "Кіберзлочини",
+              "uk": "Кіберзлочин",
               "en": "Cyber crimes"
             },
             "description": {
@@ -222,7 +222,7 @@
             "order": 130,
             "hidden": false,
             "name": {
-              "uk": "Блокування інтернет-доступу до медіа",
+              "uk": "Блокувань інтернет-доступу до медіа",
               "en": "News websites blocked"
             },
             "description": {
@@ -237,7 +237,7 @@
             "order": 140,
             "hidden": false,
             "name": {
-              "uk": "Випадки юридичного тиску",
+              "uk": "Випадків юридичного тиску",
               "en": "Cases of judicial pressure"
             },
             "description": {
