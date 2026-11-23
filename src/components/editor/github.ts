@@ -38,10 +38,29 @@ async function gh<T>(token: string, path: string, init: RequestInit = {}): Promi
   return (await r.json()) as T;
 }
 
-/** Checks that the token can write to the repository. Returns the GitHub login. */
+/**
+ * Checks that the token can write to the repository. Returns the GitHub login.
+ *
+ * `permissions.push` on the repository is not reliable for fine-grained tokens: the
+ * repo is public, so a token with "Read and write" on code can still get push:false or
+ * no `permissions` at all. When it is not true, the check creates a tiny git blob:
+ * that needs Contents write, and an unreferenced blob changes nothing visible in the
+ * repository (no commit, no file, no deploy) and is garbage-collected by GitHub.
+ */
 export async function checkAccess(token: string): Promise<string> {
   const repo = await gh<{ permissions?: { push?: boolean } }>(token, `/repos/${REPO.owner}/${REPO.repo}`);
-  if (!repo.permissions?.push) throw new GitHubError("Цей токен не має права запису в репозиторій psv98/rs.", 403);
+  if (!repo.permissions?.push) {
+    try {
+      await gh(token, `/repos/${REPO.owner}/${REPO.repo}/git/blobs`, {
+        method: "POST",
+        body: JSON.stringify({ content: "imi-editor-access-check", encoding: "utf-8" }),
+      });
+    } catch (e) {
+      if (e instanceof GitHubError && (e.status === 403 || e.status === 404))
+        throw new GitHubError("Цей токен не має права запису в репозиторій psv98/rs.", 403);
+      throw e;
+    }
+  }
   try {
     const me = await gh<{ login: string }>(token, "/user");
     return me.login;
