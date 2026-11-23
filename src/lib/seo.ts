@@ -6,6 +6,8 @@ import { formatLongDate, isValidIsoDate } from "./data/dates-server";
 import { t } from "./i18n/dictionaries";
 import { config } from "./config";
 
+const OG_VERSION = "2026-11-title";
+
 export async function pageMetadata(locale: Locale, path: "" | "/present" = ""): Promise<Metadata> {
   const { current } = await getPublicState();
   const d = t(locale).meta;
@@ -16,7 +18,9 @@ export async function pageMetadata(locale: Locale, path: "" | "/present" = ""): 
   const slash = isStatic ? "/" : "";
   const ukUrl = `${base}${path ? `${path}${slash}` : "/"}`;
   const enUrl = `${base}/en${path}${slash}`;
-  const v = current?.checksum.slice(0, 10) ?? "0";
+  // The preview image carries no figures, so its address changes only with its design.
+  // Bump OG_VERSION after a redesign so Facebook and Telegram fetch the new picture.
+  const v = OG_VERSION;
   const og = isStatic ? `${base}/exports/${locale}/og.png?v=${v}` : `${base}/api/og?lang=${locale}&v=${v}`;
   return {
     metadataBase: new URL(base),
@@ -31,7 +35,7 @@ export async function pageMetadata(locale: Locale, path: "" | "/present" = ""): 
       url: locale === "uk" ? ukUrl : enUrl,
       title,
       description,
-      images: [{ url: og, width: 1200, height: 630, alt: title }],
+      images: [{ url: og, width: 1200, height: 630, alt: title, type: "image/png" }],
     },
     twitter: { card: "summary_large_image", title, description, images: [og] },
     robots: path === "/present" ? { index: false, follow: true } : { index: true, follow: true },

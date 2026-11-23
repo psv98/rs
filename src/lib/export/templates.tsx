@@ -380,17 +380,66 @@ export function WideSlide({ locale, data, spec }: { locale: Locale; data: Data; 
 
 /* ------------------------------------------------------------------ Open Graph 1200×630 */
 
-export function OgImage({ locale, data }: { locale: Locale; data: Data | null }) {
-  const W = 1200;
-  const H = 630;
-  const P = 56;
+/* Link preview for Facebook, Telegram, X and others. It carries no figures, so it never
+   goes stale: the IMI logo and the project title on the site's grid with a red glow. */
+const OG = { w: 1200, h: 630 } as const;
+
+function ogBackground(): string {
+  const { w: W, h: H } = OG;
+  const step = 48;
+  let lines = "";
+  for (let x = (W / 2) % step; x < W; x += step) lines += `<line x1="${x}" y1="0" x2="${x}" y2="${H}"/>`;
+  for (let y = (H / 2) % step; y < H; y += step) lines += `<line x1="0" y1="${y}" x2="${W}" y2="${y}"/>`;
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">` +
+    `<defs>` +
+    `<radialGradient id="glow"><stop offset="0" stop-color="#ED4C5C" stop-opacity="0.32"/><stop offset="1" stop-color="#ED4C5C" stop-opacity="0"/></radialGradient>` +
+    `<radialGradient id="floor"><stop offset="0" stop-color="#A81D30" stop-opacity="0.45"/><stop offset="1" stop-color="#A81D30" stop-opacity="0"/></radialGradient>` +
+    `<radialGradient id="fade" cx="600" cy="350" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(600 350) scale(620 360) translate(-600 -350)">` +
+    `<stop offset="0" stop-color="#fff"/><stop offset="0.5" stop-color="#fff" stop-opacity="0.45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>` +
+    `<mask id="m"><rect width="${W}" height="${H}" fill="url(#fade)"/></mask>` +
+    `</defs>` +
+    `<rect width="${W}" height="${H}" fill="${C.bg}"/>` +
+    `<ellipse cx="600" cy="380" rx="540" ry="240" fill="url(#glow)"/>` +
+    `<g mask="url(#m)" stroke="rgba(255,255,255,0.09)" stroke-width="1">${lines}</g>` +
+    `<ellipse cx="600" cy="650" rx="700" ry="90" fill="url(#floor)"/>` +
+    `</svg>`;
+  return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
+}
+
+export function OgImage({ locale }: { locale: Locale; data?: Data | null }) {
+  const { w: W, h: H } = OG;
+  const size = locale === "en" ? 84 : 92;
+  const parts = t(locale).hero.titleParts.map((p) => p.trim());
   return (
-    <Frame w={W} h={H}>
-      <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: P, width: W, height: H, boxSizing: "border-box" }}>
-        <Logo locale={locale} height={56} />
-        <Title locale={locale} size={62} width={W - 2 * P} />
-        {data ? <TotalBlock data={data} locale={locale} width={W - 2 * P} height={250} max={150} /> : <div style={{ display: "flex", fontSize: 24, color: C.text2 }}>imi.org.ua</div>}
+    <div style={{ width: W, height: H, display: "flex", position: "relative", backgroundColor: C.bg, color: C.text, fontFamily: "Overpass" }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={ogBackground()} width={W} height={H} style={{ position: "absolute", left: 0, top: 0 }} alt="" />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 56,
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: W,
+          height: H,
+          padding: "0 56px",
+          boxSizing: "border-box",
+        }}
+      >
+        <Logo locale={locale} height={72} />
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", fontFamily: "Kyiv", fontSize: size, lineHeight: 1.04, letterSpacing: -size * 0.012 }}>
+          {parts.map((x, i) => (
+            <div key={i} style={{ display: "flex", color: i === 1 ? "#FF5A6A" : C.text }}>
+              {x}
+            </div>
+          ))}
+        </div>
       </div>
-    </Frame>
+    </div>
   );
 }
