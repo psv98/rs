@@ -3,8 +3,8 @@
   "version": 1,
   "snapshots": [
     {
-      "revision": 5,
-      "publishedAt": "2026-11-23T14:30:19.562Z",
+      "revision": 6,
+      "publishedAt": "2026-11-23T14:31:18.200Z",
       "data": {
         "schemaVersion": 1,
         "totalCrimes": 993,
@@ -38,7 +38,7 @@
           {
             "id": "killings",
             "iconId": "killings",
-            "value": 15,
+            "value": 16,
             "order": 10,
             "hidden": false,
             "name": {
@@ -128,7 +128,7 @@
           {
             "id": "strikes-on-journalists",
             "iconId": "strikes-on-journalists",
-            "value": 53,
+            "value": 54,
             "order": 70,
             "hidden": false,
             "name": {
@@ -188,7 +188,7 @@
           {
             "id": "cybercrimes",
             "iconId": "cybercrimes",
-            "value": 119,
+            "value": 121,
             "order": 110,
             "hidden": false,
             "name": {
