@@ -268,7 +268,25 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
   }, [entries, data, mode, base]);
   const v = useMemo(() => (data ? validateSnapshot(data, { previous, today, scheduleDays: SCHEDULE_DAYS }) : null), [data, previous, today]);
   const isScheduled = !!data && data.asOfDate > today && data.asOfDate <= maxDate;
-  const dataErrors = v ? v.issues.filter((i) => i.severity === "error" && i.kind !== "gate") : [];
+  // "New data" on the date that is already on the site: one plain message instead of the
+  // chart-point error it causes, and a pointer to the right action.
+  const sameDayAsLive = mode === "new" && !!data && !!live && data.asOfDate <= live.asOfDate;
+  const dataErrors: Issue[] = v
+    ? [
+        ...(sameDayAsLive
+          ? [
+              {
+                code: "new-same-date",
+                severity: "error",
+                kind: "data",
+                field: "asOfDate",
+                message: `Дані станом на ${formatLongDate(live!.asOfDate, "uk")} вже є на сайті. «Додати нові дані» — це цифри на пізнішу дату. Щоб змінити цифри на ${formatLongDate(live!.asOfDate, "uk")}, поверніться й виберіть «Виправити поточні дані»`,
+              } as Issue,
+            ]
+          : []),
+        ...v.issues.filter((i) => i.severity === "error" && i.kind !== "gate" && !(sameDayAsLive && (i.code === "history-date" || i.code === "period-order"))),
+      ]
+    : [];
   const warnings = v ? v.issues.filter((i) => i.severity === "warning") : [];
 
   // Any change to figures or texts withdraws the confirmations: they are given again in
@@ -300,8 +318,11 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
     setData(clone(target));
     setStep("main");
   };
-  const startNew = (asOf = todayIso()) => {
+  const startNew = (asOf?: string) => {
     if (!live) return;
+    // New data is for a later date than what the site shows. If that is today (or later),
+    // default to the next day; to change today's figures there is "Виправити поточні дані".
+    if (!asOf) asOf = todayIso() > live.asOfDate ? todayIso() : addDaysIso(live.asOfDate, 1);
     if (mode !== "new" && dirty && !window.confirm("Незбережені зміни буде втрачено. Продовжити?")) return;
     const d = clone(live);
     d.asOfDate = asOf;
@@ -473,7 +494,7 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
                 </span>
               </button>
               <div className="ed-choice" aria-pressed={mode === "new"} role="group">
-                <button className="ed-choice__btn" onClick={() => startNew(data.asOfDate > live.asOfDate ? data.asOfDate : todayIso())}>
+                <button className="ed-choice__btn" onClick={() => startNew(data.asOfDate > live.asOfDate ? data.asOfDate : undefined)}>
                   <b>Додати нові дані</b>
                   <span>
                     Нові цифри на обрану дату. Поточні стануть точкою на графіку динаміки. Дату можна вибрати до {SCHEDULE_DAYS} днів уперед: дані з’являться на
@@ -487,7 +508,7 @@ function Workspace({ token, login, onLogout }: { token: string; login: string; o
                       className="adm-input"
                       type="date"
                       value={data.asOfDate}
-                      min={live.asOfDate}
+                      min={addDaysIso(live.asOfDate, 1)}
                       max={maxDate}
                       onChange={(e) => e.target.value && startNew(e.target.value)}
                     />

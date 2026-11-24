@@ -124,7 +124,7 @@ export function validateSnapshot(input: unknown, ctx: ValidationContext): Valida
   const pts = d.history.points;
   pts.forEach((p, i) => {
     if (!p.source) err("history-source", `Динаміка, ${p.date}: додайте посилання на джерело`, `history.points.${i}.source`);
-    if (isoCompare(p.date, d.asOfDate) >= 0) err("history-date", `Динаміка, ${p.date}: дата має бути раніше за дату знімка`, `history.points.${i}.date`);
+    if (isoCompare(p.date, d.asOfDate) >= 0) err("history-date", `Графік динаміки: точка ${p.date} не може бути пізніше чи в той самий день, що й дата «станом на» (${d.asOfDate}). Змініть дату «станом на» або цю точку в розділі «Динаміка»`, `history.points.${i}.date`);
     if (isoCompare(p.date, d.monitoringStart) < 0) err("history-date", `Динаміка, ${p.date}: дата раніше за початок моніторингу`, `history.points.${i}.date`);
     if (i > 0 && isoCompare(pts[i - 1]!.date, p.date) >= 0) err("history-order", `Динаміка: точки мають іти за зростанням дат (${p.date})`, `history.points.${i}.date`);
     if (!!p.note.uk !== !!p.note.en) err("translation-missing", `Динаміка, ${p.date}: примітка лише однією мовою`, `history.points.${i}.note`);
