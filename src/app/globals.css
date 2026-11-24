@@ -905,20 +905,29 @@ body {
 .dyn__tip b { font-family: var(--font-display); font-size: 1.5rem; color: var(--color-paper); line-height: 1; }
 .dyn__tip em { font-style: normal; color: var(--color-ember); }
 
+/* Spans per card come from Dynamics.tsx (--s3, --s2, --sm). */
 .years {
   margin-top: var(--space-gap);
-  margin-bottom: -0.5rem;
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(13rem, 1fr);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: var(--space-gap);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 0.5rem;
-  scrollbar-width: thin;
+}
+.years > .year { grid-column: span var(--s3, 2); }
+@media (max-width: 999px) { .years > .year { grid-column: span var(--s2, 3); } }
+@media (max-width: 599px) {
+  .years > .year { grid-column: span var(--sm, 3); }
+  .years > .year[data-current] {
+    order: -1;
+    padding: 1.25rem;
+    border-color: rgba(237, 76, 92, 0.45);
+    background: radial-gradient(24rem 10rem at 0% 0%, rgba(237, 76, 92, 0.14), transparent 70%), rgba(20, 20, 26, 0.55);
+  }
+  .years > .year[data-current] .year__y { color: var(--color-paper); }
+  .years > .year[data-current] .year__v { font-size: 3rem; }
+  .years > .year[data-current] .year__bar { display: none; }
+  .years > .year:not([data-current]) .year__note { display: none; }
 }
 .year {
-  scroll-snap-align: start;
   position: relative;
   display: flex;
   flex-direction: column;

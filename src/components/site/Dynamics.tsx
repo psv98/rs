@@ -2,9 +2,19 @@ import type { CSSProperties } from "react";
 import type { Locale, PublicSnapshot } from "@/lib/data/schema";
 import { formatLongDate, formatShortDate, todayIso, yearOf } from "@/lib/data/dates";
 import { t } from "@/lib/i18n/dictionaries";
-import { YEARS } from "@/lib/data/years";
 import { groupDigits, niceMax } from "@/lib/viz/geometry";
 import { DynamicsChart, type ChartPoint } from "./DynamicsChart";
+
+/*
+ * Year cards sit on a 6-track grid. Wide screens: three per row in date order; cards of an
+ * incomplete last row share the row (2028 alone would take the full width). Tablets: two
+ * per row. Phones: the current year first across the full width, earlier years two per row.
+ */
+const span = (i: number, n: number, cols: number) => {
+  const r = n % cols;
+  return r && i >= n - r ? 6 / r : 6 / cols;
+};
+const phoneSpan = (i: number, n: number) => (i === n - 1 ? 6 : span(i, n - 1, 2));
 
 /** How the cumulative figure changed: chart of published IMI totals + one card per year. */
 export function Dynamics({ locale, snap }: { locale: Locale; snap: PublicSnapshot }) {
@@ -27,7 +37,10 @@ export function Dynamics({ locale, snap }: { locale: Locale; snap: PublicSnapsho
   if (points.length < 2) return null;
   const nowYear = yearOf(todayIso());
   const asOfYear = yearOf(data.asOfDate);
-  const years = Array.from(new Set([...YEARS.filter((y) => y <= asOfYear), ...points.map((p) => yearOf(p.date))])).sort();
+  // One card per year from the start of monitoring to the year of the current data: a new
+  // year gets its card with the first publication dated in it, nothing to add by hand.
+  const firstYear = yearOf(data.monitoringStart);
+  const years = Array.from(new Set([...Array.from({ length: asOfYear - firstYear + 1 }, (_, i) => firstYear + i), ...points.map((p) => yearOf(p.date))])).sort();
   const yMax = niceMax(Math.max(...points.map((p) => p.total)));
   let prevEnd = 0;
   const cards = years.map((yr) => {
@@ -55,7 +68,13 @@ export function Dynamics({ locale, snap }: { locale: Locale; snap: PublicSnapsho
         />
         <ol className="years" aria-label={d.yearsTitle}>
           {cards.map(({ yr, last, delta, meta, future }, i) => (
-            <li key={yr} className="year" data-state={future ? "future" : last ? "data" : "empty"} style={{ "--i": i } as CSSProperties}>
+            <li
+              key={yr}
+              className="year"
+              data-state={future ? "future" : last ? "data" : "empty"}
+              data-current={i === cards.length - 1 || undefined}
+              style={{ "--i": i, "--s3": span(i, cards.length, 3), "--s2": span(i, cards.length, 2), "--sm": phoneSpan(i, cards.length) } as CSSProperties}
+            >
               <p className="year__y">{yr}</p>
               {last ? (
                 <>
