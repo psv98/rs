@@ -3,13 +3,13 @@
   "version": 1,
   "snapshots": [
     {
-      "revision": 9,
-      "publishedAt": "2026-11-24T08:04:13.108Z",
+      "revision": 10,
+      "publishedAt": "2026-11-24T08:36:57.985Z",
       "data": {
         "schemaVersion": 1,
         "totalCrimes": 993,
         "monitoringStart": "2022-02-24",
-        "asOfDate": "2026-11-23",
+        "asOfDate": "2026-11-24",
         "period": {
           "start": "2026-10-24",
           "end": "2026-11-23",
