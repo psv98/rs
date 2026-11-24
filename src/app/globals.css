@@ -696,12 +696,16 @@ body {
    Categories: icon, figure, name
 --------------------------------------------------------------------------- */
 .cats {
-  --cols: 1;
   display: grid;
-  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: var(--space-gap);
 }
-@media (min-width: 340px) { .cats { --cols: 2; } }
+/* 12 tracks: a card spans 12/columns; cards of an incomplete last row share the row
+   (--s2/--s3/--s4 are set per card for 2, 3 and 4 columns). */
+.cats > .cat { grid-column: span 12; }
+@media (min-width: 340px) { .cats > .cat { grid-column: span var(--s2, 6); } }
+@media (min-width: 880px) { .cats > .cat { grid-column: span var(--s3, 4); } }
+@media (min-width: 1180px) { .cats > .cat { grid-column: span var(--s4, 3); } }
 @media (max-width: 860px) { :root { --logo-h: min(44px, calc((100vw - 72px) / 8.6)); --header-pad: 18px; } }
 @media (max-width: 560px) { :root { --header-pad: 16px; } }
 @media (max-width: 559px) { :root { --space-gap: 0.75rem; } }
@@ -713,8 +717,6 @@ body {
   .cat__note { font-size: 0.75rem; }
   .cat .icon-btn { display: none; }
 }
-@media (min-width: 880px) { .cats { --cols: 3; } }
-@media (min-width: 1180px) { .cats { --cols: 4; } }
 .cat {
   position: relative;
   display: flex;
@@ -831,14 +833,11 @@ body {
 }
 .cat--note {
   justify-content: space-between;
-  grid-column: span 1;
   background:
     repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.015) 0 10px, transparent 10px 20px) padding-box,
     linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)) border-box;
 }
-@media (min-width: 340px) { .cat--note { grid-column: span var(--span2, 2); } }
-@media (min-width: 880px) { .cat--note { grid-column: span var(--span3, 3); } }
-@media (min-width: 1180px) { .cat--note { grid-column: span var(--span4, 4); } }
+.cats > .cat--note { grid-column: 1 / -1; }
 .cat__sum {
   display: flex;
   gap: 0.5rem;
