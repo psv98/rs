@@ -3,8 +3,8 @@
   "version": 1,
   "snapshots": [
     {
-      "revision": 10,
-      "publishedAt": "2026-11-24T08:36:57.985Z",
+      "revision": 11,
+      "publishedAt": "2026-11-24T11:54:50.588Z",
       "data": {
         "schemaVersion": 1,
         "totalCrimes": 993,
@@ -118,7 +118,7 @@
             "hidden": false,
             "name": {
               "uk": "Обстрілів телевеж",
-              "en": "Air strikes at TV towers"
+              "en": "Air strikes on TV towers"
             },
             "description": {
               "uk": "",
@@ -133,7 +133,7 @@
             "hidden": false,
             "name": {
               "uk": "Обстріли журналістів",
-              "en": "Armed strikes at journalists"
+              "en": "Armed strikes on journalists"
             },
             "description": {
               "uk": "",
@@ -193,7 +193,7 @@
             "hidden": false,
             "name": {
               "uk": "Кіберзлочин",
-              "en": "Cyber crimes"
+              "en": "Cybercrimes"
             },
             "description": {
               "uk": "",
