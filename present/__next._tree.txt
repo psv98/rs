@@ -1,0 +1,7 @@
+:HL["/rs/_next/static/chunks/0f4eiua-gjv6i.css","style"]
+:HL["/rs/_next/static/media/KyivTypeSans_Bold-s.p.1947i2dwnzru0.ttf","font",{"crossOrigin":"","type":"font/ttf"}]
+:HL["/rs/brand/imi-logo-uk.svg","image"]
+3:[["children",{"s":"__PAGE__","h":160}]]
+2:[["children",{"s":"present","h":96,"c":"$Q3"}]]
+1:[["children",{"s":"(site)","h":112,"c":"$Q2"}]]
+0:{"b":"7q8k7G_45qGKOjKgFH1j8","t":{"t":{"s":"","h":80,"c":"$Q1"}}}

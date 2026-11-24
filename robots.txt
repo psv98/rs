@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /present/
+Disallow: /en/present/
+Disallow: /editor/
+
+Sitemap: https://psv98.github.io/rs/sitemap.xml
