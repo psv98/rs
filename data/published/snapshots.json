@@ -3,8 +3,8 @@
   "version": 1,
   "snapshots": [
     {
-      "revision": 11,
-      "publishedAt": "2026-11-24T11:54:50.588Z",
+      "revision": 12,
+      "publishedAt": "2026-11-24T11:57:15.435Z",
       "data": {
         "schemaVersion": 1,
         "totalCrimes": 993,
@@ -816,7 +816,7 @@
               "killedInYear": null,
               "note": {
                 "uk": "Найважчий рік: за перший місяць ІМІ зафіксував 148 злочинів, за десять місяців — 467.",
-                "en": "The heaviest year: 148 crimes in the first month, 467 in ten months."
+                "en": "The hardest year: 148 crimes in the first month, 467 in ten months."
               },
               "source": "https://imi.org.ua/en/monitorings/467-crimes-against-journalists-and-media-in-ukraine-committed-by-russia-in-ten-months-of-the-war-i49772"
             },
@@ -834,7 +834,7 @@
               "killedInYear": 24,
               "note": {
                 "uk": "Більше обстрілів телевеж, кіберзлочинів і залякувань. У листопаді ІМІ включив до показника дані про закриті медіа.",
-                "en": "More strikes on TV towers, cyber crimes and intimidation. In November IMI added closed media outlets to the total."
+                "en": "More strikes on TV towers, cybercrimes, and intimidation. Media outlets closed due to the war were added to the total in November."
               },
               "source": "https://imi.org.ua/en/news/trends-in-russia-s-crimes-against-the-media-in-2024-shelling-tv-towers-cyber-crime-intimidation-i65762"
             },
@@ -843,7 +843,7 @@
               "killedInYear": 26,
               "note": {
                 "uk": "Головною загрозою стали дрони: троє медійників загинули від цілеспрямованих атак російських дронів.",
-                "en": "Drones became the main threat: three media workers were killed in targeted Russian drone strikes."
+                "en": "Drones become the biggest threat: three media workers were killed in targeted Russian drone strikes."
               },
               "source": "https://imi.org.ua/monitorings/pidsumky-stanu-svobody-slova-v-ukrayini-u-2025-rotsi-130-porushen-bilshist-z-yakyh-vchynyla-rf"
             },
