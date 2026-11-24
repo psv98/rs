@@ -3,8 +3,8 @@
   "version": 1,
   "snapshots": [
     {
-      "revision": 8,
-      "publishedAt": "2026-11-23T15:01:26.303Z",
+      "revision": 9,
+      "publishedAt": "2026-11-24T08:04:13.108Z",
       "data": {
         "schemaVersion": 1,
         "totalCrimes": 993,
@@ -143,7 +143,7 @@
           {
             "id": "newsroom-damage",
             "iconId": "newsroom-damage",
-            "value": 112,
+            "value": 111,
             "order": 80,
             "hidden": false,
             "name": {
@@ -860,7 +860,7 @@
         },
         "verification": {
           "sourceChecked": true,
-          "sumMismatchConfirmed": true,
+          "sumMismatchConfirmed": false,
           "sumMismatchExplanation": {
             "uk": "Значення категорій наведено так, як їх опубліковано в інфографіці ІМІ, а головний показник — за текстом публікації ІМІ від 26 жовтня 2026 року. Різницю між ними збережено без змін.",
             "en": "Category figures are shown as published in the IMI infographic, and the headline figure as stated in the IMI publication of 26 October 2026. The difference between them is kept as published."
